@@ -45,31 +45,32 @@ Which part would get you first? 👇
 
 ---
 
-## 2. What if the Sun suddenly vanished?
+## 2. What if every human was teleported into one city?
 
-**File:** `videos/sun-vanished.mp4`
+**File:** `videos/everyone-one-city.mp4`
 
-**Title:** What If the Sun Suddenly Vanished? ☀️🥶 #shorts
+**Title:** What If Every Human Was Teleported Into One City? 😱🌆 #shorts
 
 **Description:**
 
 ```
-For 8 minutes and 20 seconds, nobody would even notice. Then… lights out. ☀️➡️🌑
+8 billion people. One city. Here's how fast it all falls apart. 😱
 
-8 min 20 sec: Earth flies off into deep space
-Weeks: plants die, and then everything that eats them
-1 year: −73°C, oceans frozen over
-Thousands of years: life clings on around deep-sea volcanic vents
-Millions of years: the AIR freezes and falls as snow
+0 sec: 6 people per square meter: crowd-crush density
+Meanwhile: 10,000+ pilotless planes fly on until the fuel runs out
+Hours: cities burn with nobody to fight the fires
+Day 1: LA's water was built for 4 million. The taps run dry.
+Day 3: billions start to die
+1 week: 400+ unattended nuclear reactors lose backup power
 
-Plot twist: the Moon goes dark too. It never had its own light.
+Plot twist: for nature, it's the best day ever. Just ask Chernobyl's wolves. 🐺
 
-How long do you think you'd last? 👇
+Where would you want to be standing? 👇
 
-#whatif #sun #space #science #apocalypse #shorts
+#whatif #apocalypse #science #humanity #shorts
 ```
 
-**Pinned comment:** Gravity travels at the speed of light too, so Earth would keep orbiting an empty spot for 8 minutes 20 seconds before flying off. 🌍💨
+**Pinned comment:** Fun fact: at ~6 people per square meter, everyone alive today would fit inside the city of Los Angeles. Not comfortably. 😬
 
 ---
 

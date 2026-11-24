@@ -24,22 +24,23 @@ A short is one file in `shorts/`. It holds a `SHORT` object (title, duration, so
 
 Shorts run 30 to 45 seconds. Every claim has to be real science or real history, because the comments will check.
 
-## Topic backlog (apocalyptic and extreme)
+## Topic backlog
 
-The channel's lane is planet-scale catastrophe told through real science: the bigger the change to Earth's climate, cycles and life, the better. Every short still ends on a true twist.
+**The rules:** a premise few people have animated, and the consequences for *people* come first. That means what happens in the first seconds, hours and days: planes, hospitals, cities, death tolls. Planet-scale effects come after that, and every short ends on a true twist. The classics (the Sun or Moon vanishing, Earth stopping spinning) are already overdone, so the short in that style is the only one we keep.
 
-| Scenario | The extreme beats | The twist (true) |
+| Scenario | Immediate human consequences | Twist (true) |
 |---|---|---|
-| ✅ What if Earth stopped spinning? | Supersonic winds, mega-tsunamis, oceans flee to the poles, year-long days | Earth's spin really is slowing |
-| ✅ What if the Sun vanished? | 8 minutes of normal life, then darkness, oceans freezing over, life only at deep-sea vents | Earth keeps flying in a straight line, and the vents could keep some life going |
-| What if Yellowstone erupted? | Ash across America, a volcanic winter, failed harvests | It's erupted before, about 640,000 years ago |
-| What if Earth lost its magnetic field? | Solar wind strips the atmosphere, oceans slowly escape | That's probably what happened to Mars |
-| What if a gamma-ray burst hit Earth? | Ozone destroyed in seconds, UV sterilises the surface | One may have helped cause a mass extinction 440 million years ago (a hypothesis) |
-| What if all of Antarctica's ice melted? | Seas up about 58 metres, coastal cities gone, the map redrawn | It was ice-free tens of millions of years ago |
-| What if the Gulf Stream current collapsed? | Europe freezes, storms intensify, monsoons shift | Some studies suggest it's already weakening |
-| What if Earth were 10% closer to the Sun? | Runaway greenhouse, oceans boil, a second Venus | Venus probably once had water |
-| What if a rogue black hole passed through the solar system? | Orbits scrambled, Earth flung into deep space | Rogue black holes exist, and we've detected one drifting through the galaxy |
-| What if the asteroid had missed the dinosaurs? | No mammal takeover, no humans | Birds are dinosaurs, so they never fully died out |
-| What if every volcano erupted at once? | Volcanic winter, acid rain, a mass extinction | The Siberian Traps nearly did this 252 million years ago |
-| What if the oceans drained? | Weather stops, the planet bakes, life collapses | About half of Earth's oxygen comes from ocean life |
-| What if the Sun became a red giant tomorrow? | Oceans boil away, the Earth may be swallowed | It really will happen, in about 5 billion years |
+| ✅ Every human teleported into one city | Crowd-crush density, pilotless planes, burning cities, no water, unattended reactors | Wolves took over Chernobyl |
+| Everyone on Earth falls asleep for one hour | Cars and trains crash, surgeries stop mid-cut, ships run aground, stoves start fires; autopilot can't land most planes | Some planes *can* land themselves, but only at airports with special equipment |
+| Every satellite falls out of the sky | GPS gone; card payments, power grids and phone networks lose their clocks; militaries go blind and panic; the space-station crew is stranded | GPS is also the clock that time-stamps the world's bank transactions |
+| Every dam on Earth breaks at once | Walls of water through valleys, megacities flooded, power gone | Three Gorges holds enough water to measurably slow Earth's rotation |
+| All bacteria vanish | Digestion fails, cows starve (they can't digest grass without microbes), crops collapse, the dead stop rotting | Your body has about as many bacterial cells as human ones |
+| Oxygen drops to half for one minute | The whole planet is suddenly at Everest altitude: pilots black out, people collapse, fires go out | Some sherpas' blood is adapted to this |
+| Every concrete structure turns to dust | Buildings, bridges, highways and dams collapse at once | Concrete is the most-used material on Earth after water |
+| Every ant on Earth attacks at once | About 20 quadrillion ants versus 8 billion humans | Ants together outweigh all wild birds and mammals combined |
+| Everyone forgets how to read overnight | No signs, no medicine labels, no cockpit displays, no code | Writing is only about 5,000 years old |
+| Every undersea internet cable is cut at once | Banks, trade and cloud services across continents go dark; GPS is no backup | Satellites carry only a tiny share of intercontinental data |
+| A solar storm like the one in 1859 hits tomorrow | Grids burn out for months: no water pumps, no hospitals, no refrigeration | One just missed us in July 2012 |
+| The world's population doubles overnight | Food is gone in days, hospitals overflow, cities burst | Earth's population has doubled since the 1970s |
+
+Check every figure before it goes into a script. A few in this table are drafts.

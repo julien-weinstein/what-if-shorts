@@ -149,6 +149,37 @@ def sfx(name):
         while k < sec - 0.05:
             st = int(k * SR); out[st:st + len(click)] += click; k += gap; gap *= 1.18  # slowing down
         return norm(out, 0.5)
+    if base == "crowd":  # panicked crowd murmur
+        tt = t(sec); x = np.zeros(len(tt))
+        for k in range(14):
+            f0 = rng.uniform(180, 420); vib = rng.uniform(3, 7)
+            f = f0 * (1 + 0.06 * np.sin(2 * np.pi * vib * tt + k))
+            x += np.sin(2 * np.pi * np.cumsum(f) / SR) * (0.5 + 0.5 * np.sin(2 * np.pi * rng.uniform(0.5, 2) * tt + k)) ** 2
+        x = lp(x + lp(noise(sec), 0.2) * 3, 0.12)
+        fade = np.minimum(1, np.minimum(tt / 0.6, (sec - tt) / 0.8))
+        return norm(x * fade, 0.4)
+    if base == "alarmbeep":
+        out = np.zeros(int(SR * sec)); k = 0.0
+        while k < sec - 0.2:
+            b = np.sin(2 * np.pi * 880 * t(0.18)) * env(int(SR * 0.18), 0.003, 0.15)
+            st = int(k * SR); out[st:st + len(b)] += b; k += 0.42
+        return norm(lp(out, 0.5), 0.3)
+    if base == "jet":
+        tt = t(sec); x = lp(noise(sec), 0.05) + 0.3 * np.sin(2 * np.pi * 140 * tt) * lp(noise(sec), 0.02)
+        fade = np.minimum(1, np.minimum(tt / 1.0, (sec - tt) / 1.0))
+        return norm(x * fade, 0.35)
+    if base == "dive":  # falling-plane whine
+        return norm(sweep(1200, 300, 1.1) * env(int(SR * 1.1), 0.1, 0.9) + lp(noise(1.1), 0.08) * 0.4, 0.4)
+    if base == "fire":
+        tt = t(sec); x = lp(noise(sec), 0.05) * 0.6
+        crack = (rng.random(len(tt)) > 0.9993) * rng.uniform(0.5, 1.0, len(tt))
+        x += lp(crack * noise(sec), 0.6) * 8
+        fade = np.minimum(1, np.minimum(tt / 0.5, (sec - tt) / 0.7))
+        return norm(x * fade, 0.4)
+    if base == "howl":
+        tt = t(2.2); f = 420 + 160 * np.sin(np.pi * tt / 2.2) - 60 * tt
+        x = np.sin(2 * np.pi * np.cumsum(f) / SR) + 0.2 * np.sin(4 * np.pi * np.cumsum(f) / SR)
+        return norm(x * np.sin(np.pi * tt / 2.2) ** 1.5, 0.3)
     raise ValueError(f"unknown sound {name}")
 
 
