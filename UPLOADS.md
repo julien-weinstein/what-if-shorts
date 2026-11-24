@@ -18,7 +18,7 @@ On each upload, answer **"No, it's not made for kids"**. That keeps comments on,
 
 ---
 
-## 1. What if Earth suddenly stopped spinning? (post this first: it's the stronger hook)
+## 1. What if Earth suddenly stopped spinning? ✅ posted
 
 **File:** `videos/earth-stops-spinning.mp4`
 
@@ -45,28 +45,31 @@ Which part would get you first? 👇
 
 ---
 
-## 2. What if the Moon just vanished?
+## 2. What if the Sun suddenly vanished?
 
-**File:** `videos/moon-vanished.mp4`
+**File:** `videos/sun-vanished.mp4`
 
-**Title:** What If the Moon Just… Vanished? 🌑 #shorts
+**Title:** What If the Sun Suddenly Vanished? ☀️🥶 #shorts
 
 **Description:**
 
 ```
-One second it's there. The next, it's gone. 🌑
+For 8 minutes and 20 seconds, nobody would even notice. Then… lights out. ☀️➡️🌑
 
-That night: way darker skies (but WAY more stars)
-6 hours later: tides shrink to about a third
-Next "full moon": corals that spawn by moonlight lose their calendar
-Millions of years later: Earth's tilt starts wobbling way more
+8 min 20 sec: Earth flies off into deep space
+Weeks: plants die, and then everything that eats them
+1 year: −73°C, oceans frozen over
+Thousands of years: life clings on around deep-sea volcanic vents
+Millions of years: the AIR freezes and falls as snow
 
-Plot twist: the Moon is ALREADY leaving, about 3.8 cm farther away every year.
+Plot twist: the Moon goes dark too. It never had its own light.
 
-#whatif #moon #science #space #shorts
+How long do you think you'd last? 👇
+
+#whatif #sun #space #science #apocalypse #shorts
 ```
 
-**Pinned comment:** The Moon drifts away about as fast as your fingernails grow. 💅🌙
+**Pinned comment:** Gravity travels at the speed of light too, so Earth would keep orbiting an empty spot for 8 minutes 20 seconds before flying off. 🌍💨
 
 ---
 

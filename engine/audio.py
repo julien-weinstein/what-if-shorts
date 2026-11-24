@@ -157,65 +157,85 @@ def hz(m):
     return 440 * 2 ** ((m - 69) / 12)
 
 
+def room(x, mix=0.28):
+    """Cheap reverb: a few decaying echoes, low-passed, blended under the dry signal."""
+    wet = np.zeros(len(x) + int(SR * 1.2))
+    for d, g in [(0.071, 0.5), (0.113, 0.42), (0.173, 0.33), (0.241, 0.25), (0.337, 0.18), (0.461, 0.12)]:
+        k = int(SR * d); wet[k:k + len(x)] += x * g
+    wet = lp(wet, 0.18)[: len(x)]
+    return x * (1 - mix) + wet * mix
+
+
+def warm(freq, sec, decay=0.4, attack=0.01):
+    """Rounded bass/keys tone: sine plus soft 2nd and 3rd harmonics."""
+    tt = t(sec)
+    x = np.sin(2 * np.pi * freq * tt) + 0.25 * np.sin(4 * np.pi * freq * tt) + 0.08 * np.sin(6 * np.pi * freq * tt)
+    return x * env(len(tt), attack, decay)
+
+
+def bell(freq, sec=1.2):
+    tt = t(sec)
+    return (np.sin(2 * np.pi * freq * tt) + 0.3 * np.sin(2 * np.pi * freq * 2.01 * tt)) * env(len(tt), 0.003, 0.35)
+
+
+def pad(freqs, sec):
+    """Soft, slowly breathing chord: detuned sines with a slow swell."""
+    tt = t(sec)
+    x = sum(np.sin(2 * np.pi * f * tt) + np.sin(2 * np.pi * f * 1.004 * tt) for f in freqs) / (2 * len(freqs))
+    swell = np.minimum(1, np.minimum(tt / 0.9, (sec - tt) / 0.9))
+    return x * swell
+
+
 def music_dark(dur, bpm):
-    """Original tense loop: pulsing minor bass, low drums, a high ostinato and a pad."""
+    """Original tense-but-smooth loop: rounded pulsing bass, soft kick, warm pads, sparse bells."""
     beat = 60 / bpm
     out = np.zeros(int(SR * (dur + 3)))
     def put(x, at, gain):
         st = int(at * SR)
         if st >= len(out): return
         out[st:st + len(x)] += x[: len(out) - st] * gain
-    kick = sweep(120, 38, 0.35) * env(int(SR * 0.35), 0.001, 0.12)
-    tom = sweep(180, 80, 0.3) * env(int(SR * 0.3), 0.001, 0.1)
+    kick = sweep(95, 40, 0.4) * env(int(SR * 0.4), 0.002, 0.14)
+    shaker = lp(noise(0.06), 0.35) * env(int(SR * 0.06), 0.004, 0.02)
     roots = [45, 41, 43, 40]                          # Am F G Em
+    chords = {45: (57, 60, 64), 41: (53, 57, 60), 43: (55, 59, 62), 40: (52, 55, 59)}
     bars = int(dur / (4 * beat)) + 1
     for b in range(bars):
         root = roots[b % 4]; t0 = b * 4 * beat
-        put(kick, t0, 0.6); put(kick, t0 + 2.5 * beat, 0.45)
-        if b % 2 == 1: put(tom, t0 + 3.5 * beat, 0.35); put(tom, t0 + 3.75 * beat, 0.3)
-        for k in range(16):  # sixteenth-note pulsing bass
-            tt = t(beat / 4)
-            bn = np.sign(np.sin(2 * np.pi * hz(root - 12) * tt)) * env(len(tt), 0.002, 0.05)
-            put(lp(bn, 0.08), t0 + k * beat / 4, 0.22)
-        for k, iv in enumerate([12, 15, 19, 15, 12, 15, 19, 22]):
-            tt = t(beat * 0.4)
-            pl = np.sin(2 * np.pi * hz(root + 12 + iv) * tt) * env(len(tt), 0.002, 0.1)
-            if b >= 2: put(pl, t0 + k * beat / 2, 0.08)
-        pad = sum(np.sin(2 * np.pi * hz(root + 12 + iv) * t(4 * beat)) for iv in (0, 3, 7)) / 3
-        pad *= np.minimum(1, np.minimum(t(4 * beat) / 0.5, (4 * beat - t(4 * beat)) / 0.5))
-        put(pad, t0, 0.12)
-    return out[: int(SR * dur)]
+        put(kick, t0, 0.5); put(kick, t0 + 2 * beat, 0.35)
+        for k in range(8):
+            put(shaker, t0 + k * beat / 2 + beat / 4, 0.05)
+            put(warm(hz(root - 12), beat * 0.45, 0.18), t0 + k * beat / 2, 0.30 if k % 2 == 0 else 0.18)
+        put(pad([hz(n) for n in chords[root]], 4 * beat), t0, 0.16)
+        if b % 2 == 1 and b >= 2:                     # sparse bell motif every other bar
+            for k, iv in enumerate([12, 7, 3, 7]):
+                put(bell(hz(root + 12 + iv)), t0 + k * beat, 0.06)
+    x = room(out[: int(SR * dur)])
+    return lp(x, 0.35)                                # take the fizz off the top
 
 
 def music(dur, bpm):
-    """Original upbeat loop: kick, hats, bass and a bright plucked riff."""
+    """Original upbeat loop: soft kick, light shaker, rounded bass, mellow keys riff."""
     beat = 60 / bpm
     out = np.zeros(int(SR * (dur + 2)))
     def put(x, at, gain):
-        s = int(at * SR)
-        if s >= len(out): return
-        out[s:s + len(x)] += x[: len(out) - s] * gain
-    kick = sweep(150, 45, 0.25) * env(int(SR * 0.25), 0.001, 0.08)
-    hat = lp(noise(0.05), 0.9) * env(int(SR * 0.05), 0.001, 0.015)
-    clap = lp(noise(0.12), 0.5) * env(int(SR * 0.12), 0.001, 0.04)
-    prog_roots = [48, 43, 45, 41]                     # C G Am F (one bar each)
-    riff = [0, 7, 12, 7, 16, 12, 7, 12]               # eighth notes, relative to the chord
+        st = int(at * SR)
+        if st >= len(out): return
+        out[st:st + len(x)] += x[: len(out) - st] * gain
+    kick = sweep(110, 45, 0.3) * env(int(SR * 0.3), 0.002, 0.1)
+    shaker = lp(noise(0.05), 0.35) * env(int(SR * 0.05), 0.003, 0.015)
+    roots = [48, 43, 45, 41]                          # C G Am F
+    riff = [0, 7, 12, 7, 16, 12, 7, 12]
     bars = int(dur / (4 * beat)) + 1
     for b in range(bars):
-        root = prog_roots[b % 4]; t0 = b * 4 * beat
-        minor = root == 45
+        root = roots[b % 4]; t0 = b * 4 * beat; minor = root == 45
         for k in range(4):
-            put(kick, t0 + k * beat, 0.55)
-            if k in (1, 3): put(clap, t0 + k * beat, 0.25)
+            put(kick, t0 + k * beat, 0.45)
         for k in range(8):
-            put(hat, t0 + k * beat / 2 + beat / 4, 0.12)
-            bn = np.sin(2 * np.pi * hz(root - 12) * t(beat / 2)) * env(int(SR * beat / 2), 0.005, 0.2)
-            put(bn, t0 + k * beat / 2, 0.35)
-            iv = riff[k] + (3 if minor and riff[k] % 12 == 4 else 0) - (1 if minor and riff[k] == 16 else 0)
-            f = hz(root + 24 + iv); tt = t(beat * 0.45)
-            pl = sum(np.sin(2 * np.pi * f * h * tt) / h ** 1.6 for h in range(1, 5)) * env(len(tt), 0.002, 0.12)
-            if b >= 1: put(pl, t0 + k * beat / 2, 0.16)
-    return out[: int(SR * dur)]
+            put(shaker, t0 + k * beat / 2 + beat / 4, 0.06)
+            put(warm(hz(root - 12), beat * 0.45, 0.2), t0 + k * beat / 2, 0.28)
+            iv = riff[k] + (-1 if minor and riff[k] == 16 else 0)
+            if b >= 1: put(warm(hz(root + 12 + iv), beat * 0.45, 0.15, 0.004), t0 + k * beat / 2, 0.10)
+    return lp(room(out[: int(SR * dur)]), 0.4)
 
 
 def main():
@@ -227,7 +247,7 @@ def main():
     if m:
         maker = music_dark if m.get("mode") == "dark" else music
         mu = maker(m.get("until", dur), m.get("bpm", 112))
-        gain = np.full(len(mu), 0.5)
+        gain = np.full(len(mu), 0.34)  # music sits under the SFX
         for a, b in m.get("duckAt", []):  # drop the music out for a beat, for emphasis
             ia, ib = int(a * SR), int(b * SR); gain[ia:ib] = 0.05
         fade = int(SR * 1.2); gain[-fade:] *= np.linspace(1, 0, fade)

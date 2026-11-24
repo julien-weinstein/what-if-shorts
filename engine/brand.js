@@ -42,7 +42,7 @@ function draw(ctx) {
   ctx.strokeText('WHAT IF,', x0, cy - 70); ctx.fillStyle = C.paper; ctx.fillText('WHAT IF,', x0, cy - 70);
   ctx.strokeText('THOUGH?', x0, cy + 70); ctx.fillStyle = C.yellow; ctx.fillText('THOUGH?', x0, cy + 70);
   ctx.font = '800 42px ' + FONT; ctx.fillStyle = '#cfd3ff'; ctx.textAlign = 'center';
-  ctx.fillText('The end of the world, explained in 40 seconds.', cx, cy + 172);
+  ctx.fillText('Earth-ending what-ifs. Real science.', cx, cy + 172);
 }`;
 
 (async () => {

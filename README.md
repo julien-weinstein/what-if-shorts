@@ -31,8 +31,7 @@ The channel's lane is planet-scale catastrophe told through real science: the bi
 | Scenario | The extreme beats | The twist (true) |
 |---|---|---|
 | ✅ What if Earth stopped spinning? | Supersonic winds, mega-tsunamis, oceans flee to the poles, year-long days | Earth's spin really is slowing |
-| ✅ What if the Moon vanished? | Darker nights, shrunken tides, confused corals, a wobbling tilt | The Moon is already leaving |
-| What if the Sun vanished? | 8 minutes of normal life, then darkness, oceans freezing over, life only at deep-sea vents | Earth keeps flying in a straight line, and the vents could keep some life going |
+| ✅ What if the Sun vanished? | 8 minutes of normal life, then darkness, oceans freezing over, life only at deep-sea vents | Earth keeps flying in a straight line, and the vents could keep some life going |
 | What if Yellowstone erupted? | Ash across America, a volcanic winter, failed harvests | It's erupted before, about 640,000 years ago |
 | What if Earth lost its magnetic field? | Solar wind strips the atmosphere, oceans slowly escape | That's probably what happened to Mars |
 | What if a gamma-ray burst hit Earth? | Ozone destroyed in seconds, UV sterilises the surface | One may have helped cause a mass extinction 440 million years ago (a hypothesis) |
