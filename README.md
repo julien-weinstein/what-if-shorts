@@ -79,6 +79,19 @@ Don't use lens flares, colour fringing, HUD counters, hand or "your life" gimmic
 
 **Story:** lead with the immediate, planet-wide destruction the premise causes, with human cost in sourced numbers.
 
+## v8: real 3D shots (Three.js / WebGL)
+
+`engine/city3d.js` renders a true 3D, cel-shaded scene into the 2D frame with `City3D.draw(ctx, localTime, opts)`. It's currently a drone flyover of a giant surge destroying a city:
+- **City:** about 500 instanced towers whose lit windows are generated in a shader in world space and fade with distance, on a street-grid ground plane.
+- **Lighting:** a low sun with soft shadows, plus atmospheric fog.
+- **The surge:** a curling extruded wave with a height gradient, a churning foam crest of instanced blobs, a rolling flood surface behind it, mist particles, and tumbling debris.
+- **Destruction:** each tower is struck when the front reaches it, then topples inland and sinks.
+- **Camera:** keyframed drone path `[[time, position, lookAt], ...]` with eased interpolation and an optional shake.
+
+Three.js is bundled once into `engine/vendor/three.iife.js`. To rebuild it: `npm install`, then `npx esbuild node_modules/three/build/three.module.js --bundle --format=iife --global-name=THREE --minify --outfile=engine/vendor/three.iife.js`. The renderer launches Chromium with SwiftShader WebGL, which works headless with no GPU.
+
+**Long shorts:** reuse scenes at new times with `shifted(sceneFn, originalStart, newStart)`. Show societal tolls with `statRow()`: a big outlined number with one line of sourced context.
+
 ## Plot-hole check (required before animating)
 
 Every script starts with a comment block listing the obvious objections ("wouldn't they just leave?", "wouldn't autopilot handle it?") and how the short deals with each. Where an objection is a common one, answer it on screen with a "What doesn't break" beat, which makes the short more credible. If an objection breaks the premise, change the premise. For example, the everyone-in-one-city short was pulled because the math says people could walk out of LA within hours.

@@ -1,5 +1,12 @@
-// What if the Moon were suddenly 10 times closer?   (v5: original illustrated style with 3D depth;
-// immediate planet-wide destruction; cinematic sound, no synth blips)
+// What if the Moon were suddenly 10 times closer?   (v6: 3D drone flyover of the surge + societal toll)
+// v6 adds: a real 3D (WebGL) drone shot of the surge destroying a city; infrastructure, famine and
+// species-level consequences with sourced numbers:
+//  - ~80% of world trade by volume moves by sea (UNCTAD).
+//  - Undersea cables carry ~99% of intercontinental internet traffic (widely cited industry figure).
+//  - Aquatic foods provide >=20% of animal protein for ~3.3 billion people (FAO SOFIA 2022).
+//  - 1816 "Year Without a Summer" followed one eruption (Tambora, 1815).
+//  - Survivors in high inland regions (Tibetan Plateau, Andes, Ethiopian Highlands, Rockies): reasoning
+//    from tides of hundreds of metres; stated as "retreat to the highlands", hedged "could".
 //
 // ARC: the Moon arrives -> its pull grabs the oceans -> the sea drains from the coast -> it returns as a
 //      tide hundreds of metres high (death toll) -> the crust tears, volcanoes erupt -> ash and famine
@@ -16,28 +23,34 @@
 //    tides growing as it falls; at the Roche limit it's torn apart into a ring; debris falls on Earth.
 const SHORT = {
   title: 'What if the Moon were suddenly 10 times closer?',
-  duration: 50,
+  duration: 68,
   fps: 60,
   motionSamples: 1,
   sfx: [
     [0.0, 'swell:2'], [1.8, 'impact'],
     [5.0, 'air'], [5.4, 'quake:4.5'], [7.0, 'roar:3'],
-    [10.0, 'air'], [10.3, 'drawback:4.6'],
-    [15.0, 'air'], [15.3, 'impact'], [15.5, 'roar:7.5'], [17.6, 'crumble'], [19.2, 'crumble'], [21.0, 'crumble'],
-    [23.0, 'air'], [23.2, 'quake:6'], [24.6, 'impact'], [26.4, 'impact'], [27.0, 'crumble'],
-    [29.0, 'air'], [29.2, 'rumble:4'],
-    [33.0, 'air'], [33.4, 'swell:1.6'], [34.2, 'impact'],
-    [39.0, 'air'], [39.2, 'swell:2.4'], [41.6, 'impact'], [42.6, 'boom'], [43.4, 'impact'], [44.2, 'boom'],
-    [46.0, 'air'], [46.4, 'swell:3'],
+    [10.0, 'air'], [10.3, 'drawback:4.2'],
+    [14.5, 'air'], [14.6, 'quake:10'], [14.8, 'roar:10'], [15.2, 'impact'], [17.4, 'crumble'], [18.6, 'crumble'], [19.8, 'impact'], [20.6, 'crumble'], [22.0, 'crumble'], [23.2, 'crumble'],
+    [25.0, 'air'], [25.4, 'impact'], [26.8, 'boom'], [28.2, 'boom'], [29.6, 'boom'],
+    [32.0, 'air'], [32.2, 'quake:6'], [33.6, 'impact'], [35.4, 'impact'], [36.0, 'crumble'],
+    [38.0, 'air'], [38.2, 'rumble:5.5'], [39.6, 'boom'], [41.2, 'boom'],
+    [44.0, 'air'], [44.3, 'swell:3'], [46.0, 'boom'], [48.0, 'boom'],
+    [51.0, 'air'], [51.4, 'swell:1.6'], [52.2, 'impact'],
+    [57.0, 'air'], [57.2, 'swell:2.4'], [59.6, 'impact'], [60.6, 'boom'], [61.4, 'impact'], [62.2, 'boom'],
+    [64.0, 'air'], [64.4, 'swell:3'],
   ],
-  music: { bpm: 70, mode: 'cinematic', until: 49.6, duckAt: [] },
+  music: { bpm: 70, mode: 'cinematic', until: 67.6, duckAt: [] },
 };
 
 const SUN = [-0.6, -0.35, 0.72];
 
+// run an existing scene (written for its own absolute times) at a new start time
+const shifted = (fn, origStart, newStart) => (ctx, t) => fn(ctx, t - newStart + origStart);
+
 function render(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  sequence(ctx, t, [[0, sArrive], [5, sPull], [10, sDrain], [15, sWave], [23, sQuake], [29, sAsh], [33, sFalling], [39, sBreak], [46, sRings]]);
+  sequence(ctx, t, [[0, sArrive], [5, sPull], [10, sDrain], [14.5, sDrone], [25, sToll], [32, shifted(sQuake, 23, 32)],
+                    [38, sFamine], [44, sSpecies], [51, shifted(sFalling, 33, 51)], [57, shifted(sBreak, 39, 57)], [64, shifted(sRings, 46, 64)]]);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850);
   post(ctx, { bloom: 0.15 });
@@ -297,4 +310,94 @@ function easeIn3(p) { return p * p * p; }
 function mixHex(a, b, p) {
   const pa = [1, 3, 5].map(i => parseInt(a.slice(i, i + 2), 16)), pb = [1, 3, 5].map(i => parseInt(b.slice(i, i + 2), 16));
   return '#' + pa.map((v, i) => Math.round(lerp(v, pb[i], p)).toString(16).padStart(2, '0')).join('');
+}
+
+// ---------------------------------------------------------------- v6: the 3D drone flyover
+const DRONE = { height: 320, z0: 1500, z1: -1800, dur: 10.5,
+  path: [[0, [500, 650, -2100], [0, 160, 900]], [3.4, [1300, 450, -1250], [-100, 170, 200]], [6.8, [1400, 700, -2500], [-300, 150, -700]], [10.5, [650, 1500, -3400], [0, 20, -1300]]],
+  shake: lt => 4 * Math.exp(-Math.abs(lt - 3) * 0.4) };
+function sDrone(ctx, t) {
+  const lt = t - 14.5;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = grad(ctx, ['#4f86da', '#a2c6f2', '#ffd9b0']); ctx.fillRect(0, 0, W, H);
+  moonToon(ctx, 760, 400, 240, { sun: [0.3, -0.4, 0.86] });
+  City3D.draw(ctx, lt, DRONE);
+  say(ctx, t, ['Then it comes back.'], 300, 14.8, { size: 92, out: 17.5 });
+  say(ctx, t, ['A surge hundreds', 'of meters high'], 300, 17.7, { size: 92, out: 20.5, mark: { line: 0, from: 8, to: 16, color: '#ff6b5b' } });
+  say(ctx, t, ['Tokyo. Shanghai. Mumbai.', 'New York. Lagos.'], 300, 20.7, { size: 80, out: 24.7 });
+}
+
+// a stat row in the original bold style: big outlined number + a line of context underneath
+function statRow(ctx, t, y, at, big, text, o = {}) {
+  const { out = 1e9, color = C.yellow } = o;
+  if (t < at || t > out + 0.4) return;
+  const p = easeOut(prog(t, at, at + 0.5)), e = 1 - prog(t, out, out + 0.35);
+  ctx.save(); ctx.globalAlpha = e * Math.min(1, p * 1.5); ctx.translate((1 - p) * -60, 0);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.lineJoin = 'round';
+  ctx.font = `900 108px ${FONT}`; ctx.lineWidth = 20; ctx.strokeStyle = INK; ctx.strokeText(big, 84, y); ctx.fillStyle = color; ctx.fillText(big, 84, y);
+  ctx.font = `800 40px ${FONT}`; ctx.lineWidth = 9; const lines = wrap(ctx, text, 900);
+  lines.forEach((ln, i) => { ctx.strokeText(ln, 88, y + 62 + i * 48); ctx.fillStyle = '#ffffff'; ctx.fillText(ln, 88, y + 62 + i * 48); });
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- v6: the toll on civilization
+function sToll(ctx, t) {
+  ctx.fillStyle = grad(ctx, ['#1b2a5c', '#2d4f93', '#3f74c4']); ctx.fillRect(0, 0, W, H);
+  drift(ctx, t, 25, 32, 1.0, 1.04, W / 2, 1700);
+  toonGlobe(ctx, W / 2, 2150, 760, t, { lon0: 120 + t * 2, lat0: 30 });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['In the first days:'], 300, 25.2, { size: 84, out: 31.7 });
+  statRow(ctx, t, 520, 25.4, '1.9 BILLION', 'people live in the surge’s path', { out: 31.7, color: '#ffb0a0' });
+  statRow(ctx, t, 790, 26.8, '80%', 'of world trade moves by sea. Every major port: wrecked.', { out: 31.7 });
+  statRow(ctx, t, 1060, 28.2, '99%', 'of intercontinental internet traffic rides undersea cables. Torn apart.', { out: 31.7 });
+  statRow(ctx, t, 1330, 29.6, 'DOZENS', 'of coastal nuclear plants, refineries and power stations: flooded', { out: 31.7 });
+}
+
+// ---------------------------------------------------------------- v6: famine
+function sFamine(ctx, t) {
+  space(ctx, t);
+  drift(ctx, t, 38, 44, 1.0, 1.05, W / 2, 1450);
+  const cx = W / 2, cy = 1480, R = 400;
+  toonGlobe(ctx, cx, cy, R, t, { lon0: 60 + t * 4, lat0: 15 });
+  const ash = easeInOut(prog(t, 38.3, 41.0));
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
+  const r = rng(33);
+  for (let i = 0; i < 40; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * R, rr = 60 + r() * 120;
+    ctx.fillStyle = `rgba(80,72,78,${0.85 * Math.min(1, ash * 1.6 - r() * 0.5)})`; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * d, cy + Math.sin(a) * d, rr * ash, 0, 6.283); ctx.fill(); }
+  for (let i = 0; i < 10; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * R * 0.85; glow(ctx, cx + Math.cos(a) * d, cy + Math.sin(a) * d, 40, '255,120,40', 0.9 * (0.5 + 0.5 * Math.sin(t * 6 + i))); }
+  ctx.restore();
+  ctx.lineWidth = 8; ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.stroke();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['Ash blots out the Sun.', 'Harvests fail.'], 300, 38.3, { size: 84, out: 43.7 });
+  statRow(ctx, t, 560, 39.6, '1816', 'One volcano gave Earth a “year without a summer.” This is hundreds.', { out: 43.7 });
+  statRow(ctx, t, 850, 41.2, '3.3 BILLION', 'people rely on fish for protein. Fisheries collapse.', { out: 43.7, color: '#ffb0a0' });
+}
+
+// ---------------------------------------------------------------- v6: what happens to humanity
+const HIGHLANDS = [['Tibetan Plateau', 88, 33], ['Ethiopian Highlands', 39, 9], ['Andes', -70, -15], ['Rockies', -106, 40]];
+function projectLL(cx, cy, R, lon0, lat0, lon, lat) {
+  const l0 = lon0 * Math.PI / 180, p0 = lat0 * Math.PI / 180, l = lon * Math.PI / 180 - l0, p = lat * Math.PI / 180;
+  const x = Math.cos(p) * Math.sin(l), y = -(Math.cos(p0) * Math.sin(p) - Math.sin(p0) * Math.cos(p) * Math.cos(l));
+  const z = Math.sin(p0) * Math.sin(p) + Math.cos(p0) * Math.cos(p) * Math.cos(l);
+  return [cx + x * R, cy + y * R, z];
+}
+function sSpecies(ctx, t) {
+  space(ctx, t);
+  drift(ctx, t, 44, 51, 1.0, 1.04, W / 2, 1150);
+  const cx = W / 2, cy = 1150, R = 430, lon0 = lerp(110, -90, easeInOut(prog(t, 44, 50.8))), lat0 = 12;
+  toonGlobe(ctx, cx, cy, R, t, { lon0, lat0 });
+  // drowned coastlines: a dark-blue fringe along every shore, the land that's left glows faintly
+  for (const [name, lo, la] of HIGHLANDS) {
+    const [x, y, z] = projectLL(cx, cy, R, lon0, lat0, lo, la); if (z < 0.15) continue;
+    const a = Math.min(1, (z - 0.15) * 3) * prog(t, 44.6, 45.4);
+    ctx.save(); ctx.globalAlpha = a;
+    glow(ctx, x, y, 70 + Math.sin(t * 3) * 8, '255,214,90', 0.9);
+    ctx.fillStyle = C.yellow; ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, y, 14, 0, 6.283); ctx.fill(); ctx.stroke();
+    ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'left'; ctx.lineJoin = 'round'; ctx.lineWidth = 10; ctx.strokeText(name, x + 26, y + 14); ctx.fillStyle = '#fff'; ctx.fillText(name, x + 26, y + 14);
+    ctx.restore();
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['Survivors retreat', 'to the highlands'], 300, 44.3, { size: 92, out: 47.4 });
+  say(ctx, t, ['Civilization could be', 'set back centuries'], 300, 47.6, { size: 88, out: 50.7, mark: { line: 1, from: 0, to: 18, color: '#ff6b5b' } });
+  say(ctx, t, ['And the Moon isn’t finished.'], 1700, 49.0, { size: 60, weight: 900, out: 50.7 });
 }

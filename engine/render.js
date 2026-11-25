@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
 
 const [, , scenePath, outBase, ...rest] = process.argv;
 const stillsArg = rest.indexOf('--stills') >= 0 ? rest[rest.indexOf('--stills') + 1] : null;
-const ENGINE = ['lib.js', 'style2.js', 'style3.js', 'style4.js', 'data/land.js', 'fx.js'];
+const ENGINE = ['vendor/three.iife.js', 'lib.js', 'style2.js', 'style3.js', 'style4.js', 'data/land.js', 'fx.js', 'city3d.js'];
 
 async function openPage(browser, lib, scene) {
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
@@ -36,7 +36,7 @@ async function openPage(browser, lib, scene) {
 (async () => {
   const lib = ENGINE.map(f => fs.readFileSync(path.join(__dirname, f), 'utf8')).join('\n');
   const scene = fs.readFileSync(scenePath, 'utf8');
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   fs.mkdirSync(path.dirname(outBase), { recursive: true });
 
   if (stillsArg) {

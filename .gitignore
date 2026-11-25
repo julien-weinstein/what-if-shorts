@@ -1,4 +1,4 @@
+node_modules/
 out/
 __pycache__/
 *.f32
-node_modules/
