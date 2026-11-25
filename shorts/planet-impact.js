@@ -379,7 +379,7 @@ function vBoil(ctx, u) {
   ctx.fillStyle = grad(ctx, ['#3a2a3a', '#1a2a48', '#0a1a30'], 0, hz, 0, H); ctx.fillRect(0, hz, W, H);
   const r = rng(22);
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  for (let i = 0; i < 260; i++) { const q = r(), y = hz + 10 + q * q * 900, x = r() * W, ph = (u * (1.5 + r() * 2) + r()) % 1, s = (4 + q * 30) * (0.3 + ph);
+  for (let i = 0; i < 260; i++) { const q = r(), y = hz + 10 + q * q * 900, x = r() * W, ph = (((u * (1.5 + r() * 2) + r()) % 1) + 1) % 1, s = (4 + q * 30) * (0.3 + ph);
     ctx.strokeStyle = `rgba(255,190,140,${0.5 * (1 - ph)})`; ctx.lineWidth = 1 + q * 3; ctx.beginPath(); ctx.ellipse(x, y, s * 1.8, s * 0.5, 0, 0, 6.283); ctx.stroke(); }
   ctx.restore();
   [[160, 1080, 0.55, 0.8], [760, 1180, 0.9, 1.4], [420, 1420, 1.5, 0.5]].forEach(([x, y, s, at]) => { const k = easeIn2(R2((u - at) / 3.2));
