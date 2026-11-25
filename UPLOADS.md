@@ -108,10 +108,10 @@ Plot twist: this already happened. 4.5 billion years ago, a planet called Theia 
 ```
 As contagious as measles. As deadly as smallpox. Designed by a machine.
 
-It spreads for days before anyone feels sick. Within weeks it's in every country.
-Borders close too late. Hospitals overflow. Cities go dark.
-If it spread like measles and killed like smallpox: ~1.8 billion dead in a year (est.).
-That dwarfs the Black Death, the 1918 flu and COVID-19 combined.
+One sneeze: up to 40,000 droplets. Each sick person infects ~15 more. Five jumps later: 760,000 people.
+Inside you, it hijacks your cells until they burst with thousands of copies. Your immune system goes to war... and the fight itself wrecks your lungs.
+Hospitals run out of beds. Then hallways. Then parking lots.
+Most of the world catches it. 1 in 3 die: ~1.8 billion people in a year (est.).
 
 But AI can fight back too: COVID's vaccine was designed in 2 days.
 
