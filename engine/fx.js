@@ -327,7 +327,7 @@ function ship(ctx, x, y, s, rot) {
 // ---------------------------------------------------------------- post-processing
 // Bloom + colour grade + soft vignette. Call once at the end of render().
 function post(ctx, o = {}) {
-  const { bloom = 0.22, contrast = 1.05, saturate = 1.08, vignette = 0.28 } = o;
+  const { bloom = 0.22, contrast = 1.05, saturate = 1.08, vignette = 0.28, chromaPx = 0 } = o;
   const src = ctx.canvas;
   const small = fxBuf('bloom', W / 4, H / 4), sc = small.getContext('2d');
   sc.filter = 'brightness(0.62) contrast(3.4)'; sc.clearRect(0, 0, small.width, small.height); sc.drawImage(src, 0, 0, small.width, small.height); sc.filter = 'none';
@@ -343,6 +343,7 @@ function post(ctx, o = {}) {
   v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, `rgba(0,0,0,${vignette})`);
   ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
   ctx.restore();
+  chroma(ctx, chromaPx);
 }
 
 // Draw something blurred (depth of field) via an offscreen buffer.
@@ -363,5 +364,129 @@ function tally(ctx, t, value, x, y, at, o = {}) {
   ctx.font = `900 ${size}px ${FONT}`; if (ctx.letterSpacing !== undefined) ctx.letterSpacing = `${-size * 0.03}px`;
   ctx.fillStyle = color; ctx.fillText(prefix + v.toLocaleString('en-US') + suffix, x, y);
   if (label) { if (ctx.letterSpacing !== undefined) ctx.letterSpacing = '0px'; ctx.font = `800 ${labelSize}px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fillText(label, x, y + labelSize * 1.5); }
+  ctx.restore();
+}
+
+// ================================================================ v6: impact & lighting kit
+// Camera punch-in: a quick zoom pulse after each hit time, decaying fast.
+function punch(ctx, t, hits, amount = 0.07, cx = W / 2, cy = H / 2) {
+  let s = 1;
+  for (const h of hits) if (t >= h) s += amount * Math.exp(-(t - h) * 7) * (1 - Math.exp(-(t - h) * 60));
+  ctx.translate(cx, cy); ctx.scale(s, s); ctx.translate(-cx, -cy);
+}
+// Strength (0..1) of an impact effect at time t for a list of hit times.
+function hitAmount(t, hits, decay = 6) { let a = 0; for (const h of hits) if (t >= h) a = Math.max(a, Math.exp(-(t - h) * decay)); return a; }
+
+// Chromatic aberration (RGB split), applied to the whole frame. Used on impact frames.
+function chroma(ctx, px) {
+  if (px < 0.5) return;
+  const src = ctx.canvas, mk = (n, col) => { const b = fxBuf(n), c = b.getContext('2d');
+    c.globalCompositeOperation = 'source-over'; c.clearRect(0, 0, W, H); c.drawImage(src, 0, 0);
+    c.globalCompositeOperation = 'multiply'; c.fillStyle = col; c.fillRect(0, 0, W, H); c.globalCompositeOperation = 'source-over'; return b; };
+  const r = mk('chR', '#ff0000'), g = mk('chG', '#00ff00'), b = mk('chB', '#0000ff');
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.drawImage(r, -px, 0); ctx.drawImage(g, 0, 0); ctx.drawImage(b, px, 0);
+  ctx.restore();
+}
+
+// Anamorphic lens flare: horizontal streak, glow, starburst and ghosts toward the frame centre.
+function lensFlare(ctx, x, y, k = 1, tint = '190,215,255') {
+  if (k <= 0) return;
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  const sg = ctx.createLinearGradient(x - 700, 0, x + 700, 0);
+  sg.addColorStop(0, `rgba(${tint},0)`); sg.addColorStop(0.5, `rgba(${tint},${0.55 * k})`); sg.addColorStop(1, `rgba(${tint},0)`);
+  ctx.fillStyle = sg; ctx.beginPath(); ctx.ellipse(x, y, 700, 7, 0, 0, 6.283); ctx.fill();
+  glow(ctx, x, y, 160, tint, 0.35 * k);
+  ctx.strokeStyle = `rgba(${tint},${0.18 * k})`; ctx.lineWidth = 2;
+  for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2 + 0.2; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a) * 260, y + Math.sin(a) * 260); ctx.stroke(); }
+  const dx = W / 2 - x, dy = H / 2 - y;
+  for (const [f, r, a, c] of [[0.6, 40, 0.18, '255,200,150'], [1.1, 90, 0.10, '150,200,255'], [1.5, 26, 0.22, '255,255,255'], [1.9, 140, 0.06, '200,150,255']]) {
+    const gx = x + dx * f, gy = y + dy * f, g = ctx.createRadialGradient(gx, gy, 0, gx, gy, r);
+    g.addColorStop(0, `rgba(${c},${a * k})`); g.addColorStop(0.7, `rgba(${c},${a * 0.6 * k})`); g.addColorStop(1, `rgba(${c},0)`);
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(gx, gy, r, 0, 6.283); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// Volumetric light rays streaming from a source, slowly rotating.
+function godRays(ctx, t, x, y, o = {}) {
+  const { n = 18, len = 1500, alpha = 0.10, tint = '210,225,255', seed = 3 } = o;
+  const r = rng(seed);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < n; i++) {
+    const a = r() * Math.PI * 2 + t * 0.03 * (r() - 0.5), w = 0.02 + r() * 0.05, l = len * (0.5 + r() * 0.5);
+    const g = ctx.createRadialGradient(x, y, 0, x, y, l);
+    g.addColorStop(0, `rgba(${tint},${alpha * (0.5 + r())})`); g.addColorStop(1, `rgba(${tint},0)`);
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x, y); ctx.arc(x, y, l, a - w, a + w); ctx.closePath(); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// Physically simulated debris: gravity, drag, and bounces on a ground line (deterministic re-sim).
+function debrisPhys(ctx, t, x, y, at, o = {}) {
+  const { n = 40, speed = 900, g = 1800, spread = Math.PI, dir = -Math.PI / 2, seed = 5, col = '#3a3340', size = 14, ground = 1e9, dur = 4, restitution = 0.35 } = o;
+  const T = t - at; if (T < 0 || T > dur) return;
+  const r = rng(seed), dt = 1 / 120, steps = Math.floor(T / dt);
+  for (let i = 0; i < n; i++) {
+    const a = dir + (r() - 0.5) * spread, v = speed * (0.35 + r() * 0.85), s = size * (0.4 + r()); let spin = (r() - 0.5) * 16;
+    let px = x, py = y, vx = Math.cos(a) * v, vy = Math.sin(a) * v, rot = 0;
+    for (let k = 0; k < steps; k++) {
+      vy += g * dt; vx *= 0.999; px += vx * dt; py += vy * dt; rot += spin * dt;
+      if (py > ground - s * 0.5) { py = ground - s * 0.5; vy = -vy * restitution; vx *= 0.7; spin *= 0.6; }
+    }
+    ctx.save(); ctx.translate(px, py); ctx.rotate(rot); ctx.globalAlpha = Math.min(1, (dur - T) * 2);
+    ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(-s, -s * 0.6); ctx.lineTo(s * 0.8, -s); ctx.lineTo(s, s * 0.7); ctx.lineTo(-s * 0.7, s); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.fillRect(-s * 0.6, -s * 0.7, s * 0.8, s * 0.25);
+    ctx.restore();
+  }
+}
+
+// Streaking water droplets (spray) thrown from a point along a direction.
+function spray(ctx, t, x, y, o = {}) {
+  const { n = 80, speed = 1100, dir = -1.2, spread = 0.9, g = 1600, seed = 8, period = 1.1 } = o;
+  const r = rng(seed);
+  ctx.save(); ctx.lineCap = 'round';
+  for (let i = 0; i < n; i++) {
+    const ph = (t / period + r()) % 1, T = ph * period;
+    const a = dir + (r() - 0.5) * spread, v = speed * (0.5 + r() * 0.7);
+    const vx = Math.cos(a) * v, vy = Math.sin(a) * v + g * T;
+    const px = x + Math.cos(a) * v * T, py = y + Math.sin(a) * v * T + 0.5 * g * T * T;
+    ctx.strokeStyle = `rgba(240,250,255,${0.75 * (1 - ph)})`; ctx.lineWidth = 2 + r() * 4;
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - vx * 0.02, py - vy * 0.02); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Elegant human silhouette (no face): pose 'stand' | 'read' | 'point'.
+function silhouette(ctx, x, y, h, o = {}) {
+  const { col = '#0d1326', pose = 'stand', flip = false } = o;
+  const u = h / 8;
+  ctx.save(); ctx.translate(x, y); if (flip) ctx.scale(-1, 1); ctx.fillStyle = col; ctx.strokeStyle = col; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.ellipse(0, -7.4 * u, 0.48 * u, 0.58 * u, 0, 0, 6.283); ctx.fill();            // head
+  ctx.fillRect(-0.18 * u, -6.9 * u, 0.36 * u, 0.5 * u);                                                  // neck
+  ctx.beginPath(); ctx.moveTo(-1.05 * u, -6.3 * u); ctx.quadraticCurveTo(0, -6.6 * u, 1.05 * u, -6.3 * u);  // torso
+  ctx.lineTo(0.75 * u, -3.6 * u); ctx.lineTo(-0.75 * u, -3.6 * u); ctx.closePath(); ctx.fill();
+  ctx.lineWidth = 0.62 * u;
+  ctx.beginPath(); ctx.moveTo(-0.38 * u, -3.8 * u); ctx.lineTo(-0.45 * u, -0.2 * u); ctx.moveTo(0.38 * u, -3.8 * u); ctx.lineTo(0.48 * u, -0.2 * u); ctx.stroke();  // legs
+  ctx.lineWidth = 0.42 * u;
+  if (pose === 'read') {
+    ctx.beginPath(); ctx.moveTo(-0.9 * u, -6.0 * u); ctx.lineTo(-0.7 * u, -4.6 * u); ctx.lineTo(0.3 * u, -5.0 * u); ctx.moveTo(0.9 * u, -6.0 * u); ctx.lineTo(1.0 * u, -4.7 * u); ctx.lineTo(0.5 * u, -5.0 * u); ctx.stroke();
+    ctx.fillStyle = '#f4efe2'; ctx.save(); ctx.translate(0.4 * u, -5.2 * u); ctx.rotate(-0.25); ctx.fillRect(-0.55 * u, -0.4 * u, 1.1 * u, 0.75 * u); ctx.restore();   // lit book pages
+  } else if (pose === 'point') {
+    ctx.beginPath(); ctx.moveTo(-0.9 * u, -6.0 * u); ctx.lineTo(-1.1 * u, -3.9 * u); ctx.moveTo(0.9 * u, -6.0 * u); ctx.lineTo(2.2 * u, -7.6 * u); ctx.stroke();
+  } else {
+    ctx.beginPath(); ctx.moveTo(-0.9 * u, -6.0 * u); ctx.lineTo(-1.15 * u, -3.8 * u); ctx.moveTo(0.9 * u, -6.0 * u); ctx.lineTo(1.15 * u, -3.8 * u); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// A hand held up at arm's length (silhouette), fingers up, viewed from behind.
+function hand(ctx, x, y, s, col = '#0b1020') {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = col;
+  roundRect(ctx, -170, -40, 340, 420, 120); ctx.fill();                                 // palm + wrist
+  [[-150, -330, 70, 330], [-72, -400, 72, 400], [6, -380, 72, 380], [84, -320, 66, 320]].forEach(([fx, fy, fw, fh]) => { roundRect(ctx, fx, fy, fw, fh, 34); ctx.fill(); });
+  ctx.save(); ctx.translate(150, 60); ctx.rotate(-0.75); roundRect(ctx, -40, -230, 78, 250, 38); ctx.fill(); ctx.restore();   // thumb
   ctx.restore();
 }

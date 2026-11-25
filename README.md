@@ -54,6 +54,16 @@ The retired experiments are kept for reference: `style2.js` (dark), `style4.js` 
 - **Renderer:** set `SHORT.fps = 60` and `SHORT.motionSamples = 2` for 60fps with motion blur. Frames render in parallel on several browser pages and are joined at the end. A 48-second short takes about 9 minutes on 4 cores.
 - **Test card:** `shorts/fx-test.js` exercises the whole kit.
 
+## FX v6: impact and lighting kit (`fx.js`)
+
+- **`punch(ctx, t, hits)`:** a camera zoom-pulse on impacts. `hitAmount()` gives the impact strength, which drives `post({ chromaPx })` for a brief RGB-split colour fringe.
+- **`lensFlare()`:** an anamorphic streak, starburst and ghosts. **`godRays()`:** volumetric light shafts.
+- **`debrisPhys()`:** simulated chunks with gravity, drag and bounces on a ground line. **`spray()`:** streaking water droplets.
+- **`silhouette()`:** faceless human figures (standing, reading, pointing). **`hand()`:** a hand held up at arm's length, for scale moments.
+- **Slow motion:** remap time inside a scene for climaxes (see `sBreak` in `moon-closer.js`).
+
+**Hook formula:** open with the viewer's own experience ("Here's what your life would look like", "Hold out your hand"). Give one relatable fact before the planetary escalation (the ground under you already rises 30 cm a day), and keep a counter or a number on screen at every big beat.
+
 ## Plot-hole check (required before animating)
 
 Every script starts with a comment block listing the obvious objections ("wouldn't they just leave?", "wouldn't autopilot handle it?") and how the short deals with each. Where an objection is a common one, answer it on screen with a "What doesn't break" beat, which makes the short more credible. If an objection breaks the premise, change the premise. For example, the everyone-in-one-city short was pulled because the math says people could walk out of LA within hours.
