@@ -132,7 +132,8 @@ function vAlert(ctx, u) {
 function vUnzip(ctx, u) {
   const [sx, sy] = shakeOffset(u, 0.1, 5.2, 14);
   ctx.translate(sx, sy);
-  const { P, tip } = caMap(ctx, { lon0: -117.5, lat0: 34.1, k: 330, cy: 1150, t: u, rupture: easeInOut(prog(u, 0.2, 4.6)), rupFrom: 0, rupTo: 5 });
+  const { P, tip: tip0 } = caMap(ctx, { lon0: -117.5, lat0: 34.1, k: 330, cy: 1150, t: u, rupture: easeInOut(prog(u, 0.2, 4.6)), rupFrom: 0, rupTo: 5 });
+  const tip = tip0 || P(...FAULT[0]);
   for (let i = 0; i < 5; i++) { const ph = ((u * 0.8 + i / 5) % 1); ctx.strokeStyle = `rgba(255,220,120,${0.7 * (1 - ph)})`; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(tip[0], tip[1], ph * 700, 0, 6.283); ctx.stroke(); }
   cityDots(ctx, P, ['Los Angeles', 'San Bernardino', 'Palm Springs', 'San Diego'], 42);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
