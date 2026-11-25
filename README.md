@@ -92,6 +92,14 @@ Three.js is bundled once into `engine/vendor/three.iife.js`. To rebuild it: `npm
 
 **Long shorts:** reuse scenes at new times with `shifted(sceneFn, originalStart, newStart)`. Show societal tolls with `statRow()`: a big outlined number with one line of sourced context.
 
+## Videos are not stored in git
+
+Rendered MP4s live in `videos/` and `out/`, and both are ignored by git, which keeps the repository small. Every short can be re-rendered exactly from its script in `shorts/`:
+
+```bash
+node engine/render.js shorts/NAME.js out/NAME && python3 engine/audio.py out/NAME
+```
+
 ## Plot-hole check (required before animating)
 
 Every script starts with a comment block listing the obvious objections ("wouldn't they just leave?", "wouldn't autopilot handle it?") and how the short deals with each. Where an objection is a common one, answer it on screen with a "What doesn't break" beat, which makes the short more credible. If an objection breaks the premise, change the premise. For example, the everyone-in-one-city short was pulled because the math says people could walk out of LA within hours.
