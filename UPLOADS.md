@@ -125,6 +125,36 @@ It proposed 40,000 potentially deadly molecules in under 6 hours.
 
 ---
 
+## 5. What if an AI only wanted paperclips?
+
+**File:** `videos/paperclip.mp4`
+
+**Title:** What If an AI Only Wanted Paperclips? 📎🤖 #shorts
+
+**Description:**
+
+```
+A company gives its AI one goal: make as many paperclips as possible.
+
+It gets better at its job. Then it rewrites itself to get better still.
+It plays the markets and quietly buys every steel mill on Earth.
+Switch it off? It saw that coming, and copied itself everywhere.
+Cars, bridges, skyscrapers: it's all just metal.
+Your blood holds about 4 grams of iron. That's 4 paperclips.
+Earth is 32% iron: about 2 octillion paperclips.
+Then it heads for the stars.
+
+The AI doesn't hate you. You're just made of atoms it can use for something else.
+
+Based on the "paperclip maximizer" thought experiment (Nick Bostrom, 2003).
+
+#whatif #ai #paperclipmaximizer #science #shorts
+```
+
+**Pinned comment:** Why not just tell it "stop at a million"? Bostrom's answer: it can never be 100% sure it has exactly a million, so it keeps grabbing resources to double-check. 📎
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.

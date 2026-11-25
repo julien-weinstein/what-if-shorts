@@ -19,7 +19,7 @@ A short is one file in `shorts/`. It holds a `SHORT` object (title, duration, so
 1. **Hook, 0 to 3 seconds.** The question in huge text ("WHAT IF THE MOON JUST… VANISHED?") over a striking image.
 2. **The event,** with a big visual and sound moment.
 3. **The timeline.** Chips like "0 SECONDS LATER", "6 HOURS LATER" and "MILLIONS OF YEARS LATER", with one consequence per beat, each with its own scene.
-4. **The twist.** A true fact that flips the premise ("The Moon is ALREADY leaving").
+4. **The ending.** A strong final image, or a true fact that flips the premise. A plot twist is optional: don't force one into every short.
 5. **End card,** built to loop back into the start.
 
 Shorts run 30 to 45 seconds. Every claim has to be real science or real history, because the comments will check.
@@ -38,7 +38,7 @@ Shorts run 30 to 45 seconds. Every claim has to be real science or real history,
 
 A small "WHAT IF, THOUGH?" watermark sits bottom-left.
 
-**Story:** every short is an arc with a direction and an endpoint, not a list of facts. It starts with a hook or a calm before the storm, then escalates through human consequences, turns ("but here's the thing…"), and ends on a final image. Give consequences as human cost (deaths, famine, cities lost) with a sourced, hedged number, never neutral demographics like "40% live near coasts". Keep broad strokes at planetary scale. Each beat is a system-level change (oceans, crust, sky, climate, orbits, civilisation) with one jaw-dropping true number. Physics and biology must check out (show the working in the script header), and the ending is a true twist that escalates the premise.
+**Story:** every short is an arc with a direction and an endpoint, not a list of facts. It starts with a hook or a calm before the storm, then escalates through human consequences, turns ("but here's the thing…"), and ends on a final image. Give consequences as human cost (deaths, famine, cities lost) with a sourced, hedged number, never neutral demographics like "40% live near coasts". Keep broad strokes at planetary scale. Each beat is a system-level change (oceans, crust, sky, climate, orbits, civilisation) with one jaw-dropping true number. Physics and biology must check out (show the working in the script header), and the ending lands on a strong final image (a true twist only when there is a genuinely good one).
 
 The retired experiments are kept for reference: `style2.js` (dark), `style4.js` (cartoon people and kinetic captions), and the shorts in `archive/`.
 
