@@ -45,7 +45,7 @@ const FNS = { hook: vHook, fault: vFault, alert: vAlert, unzip: vUnzip, offset: 
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 function render(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  sequence(ctx, t, SCENES.map(([n]) => [START[n], (c, tt) => FNS[n](c, tt - START[n])]), 0.3);
+  sequence(ctx, t, SCENES.map(([n]) => [START[n], (c, tt) => FNS[n](c, Math.max(0, tt - START[n]))]), 0.3);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (t < START.end) { ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850); }
   post(ctx, { bloom: 0.15 });
