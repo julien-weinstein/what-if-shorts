@@ -17,6 +17,10 @@
 //  - V-2 test MW 18014 reached ~176 km on 20 June 1944: the first human-made object in space.
 //  - The Manhattan Project began from fear of a German bomb (Einstein-Szilard letter, 1939). Trinity: 16 July 1945.
 //  - WWII killed ~70-85 million people.
+//  - Later decades (speculative, by analogy): Hitler (b. 1889) would be in his 80s by the 1970s -> succession struggle;
+//    occupied nations resisting like Poland's Solidarity (1980); a censored national internet like China's Great Firewall;
+//    totalitarian empires either collapse (USSR, 1991) or endure in isolation (North Korea, whose night-time satellite
+//    image is almost entirely dark).
 // PLOT HOLES: Could Germany really win? Historians mostly say no (resources, the US); hence the explicit divergence.
 //  Would the US keep fighting? Germany declared war on the US in Dec 1941, and the bomb was built for Germany.
 
@@ -30,6 +34,8 @@ const SCENES = [
   ['rocket', 4.5, [[0.4, 'roar:3.6'], [0.5, 'boom']]],
   ['bomb', 5.0, [[0.2, 'swell:2.4'], [2.6, 'impact'], [2.65, 'boom'], [2.7, 'rumble:2.2']]],
   ['cold', 5.0, [[0.2, 'heart:4.6']]],
+  ['decades', 6.5, [[0.2, 'rumble:6'], [0.6, 'impact'], [2.4, 'impact'], [4.2, 'impact']]],
+  ['today', 5.5, [[0.2, 'swell:5']]],
   ['final', 5.5, [[0.2, 'swell:5']]],
   ['end', 3.0, [[0.2, 'swell:2.5']]],
 ];
@@ -47,7 +53,7 @@ const SHORT = {
 };
 
 const FNS = { hook: vHook, close: vClose, map: vMap, holo: vHolo, east: vEast, germania: vGermania, rocket: vRocket, bomb: vBomb,
-              cold: vCold, final: vFinal, end: vEnd };
+              cold: vCold, decades: vDecades, today: vToday, final: vFinal, end: vEnd };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 const REICH = '122,31,43';
 function render(ctx, t) {
@@ -253,6 +259,55 @@ function vCold(ctx, u) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   say(ctx, u, ['Or worse: a cold war', 'across the Atlantic'], 230, 0.15, { size: 80, out: 2.6 });
   say(ctx, u, ['with nuclear weapons', 'on both sides'], 230, 2.7, { size: 80, out: OUT('cold') });
+}
+
+// ================================================================ 10a. the decades (speculative)
+const DECADES = [['1970s', 'Hitler dies. A brutal', 'fight over who rules next.', '#b02a3a'], ['1980s', 'Uprisings across occupied', 'Europe, like Poland’s Solidarity', '#ffbe0b'],
+  ['1990s', 'Two internets: one open,', 'one censored', '#4cc9f0']];
+function vDecades(ctx, u) {
+  bgSky(ctx, ['#141a3a', '#232a5a', '#33407a']);
+  const x0 = 120, y0 = 560, y1 = 1780, f = easeInOut(prog(u, 0, 5.2));
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 14; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.stroke();
+  ctx.strokeStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, lerp(y0, y1, f)); ctx.stroke();
+  DECADES.forEach(([yr, a, b, col], i) => { const at = 0.5 + i * 1.8, k = easeBack(R2((u - at) / 0.45)); if (k <= 0) return; const y = y0 + 120 + i * 400;
+    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x0, y, 28 * k, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 8; ctx.stroke();
+    ctx.save(); ctx.translate(x0 + 70, y); ctx.scale(k, k);
+    ctx.fillStyle = 'rgba(255,255,255,0.96)'; roundRect(ctx, 0, -120, 830, 240, 30); ctx.fill(); ctx.fillStyle = col; roundRect(ctx, 0, -120, 22, 240, 11); ctx.fill();
+    ctx.font = `900 64px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = col === '#ffbe0b' ? '#b07a00' : col; ctx.fillText(yr, 50, -42);
+    ctx.font = `800 40px ${FONT}`; ctx.fillStyle = '#1b1b2e'; ctx.fillText(a, 50, 20); ctx.fillText(b, 50, 70);
+    // small icon per decade
+    ctx.translate(730, -50);
+    if (i === 0) { ctx.fillStyle = '#b02a3a'; ctx.beginPath(); ctx.moveTo(-40, 20); ctx.lineTo(-40, -10); ctx.lineTo(-20, 5); ctx.lineTo(0, -20); ctx.lineTo(20, 5); ctx.lineTo(40, -10); ctx.lineTo(40, 20); ctx.fill();
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(-6, -14); ctx.lineTo(4, 2); ctx.lineTo(-4, 8); ctx.lineTo(6, 20); ctx.stroke(); }
+    else if (i === 1) { ctx.fillStyle = '#1b1b2e'; for (let q = -2; q <= 2; q++) { ctx.beginPath(); ctx.arc(q * 18, -8, 8, 0, 6.283); ctx.fill(); ctx.fillRect(q * 18 - 8, 0, 16, 26); }
+      ctx.fillStyle = '#ffbe0b'; ctx.fillRect(-4, -48, 6, 40); ctx.fillRect(2, -48, 30, 18); }
+    else { ctx.strokeStyle = '#4cc9f0'; ctx.lineWidth = 6; for (let q = 1; q <= 3; q++) { ctx.beginPath(); ctx.arc(0, 20, q * 14, Math.PI * 1.2, Math.PI * 1.8); ctx.stroke(); }
+      ctx.strokeStyle = '#b02a3a'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(-36, -30); ctx.lineTo(36, 30); ctx.stroke(); }
+    ctx.restore(); });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, u, ['Then the decades', 'roll on…'], 230, 0.15, { size: 92, out: OUT('decades') });
+}
+
+// ================================================================ 10b. 2026: collapse, or a continent in the dark
+function inPoly(lon, lat, P) { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j];
+  if ((yi > lat) !== (yj > lat) && lon < (xj - xi) * (lat - yi) / (yj - yi) + xi) c = !c; } return c; }
+function vToday(ctx, u) {
+  space(ctx, u);
+  const R = 720, cx = W / 2, cy = 1240, lon0 = lerp(-25, 12, easeInOut(prog(u, 0, 5.5))), lat0 = 47, v = gView(lon0, lat0);
+  globe(ctx, cx, cy, R, { lon0, lat0, t: u, ink: false, sun: [0.15, -0.1, -0.98], clouds: 0.15 });
+  const dark = easeInOut(prog(u, 2.5, 3.6));
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
+  ctx.beginPath(); REICH_POLY.forEach(([lo, la], i) => { const [x, y] = v(lo, la); i ? ctx.lineTo(cx + x * R, cy + y * R) : ctx.moveTo(cx + x * R, cy + y * R); }); ctx.closePath();
+  ctx.fillStyle = `rgba(4,6,16,${0.92 * dark})`; ctx.fill(); ctx.strokeStyle = `rgba(255,110,110,${0.7 * dark})`; ctx.lineWidth = 3; ctx.setLineDash([12, 10]); ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+  const extra = [['Boston', -71, 42.4, 5], ['Washington', -77, 38.9, 6], ['Chicago', -87.6, 41.9, 9], ['Toronto', -79.4, 43.7, 6], ['Montreal', -73.6, 45.5, 4], ['Dublin', -6.3, 53.3, 1.5],
+    ['Lisbon', -9.1, 38.7, 3], ['Barcelona', 2.2, 41.4, 5], ['Stockholm', 18.1, 59.3, 2], ['Zurich', 8.5, 47.4, 1.4], ['Atlanta', -84.4, 33.7, 6], ['Miami', -80.2, 25.8, 6]];
+  for (const [name, lon, lat, pop] of [...CITIES, ...extra]) { const [x, y, z] = v(lon, lat); if (z < 0.08) continue; const sx = cx + x * R, sy = cy + y * R;
+    const inside = inPoly(lon, lat, REICH_POLY), a = inside ? (name === 'Berlin' ? 1 : 1 - dark) : 1, sz = 3 + Math.sqrt(pop) * 1.6;
+    if (a <= 0.02) continue; glow(ctx, sx, sy, sz * 6, '255,214,140', 0.6 * a * z); ctx.fillStyle = `rgba(255,240,200,${a})`; ctx.beginPath(); ctx.arc(sx, sy, sz * 0.5, 0, 6.283); ctx.fill(); }
+  { const [x, y, z] = v(13.4, 52.5); if (z > 0) { glow(ctx, cx + x * R, cy + y * R, 70, '255,200,120', 0.9); } }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, u, ['2026: maybe it collapses,', 'like the Soviet Union did'], 230, 0.15, { size: 72, out: 2.4 });
+  say(ctx, u, ['Or Europe at night looks', 'like North Korea'], 230, 2.5, { size: 76, out: OUT('today'), mark: { line: 1, from: 5, to: 16, color: '#b02a3a' } });
 }
 
 // ================================================================ 10. final image: remembrance poppies at dawn

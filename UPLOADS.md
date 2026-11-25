@@ -200,6 +200,8 @@ Generalplan Ost planned to remove 30–45 million people from the East. The Hung
 Berlin becomes "Germania": a dome 290 m tall, and trains on tracks 3 meters wide.
 Their rockets had already reached space.
 But America was building the atomic bomb to beat Hitler.
+Then the decades roll on: Hitler dies and a fight over who rules next. Uprisings across occupied Europe. Two internets, one censored.
+2026: maybe it collapses like the Soviet Union did. Or Europe at night looks like North Korea.
 
 In our timeline, the Allies stopped it. It cost 70–85 million lives.
 
