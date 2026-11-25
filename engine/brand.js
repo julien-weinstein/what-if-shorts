@@ -1,53 +1,48 @@
-// Channel art in the cinematic style: avatar (800x800) and banner (2560x1440).
+// Channel art: avatar (800x800) and banner (2560x1440, logo inside the 1546x423 safe area).
 //   node engine/brand.js  -> art/avatar.png, art/banner.png
 const fs = require('fs'), path = require('path');
 const { chromium } = require('playwright');
-const lib = fs.readFileSync(path.join(__dirname, 'lib.js'), 'utf8') + '\n' + fs.readFileSync(path.join(__dirname, 'style2.js'), 'utf8') + '\n' + fs.readFileSync(path.join(__dirname, 'style3.js'), 'utf8');
 
-const shared = `
-function eyeMark(ctx, x, y, w) {
-  const h = w * 0.42;
-  const almond = () => { ctx.beginPath(); ctx.moveTo(-w / 2, 0); ctx.quadraticCurveTo(0, -h * 1.6, w / 2, 0); ctx.quadraticCurveTo(0, h * 1.6, -w / 2, 0); ctx.closePath(); };
-  ctx.save(); ctx.translate(x, y);
-  ctx.shadowColor = 'rgba(27,22,64,0.35)'; ctx.shadowBlur = w * 0.08; ctx.shadowOffsetY = w * 0.03;
-  almond(); ctx.fillStyle = '#fff'; ctx.fill(); ctx.shadowColor = 'transparent';
-  const ig = ctx.createRadialGradient(-w * 0.04, -w * 0.04, 2, 0, 0, w * 0.2);
-  ig.addColorStop(0, P.peach); ig.addColorStop(1, P.coral);
-  ctx.fillStyle = ig; ctx.beginPath(); ctx.arc(0, 0, w * 0.19, 0, 6.283); ctx.fill();
-  ctx.fillStyle = P.ink; ctx.beginPath(); ctx.arc(0, 0, w * 0.085, 0, 6.283); ctx.fill();
-  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(w * 0.05, -w * 0.05, w * 0.03, 0, 6.283); ctx.fill();
-  ctx.restore();
-}
-function backdrop(ctx, w, h) {
-  const g = ctx.createLinearGradient(0, 0, w, h);
-  g.addColorStop(0, '#5a3fe0'); g.addColorStop(0.5, '#c25bc4'); g.addColorStop(1, '#ff7a5c');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
-  const r = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.5);
-  r.addColorStop(0, 'rgba(255,255,255,0.22)'); r.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = r; ctx.fillRect(0, 0, w, h);
-}`;
+const lib = fs.readFileSync(path.join(__dirname, 'lib.js'), 'utf8');
 
 const avatar = `
-function draw(ctx) { backdrop(ctx, 800, 800); eyeMark(ctx, 400, 400, 600); }`;
+function draw(ctx) {
+  const S = 800;
+  const g = ctx.createRadialGradient(S/2, S/2, 50, S/2, S/2, S*0.7);
+  g.addColorStop(0, '#26305e'); g.addColorStop(1, '#0b0f1e');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
+  const r = rng(4); ctx.fillStyle = '#fff';
+  for (let i = 0; i < 70; i++) { ctx.globalAlpha = 0.4 + r() * 0.6; ctx.beginPath(); ctx.arc(r() * S, r() * S, 1 + r() * 3, 0, 6.283); ctx.fill(); }
+  ctx.globalAlpha = 1;
+  blip(ctx, 0.3, 400, 480, 'shock', 2.1, 0);
+}`;
 
 const banner = `
 function draw(ctx) {
-  const BW = 2560, BH = 1440, cx = BW / 2, cy = BH / 2;
-  backdrop(ctx, BW, BH);
-  for (let k = 0; k < 4; k++) { ctx.strokeStyle = 'rgba(255,255,255,' + (0.14 - k * 0.03) + ')'; ctx.lineWidth = 4;
-    ctx.beginPath(); ctx.arc(cx - 560, cy, 230 + k * 120, 0, 6.283); ctx.stroke(); }
-  eyeMark(ctx, cx - 560, cy, 300);
-  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-  ctx.shadowColor = 'rgba(27,22,64,0.35)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 8;
-  ctx.font = '900 150px ' + P.sans; if (ctx.letterSpacing !== undefined) ctx.letterSpacing = '-4px';
-  ctx.fillStyle = '#fff'; ctx.fillText('WHAT IF,', cx - 340, cy - 10);
-  ctx.fillStyle = P.gold; ctx.fillText('THOUGH?', cx - 340, cy + 130);
-  if (ctx.letterSpacing !== undefined) ctx.letterSpacing = '0px';
-  ctx.shadowColor = 'transparent';
-  ctx.font = '700 34px ' + P.mono; const tag = 'EARTH-ENDING WHAT-IFS. REAL SCIENCE.';
-  const tw = ctx.measureText(tag).width + 50;
-  ctx.fillStyle = 'rgba(27,22,64,0.3)'; roundRect(ctx, cx - 340, cy + 160, tw, 56, 28); ctx.fill();
-  ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(tag, cx - 315, cy + 190);
+  const BW = 2560, BH = 1440;
+  const g = ctx.createLinearGradient(0, 0, 0, BH);
+  g.addColorStop(0, '#070a1c'); g.addColorStop(1, '#1d1240');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, BW, BH);
+  const r = rng(9); ctx.fillStyle = '#fff';
+  for (let i = 0; i < 420; i++) { ctx.globalAlpha = 0.3 + r() * 0.7; ctx.beginPath(); ctx.arc(r() * BW, r() * BH, 1 + r() * 3.2, 0, 6.283); ctx.fill(); }
+  ctx.globalAlpha = 1;
+  // burning Earth on the right, frozen Moon on the left (outside the phone-safe strip)
+  earth(ctx, 2330, 720, 260, 1.2);
+  const fire = ctx.createRadialGradient(2330, 720, 240, 2330, 720, 380);
+  fire.addColorStop(0, 'rgba(255,90,0,0.55)'); fire.addColorStop(1, 'rgba(255,90,0,0)');
+  ctx.fillStyle = fire; ctx.beginPath(); ctx.arc(2330, 720, 380, 0, 6.283); ctx.fill();
+  moon(ctx, 330, 720, 150);
+  // safe area: 1546 x 423 centred
+  const cx = BW / 2, cy = BH / 2;
+  blip(ctx, 0.3, cx - 540, cy + 50, 'shock', 1.1, 0);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  ctx.font = '900 150px ' + FONT;
+  const x0 = cx - 380;
+  ctx.lineWidth = 30; ctx.strokeStyle = C.ink;
+  ctx.strokeText('WHAT IF,', x0, cy - 70); ctx.fillStyle = C.paper; ctx.fillText('WHAT IF,', x0, cy - 70);
+  ctx.strokeText('THOUGH?', x0, cy + 70); ctx.fillStyle = C.yellow; ctx.fillText('THOUGH?', x0, cy + 70);
+  ctx.font = '800 42px ' + FONT; ctx.fillStyle = '#cfd3ff'; ctx.textAlign = 'center';
+  ctx.fillText('Earth-ending what-ifs. Real science.', cx, cy + 172);
 }`;
 
 (async () => {
@@ -55,9 +50,9 @@ function draw(ctx) {
   fs.mkdirSync('art', { recursive: true });
   for (const [name, code, w, h] of [['avatar', avatar, 800, 800], ['banner', banner, 2560, 1440]]) {
     const page = await browser.newPage({ viewport: { width: w, height: h } });
-    await page.setContent(`<canvas id="c" width="${w}" height="${h}"></canvas><script>const W0=${w};${lib}\n${shared}\n${code}</script>`);
+    await page.setContent(`<canvas id="c" width="${w}" height="${h}"></canvas><script>${lib}\n${code}\ndraw(document.getElementById('c').getContext('2d'));</script>`);
     await page.evaluate(() => document.fonts.ready);
-    await page.evaluate(() => draw(document.getElementById('c').getContext('2d')));
+    await page.evaluate(code => { /* redraw once fonts are ready */ draw(document.getElementById('c').getContext('2d')); }, null);
     await page.locator('#c').screenshot({ path: `art/${name}.png` });
     await page.close();
   }

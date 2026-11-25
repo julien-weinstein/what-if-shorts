@@ -24,17 +24,17 @@ A short is one file in `shorts/`. It holds a `SHORT` object (title, duration, so
 
 Shorts run 30 to 45 seconds. Every claim has to be real science or real history, because the comments will check.
 
-## Style (v3: pop editorial, the house style)
+## Style (v4, the house style): the original look, turned up
 
-New shorts use `engine/style3.js`. `style2.js` (the dark cinematic test) is kept but retired. `lib.js` is the shared drawing base.
+The bright cartoon look of the first shorts (`lib.js`: Blip, yellow time chips, bold outlined captions) with more craft from `style4.js`. Two experiments were retired and kept for reference: `style2.js` (dark cinematic) and `style3.js` (pop editorial). The whip-pan `sequence()`, `shadowed()`, `glow()` and `drift()` helpers are still used from `style3.js`.
 
-- **Colour:** a rich, harmonious palette for each scene, with dusk magentas, tropical teals and sunrise corals. No black backgrounds, no flat primaries. Main tokens: violet `#6c4cff`, coral `#ff6b5b`, gold `#ffc93c`, teal `#14c8b4`, ink `#1b1640`.
-- **Depth:** gradients on shapes, soft drop shadows via `shadowed()`, `glow()`, light shafts, bokeh, clouds and a slow `drift()` push-in.
-- **Captions:** `say()` slides lines up from behind a mask in white with a soft shadow. An optional highlighter band (`mark`) sweeps in behind the key words. Nothing bounces.
-- **Labels:** `pill()` frosted labels with a coloured dot and mono text ("T+00:20:00 · CITIES"), and `note()` bubble callouts with leader lines.
-- **Frame:** `hudPop()` with channel and clock chips (readable on light and dark scenes) and a coral progress bar.
-- **Transitions:** `sequence()` whip-pans between scenes with motion smear.
-- **Brand:** the eye mark on a violet-to-coral gradient (`art/`).
+- **Captions:** `pop()` kinetic captions, where words land one by one with a small lift and settle. Wrap a word in `*stars*` to make it yellow.
+- **Facts:** `stat()` shows a big number with a label ("1.5 BILLION / cattle start to starve").
+- **People:** `human()` draws realistic proportions (about 7.5 heads tall) with skin tones, clothes, hair, poses (stand, sniff, cheer, shrug) and faces (neutral, happy, shock, gross). No stick figures.
+- **Props:** `bacterium()`, `cow()`, `redX()`, `greenCheck()`, plus everything in `lib.js` (Earth, Moon, skyline, wave, flames, debris…).
+- **Backgrounds:** `backdrop4()` bright gradients with soft light blobs. Every scene has a slow `drift()` push-in and a whip-pan to the next.
+
+**Content rules:** lead with the most jaw-dropping true facts and consequences, and show what really happens to people, animals and the planet with accurate physics and biology. Keep the tone light and fun, never grim. Every script still starts with the plot-hole check.
 
 ## Plot-hole check (required before animating)
 
@@ -50,7 +50,7 @@ Every script starts with a comment block listing the obvious objections ("wouldn
 | ✅ Everyone on Earth falls asleep for one hour | Cars and trains crash, surgeries stop mid-cut, ships run aground, stoves start fires; autopilot can't land most planes | Some planes *can* land themselves, but only at airports with special equipment |
 | Every satellite falls out of the sky | GPS gone; card payments, power grids and phone networks lose their clocks; militaries go blind and panic; the space-station crew is stranded | GPS is also the clock that time-stamps the world's bank transactions |
 | Every dam on Earth breaks at once | Walls of water through valleys, megacities flooded, power gone | Three Gorges holds enough water to measurably slow Earth's rotation |
-| All bacteria vanish | Digestion fails, cows starve (they can't digest grass without microbes), crops collapse, the dead stop rotting | Your body has about as many bacterial cells as human ones |
+| ✅ All bacteria vanish | Digestion fails, cows starve (they can't digest grass without microbes), crops collapse, the dead stop rotting | Your body has about as many bacterial cells as human ones |
 | Oxygen drops to half for one minute | The whole planet is suddenly at Everest altitude: pilots black out, people collapse, fires go out | Some sherpas' blood is adapted to this |
 | Every concrete structure turns to dust | Buildings, bridges, highways and dams collapse at once | Concrete is the most-used material on Earth after water |
 | Every ant on Earth attacks at once | About 20 quadrillion ants versus 8 billion humans | Ants together outweigh all wild birds and mammals combined |

@@ -237,6 +237,20 @@ def sfx(name):
                 out.append(np.sin(2 * np.pi * f * t(0.12)) * env(int(SR * 0.12), 0.003, None))
             out.append(np.zeros(int(SR * 0.08)))
         return norm(np.concatenate(out), 0.28)
+    if base == "fart":  # cartoon brass blat (keeps it silly)
+        tt = t(0.7); f = 95 + 25 * np.sin(2 * np.pi * 11 * tt) - 30 * tt
+        x = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * (0.7 + 0.3 * np.sin(2 * np.pi * 31 * tt))
+        return norm(lp(x, 0.18) * env(len(tt), 0.01, 0.45), 0.4)
+    if base == "cheer":  # bright crowd swell
+        tt = t(sec); x = lp(noise(sec), 0.35)
+        for k in range(10):
+            f0 = rng.uniform(300, 700); x += 0.15 * np.sin(2 * np.pi * np.cumsum(f0 * (1 + 0.05 * np.sin(2 * np.pi * 5 * tt + k))) / SR)
+        sw = np.sin(np.pi * np.minimum(1, tt / sec)) ** 0.7
+        return norm(x * sw, 0.35)
+    if base == "moo":
+        tt = t(1.3); f = 150 - 40 * tt
+        x = sum(np.sin(2 * np.pi * h * np.cumsum(f) / SR) / h for h in range(1, 7))
+        return norm(lp(x, 0.2) * np.sin(np.pi * tt / 1.3), 0.35)
     raise ValueError(f"unknown sound {name}")
 
 

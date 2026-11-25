@@ -45,33 +45,32 @@ Which part would get you first? 👇
 
 ---
 
-## 2. What if everyone on Earth fell asleep for one hour?
+## 2. What if every bacterium on Earth vanished?
 
-**File:** `videos/everyone-asleep.mp4`
+**File:** `videos/bacteria-vanish.mp4`
 
-**Title:** What If Everyone on Earth Fell Asleep at the Same Second? #shorts
+**Title:** What If Every Bacterium on Earth Vanished? 🦠 #shorts
 
 **Description:**
 
 ```
-8.2 billion people. Asleep. For one hour.
+Every bacterium on Earth, gone in a blink. 🦠✨
 
-T+00:00:02: every driver, hands off the wheel
-T+00:00:30: planes taking off or landing have no one flying them
-T+00:03:00: anyone in the water drowns
-T+00:05:00: tens of thousands of operations, mid-procedure
-T+00:20:00: unattended stoves; no firefighters to answer
+0 sec: you instantly lose ~0.2 kg (that was all bacteria)
+Seconds: no more bad breath, B.O. or (most) farts
+Instantly: tuberculosis, cholera and plague are cured
+Days: 1.5 billion cattle can't digest grass anymore
+Weeks: goodbye cheese, yogurt, salami, pickles (beer and bread survive: that's yeast)
+Months: soils stop feeding crops and harvests crash
 
-What doesn't break: trains (dead-man's switches), nuclear plants (automatic safety), planes at cruise (autopilot).
+Plot twist: by cell count you're about HALF bacteria (~38 trillion vs ~30 trillion human cells).
 
-And it's already happened at 37,000 ft: in 2022 both pilots of an Ethiopian Airlines jet reportedly fell asleep and flew past their airport.
+Would you take this deal? 👇
 
-What would you wake up to? 👇
-
-#whatif #science #hypothetical #shorts
+#whatif #science #biology #bacteria #shorts
 ```
 
-**Pinned comment:** Before anyone asks: yes, autopilot would keep most cruising planes in the air for an hour. It's the ones taking off and landing that are in trouble. ✈️
+**Pinned comment:** Before anyone asks: no, we wouldn't suffocate. Plants still make oxygen, and the air holds enough for thousands of years. 🌿
 
 ---
 
