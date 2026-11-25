@@ -444,7 +444,7 @@ function vToll(ctx, u) {
   say(ctx, u, ['Within a day (est.):'], 470, 0.15, { size: 72, x: W / 2, align: 'center', out: OUT('toll') });
   bigNum(ctx, u, n.toLocaleString('en-US'), 600, 0.4, { size: 118, color: '#ff6b5b', out: OUT('toll') });
   say(ctx, u, ['Everyone.'], 790, 2.6, { size: 120, x: W / 2, align: 'center', out: OUT('toll') });
-  say(ctx, u, ['No bunker is deep enough:', 'the crust melts hundreds of km down'], 1760, 3.0, { size: 46, weight: 800, x: W / 2, align: 'center', out: OUT('toll') });
+  say(ctx, u, ['No bunker is deep enough:', 'the crust melts hundreds of km down'], 1700, 3.0, { size: 46, weight: 800, x: W / 2, align: 'center', out: OUT('toll') });
 }
 
 // ================================================================ 11. magma world -> ring -> new moon
