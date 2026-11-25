@@ -267,6 +267,36 @@ Next big quake? Over 99% chance of an M6.7+ in California in the next 30 years.
 
 ---
 
+## 10. What if the internet crashed forever?
+
+**File:** `videos/internet-down.mp4`
+
+**Title:** What If the Internet Crashed Forever? 🌐💀 #shorts
+
+**Description:**
+
+```
+5.5 billion people lose it at once.
+99% of data between continents runs through cables on the seabed: 1.4 million km of them. All dark.
+Cards stop working. ATMs too. (Visa alone handles 600 million payments a day.)
+Trucks can't be dispatched. Stores hold ~3 days of food.
+Flights, hospitals, banks: all down. In 2024, one bad update crashed 8.5 million computers for a day.
+Cities flicker out. Gridlock.
+$110 trillion in markets, frozen. Governments go half-blind.
+Ships carry ~80% of world trade, and their paperwork is digital. Ports grind to a halt.
+Millions could die (est.). The one upside: emissions plunge.
+
+We rebuild on radio, paper and cash. The world last ran offline in 1990 with 5.3 billion people. Now: 8.2 billion.
+
+The internet's first message, in 1969, was "LOGIN". It crashed after two letters.
+
+#whatif #internet #technology #science #shorts
+```
+
+**Pinned comment:** What's the first thing you'd miss? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
