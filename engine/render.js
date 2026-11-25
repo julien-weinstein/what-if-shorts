@@ -9,7 +9,7 @@ const stillsArg = rest.indexOf('--stills') >= 0 ? rest[rest.indexOf('--stills') 
 const FPS = 30;
 
 (async () => {
-  const lib = fs.readFileSync(path.join(__dirname, 'lib.js'), 'utf8');
+  const lib = fs.readFileSync(path.join(__dirname, 'lib.js'), 'utf8') + '\n' + fs.readFileSync(path.join(__dirname, 'style2.js'), 'utf8');
   const scene = fs.readFileSync(scenePath, 'utf8');
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });

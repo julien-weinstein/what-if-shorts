@@ -45,32 +45,33 @@ Which part would get you first? 👇
 
 ---
 
-## 2. What if every human was teleported into one city?
+## 2. What if everyone on Earth fell asleep for one hour?
 
-**File:** `videos/everyone-one-city.mp4`
+**File:** `videos/everyone-asleep.mp4`
 
-**Title:** What If Every Human Was Teleported Into One City? 😱🌆 #shorts
+**Title:** What If Everyone on Earth Fell Asleep at the Same Second? #shorts
 
 **Description:**
 
 ```
-8 billion people. One city. Here's how fast it all falls apart. 😱
+8.2 billion people. Asleep. For one hour.
 
-0 sec: 6 people per square meter: crowd-crush density
-Meanwhile: 10,000+ pilotless planes fly on until the fuel runs out
-Hours: cities burn with nobody to fight the fires
-Day 1: LA's water was built for 4 million. The taps run dry.
-Day 3: billions start to die
-1 week: 400+ unattended nuclear reactors lose backup power
+T+00:00:02: every driver, hands off the wheel
+T+00:00:30: planes taking off or landing have no one flying them
+T+00:03:00: anyone in the water drowns
+T+00:05:00: tens of thousands of operations, mid-procedure
+T+00:20:00: unattended stoves; no firefighters to answer
 
-Plot twist: for nature, it's the best day ever. Just ask Chernobyl's wolves. 🐺
+What doesn't break: trains (dead-man's switches), nuclear plants (automatic safety), planes at cruise (autopilot).
 
-Where would you want to be standing? 👇
+And it's already happened at 37,000 ft: in 2022 both pilots of an Ethiopian Airlines jet reportedly fell asleep and flew past their airport.
 
-#whatif #apocalypse #science #humanity #shorts
+What would you wake up to? 👇
+
+#whatif #science #hypothetical #shorts
 ```
 
-**Pinned comment:** Fun fact: at ~6 people per square meter, everyone alive today would fit inside the city of Los Angeles. Not comfortably. 😬
+**Pinned comment:** Before anyone asks: yes, autopilot would keep most cruising planes in the air for an hour. It's the ones taking off and landing that are in trouble. ✈️
 
 ---
 

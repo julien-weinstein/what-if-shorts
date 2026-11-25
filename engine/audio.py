@@ -180,6 +180,63 @@ def sfx(name):
         tt = t(2.2); f = 420 + 160 * np.sin(np.pi * tt / 2.2) - 60 * tt
         x = np.sin(2 * np.pi * np.cumsum(f) / SR) + 0.2 * np.sin(4 * np.pi * np.cumsum(f) / SR)
         return norm(x * np.sin(np.pi * tt / 2.2) ** 1.5, 0.3)
+    if base == "heartbeat":
+        out = np.zeros(int(SR * sec)); k = 0.0; gap = 0.85
+        thump = lp(sweep(70, 40, 0.18) * env(int(SR * 0.18), 0.003, 0.06), 0.3)
+        while k < sec - 0.4:
+            for off, g in ((0, 1.0), (0.22, 0.7)):
+                st = int((k + off) * SR); out[st:st + len(thump)] += thump[: len(out) - st] * g
+            k += gap; gap *= 1.12                          # slowing as they fall asleep
+        return norm(out, 0.8)
+    if base == "glitchfx":
+        x = np.sign(np.sin(2 * np.pi * rng.uniform(200, 900) * t(0.16))) * (rng.random(int(SR * 0.16)) > 0.5)
+        return norm(lp(x + noise(0.16) * 0.5, 0.6) * env(int(SR * 0.16), 0.001, 0.08), 0.3)
+    if base == "skid":
+        tt = t(0.9); f = 900 + 120 * np.sin(2 * np.pi * 23 * tt)
+        x = np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.6 + lp(noise(0.9), 0.4)
+        return norm(x * env(len(tt), 0.05, 0.6), 0.35)
+    if base == "crash":
+        x = lp(noise(1.2), 0.5) * env(int(SR * 1.2), 0.001, 0.25) + sweep(140, 40, 1.2) * env(int(SR * 1.2), 0.001, 0.2)
+        clat = np.zeros(int(SR * 1.2))
+        for _ in range(12):
+            st = int(rng.uniform(0.05, 0.9) * SR); b = np.sin(2 * np.pi * rng.uniform(1500, 4000) * t(0.05)) * env(int(SR * 0.05), 0.001, 0.015)
+            clat[st:st + len(b)] += b * 0.4
+        return norm(x + clat, 0.75)
+    if base == "horn":  # stuck car horn
+        tt = t(sec); x = sum(np.sign(np.sin(2 * np.pi * f * tt)) for f in (415, 523))
+        fade = np.minimum(1, np.minimum(tt / 0.02, (sec - tt) / 0.3))
+        return norm(lp(x, 0.2) * fade, 0.22)
+    if base == "underwater":
+        tt = t(sec); x = lp(lp(noise(sec), 0.01), 0.03) + 0.4 * np.sin(2 * np.pi * 55 * tt)
+        fade = np.minimum(1, np.minimum(tt / 0.4, (sec - tt) / 0.6))
+        return norm(x * fade, 0.45)
+    if base == "ecg":  # monitor beeps that turn into a fast alarm
+        out = np.zeros(int(SR * sec)); k = 0.0
+        while k < sec - 0.2:
+            fast = k > sec * 0.45
+            b = np.sin(2 * np.pi * (960 if fast else 880) * t(0.1)) * env(int(SR * 0.1), 0.002, 0.06)
+            st = int(k * SR); out[st:st + len(b)] += b; k += 0.22 if fast else 0.8
+        return norm(out, 0.25)
+    if base == "tickmark":
+        return norm(sweep(1200, 1800, 0.07) * env(int(SR * 0.07), 0.001, 0.03) + np.sin(2 * np.pi * 2400 * t(0.07)) * env(int(SR * 0.07), 0.001, 0.02), 0.25)
+    if base == "gasp":  # sharp inhale
+        n = lp(noise(0.5), 0.25) * np.linspace(0.2, 1, int(SR * 0.5)) ** 2
+        return norm(n * env(int(SR * 0.5), 0.2, None), 0.35)
+    if base == "siren":
+        tt = t(sec); f = 760 + 200 * np.sin(2 * np.pi * 0.35 * tt)
+        x = np.sin(2 * np.pi * np.cumsum(f) / SR) + 0.3 * np.sin(4 * np.pi * np.cumsum(f) / SR)
+        fade = np.minimum(1, np.minimum(tt / 1.0, (sec - tt) / 1.0))
+        return norm(lp(x, 0.3) * fade, 0.18)
+    if base == "busy":  # phone busy tone
+        tt = t(sec); x = (np.sin(2 * np.pi * 480 * tt) + np.sin(2 * np.pi * 620 * tt)) * ((tt % 1.0) < 0.5)
+        return norm(lp(x, 0.4), 0.2)
+    if base == "apalarm":  # generic cockpit warning warble (not any manufacturer's actual alarm)
+        out = []
+        for _ in range(3):
+            for f in (1050, 1400):
+                out.append(np.sin(2 * np.pi * f * t(0.12)) * env(int(SR * 0.12), 0.003, None))
+            out.append(np.zeros(int(SR * 0.08)))
+        return norm(np.concatenate(out), 0.28)
     raise ValueError(f"unknown sound {name}")
 
 

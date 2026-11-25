@@ -24,14 +24,30 @@ A short is one file in `shorts/`. It holds a `SHORT` object (title, duration, so
 
 Shorts run 30 to 45 seconds. Every claim has to be real science or real history, because the comments will check.
 
+## Style (v2: cinematic)
+
+New shorts use `engine/style2.js`. The first-generation cartoon kit in `engine/lib.js` stays as a drawing base.
+
+- **Palette:** near-black `#0a0a0c`, off-white `#ece8e1`, one signal red `#ff3b30`. Blue `#4da3ff` is used only for "this is fine" information.
+- **Type:** Inter Display for statements and JetBrains Mono for anything that looks like data (clock, labels, counters).
+- **Captions:** `reveal()` slides lines up from behind a mask, left-aligned, with a staggered entrance and a fade-and-drift exit. No bouncing.
+- **Labels:** `kicker()` types a mono label such as "T+00:20:00 · CITIES" with a red tick.
+- **Frame:** a HUD on every frame (channel bug, in-world clock, progress bar), film grain and a vignette.
+- **Camera and cuts:** a slow `push()` in every scene, and hard cuts with a short `glitch()`. No wipes.
+- **Mascot:** none. The brand mark is the eye (`art/avatar.png`).
+
+## Plot-hole check (required before animating)
+
+Every script starts with a comment block listing the obvious objections ("wouldn't they just leave?", "wouldn't autopilot handle it?") and how the short deals with each. Where an objection is a common one, answer it on screen with a "What doesn't break" beat, which makes the short more credible. If an objection breaks the premise, change the premise. For example, the everyone-in-one-city short was pulled because the math says people could walk out of LA within hours.
+
 ## Topic backlog
 
 **The rules:** a premise few people have animated, and the consequences for *people* come first. That means what happens in the first seconds, hours and days: planes, hospitals, cities, death tolls. Planet-scale effects come after that, and every short ends on a true twist. The classics (the Sun or Moon vanishing, Earth stopping spinning) are already overdone, so the short in that style is the only one we keep.
 
 | Scenario | Immediate human consequences | Twist (true) |
 |---|---|---|
-| ✅ Every human teleported into one city | Crowd-crush density, pilotless planes, burning cities, no water, unattended reactors | Wolves took over Chernobyl |
-| Everyone on Earth falls asleep for one hour | Cars and trains crash, surgeries stop mid-cut, ships run aground, stoves start fires; autopilot can't land most planes | Some planes *can* land themselves, but only at airports with special equipment |
+| ~~Every human teleported into one city~~ (pulled: they could walk out within hours) | Crowd-crush density, pilotless planes, burning cities, no water, unattended reactors | Wolves took over Chernobyl |
+| ✅ Everyone on Earth falls asleep for one hour | Cars and trains crash, surgeries stop mid-cut, ships run aground, stoves start fires; autopilot can't land most planes | Some planes *can* land themselves, but only at airports with special equipment |
 | Every satellite falls out of the sky | GPS gone; card payments, power grids and phone networks lose their clocks; militaries go blind and panic; the space-station crew is stranded | GPS is also the clock that time-stamps the world's bank transactions |
 | Every dam on Earth breaks at once | Walls of water through valleys, megacities flooded, power gone | Three Gorges holds enough water to measurably slow Earth's rotation |
 | All bacteria vanish | Digestion fails, cows starve (they can't digest grass without microbes), crops collapse, the dead stop rotting | Your body has about as many bacterial cells as human ones |

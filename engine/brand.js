@@ -1,48 +1,48 @@
-// Channel art: avatar (800x800) and banner (2560x1440, logo inside the 1546x423 safe area).
+// Channel art in the cinematic style: avatar (800x800) and banner (2560x1440).
 //   node engine/brand.js  -> art/avatar.png, art/banner.png
 const fs = require('fs'), path = require('path');
 const { chromium } = require('playwright');
+const lib = fs.readFileSync(path.join(__dirname, 'lib.js'), 'utf8') + '\n' + fs.readFileSync(path.join(__dirname, 'style2.js'), 'utf8');
 
-const lib = fs.readFileSync(path.join(__dirname, 'lib.js'), 'utf8');
+const shared = `
+function eyeMark(ctx, x, y, w) {
+  const h = w * 0.42;
+  ctx.save(); ctx.translate(x, y); ctx.strokeStyle = S2.fg; ctx.lineWidth = w * 0.035; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-w / 2, 0); ctx.quadraticCurveTo(0, -h * 1.6, w / 2, 0); ctx.quadraticCurveTo(0, h * 1.6, -w / 2, 0); ctx.closePath(); ctx.stroke();
+  ctx.fillStyle = S2.fg; ctx.beginPath(); ctx.arc(0, 0, w * 0.17, 0, 6.283); ctx.fill();
+  ctx.fillStyle = S2.bg; ctx.beginPath(); ctx.arc(0, 0, w * 0.08, 0, 6.283); ctx.fill();
+  ctx.fillStyle = S2.red; ctx.beginPath(); ctx.arc(w * 0.04, -w * 0.04, w * 0.022, 0, 6.283); ctx.fill();
+  ctx.restore();
+}
+function texture(ctx, w, h) {
+  const g = ctx.createRadialGradient(w / 2, h / 2, 10, w / 2, h / 2, Math.max(w, h) * 0.7);
+  g.addColorStop(0, '#16161a'); g.addColorStop(1, '#050506');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+}`;
 
 const avatar = `
 function draw(ctx) {
-  const S = 800;
-  const g = ctx.createRadialGradient(S/2, S/2, 50, S/2, S/2, S*0.7);
-  g.addColorStop(0, '#26305e'); g.addColorStop(1, '#0b0f1e');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
-  const r = rng(4); ctx.fillStyle = '#fff';
-  for (let i = 0; i < 70; i++) { ctx.globalAlpha = 0.4 + r() * 0.6; ctx.beginPath(); ctx.arc(r() * S, r() * S, 1 + r() * 3, 0, 6.283); ctx.fill(); }
-  ctx.globalAlpha = 1;
-  blip(ctx, 0.3, 400, 480, 'shock', 2.1, 0);
+  texture(ctx, 800, 800);
+  eyeMark(ctx, 400, 400, 560);
 }`;
 
 const banner = `
 function draw(ctx) {
-  const BW = 2560, BH = 1440;
-  const g = ctx.createLinearGradient(0, 0, 0, BH);
-  g.addColorStop(0, '#070a1c'); g.addColorStop(1, '#1d1240');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, BW, BH);
-  const r = rng(9); ctx.fillStyle = '#fff';
-  for (let i = 0; i < 420; i++) { ctx.globalAlpha = 0.3 + r() * 0.7; ctx.beginPath(); ctx.arc(r() * BW, r() * BH, 1 + r() * 3.2, 0, 6.283); ctx.fill(); }
-  ctx.globalAlpha = 1;
-  // burning Earth on the right, frozen Moon on the left (outside the phone-safe strip)
-  earth(ctx, 2330, 720, 260, 1.2);
-  const fire = ctx.createRadialGradient(2330, 720, 240, 2330, 720, 380);
-  fire.addColorStop(0, 'rgba(255,90,0,0.55)'); fire.addColorStop(1, 'rgba(255,90,0,0)');
-  ctx.fillStyle = fire; ctx.beginPath(); ctx.arc(2330, 720, 380, 0, 6.283); ctx.fill();
-  moon(ctx, 330, 720, 150);
-  // safe area: 1546 x 423 centred
-  const cx = BW / 2, cy = BH / 2;
-  blip(ctx, 0.3, cx - 540, cy + 50, 'shock', 1.1, 0);
-  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
-  ctx.font = '900 150px ' + FONT;
-  const x0 = cx - 380;
-  ctx.lineWidth = 30; ctx.strokeStyle = C.ink;
-  ctx.strokeText('WHAT IF,', x0, cy - 70); ctx.fillStyle = C.paper; ctx.fillText('WHAT IF,', x0, cy - 70);
-  ctx.strokeText('THOUGH?', x0, cy + 70); ctx.fillStyle = C.yellow; ctx.fillText('THOUGH?', x0, cy + 70);
-  ctx.font = '800 42px ' + FONT; ctx.fillStyle = '#cfd3ff'; ctx.textAlign = 'center';
-  ctx.fillText('Earth-ending what-ifs. Real science.', cx, cy + 172);
+  const BW = 2560, BH = 1440, cx = BW / 2, cy = BH / 2;
+  texture(ctx, BW, BH);
+  // faint horizon line and grid, documentary feel
+  ctx.strokeStyle = 'rgba(236,232,225,0.06)'; ctx.lineWidth = 2;
+  for (let x = 0; x < BW; x += 80) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, BH); ctx.stroke(); }
+  for (let y = 0; y < BH; y += 80) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(BW, y); ctx.stroke(); }
+  eyeMark(ctx, cx - 560, cy, 300);
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  ctx.font = '900 150px ' + S2.sans; if (ctx.letterSpacing !== undefined) ctx.letterSpacing = '-4px';
+  ctx.fillStyle = S2.fg; ctx.fillText('WHAT IF,', cx - 340, cy - 10);
+  ctx.fillStyle = S2.red; ctx.fillText('THOUGH?', cx - 340, cy + 130);
+  if (ctx.letterSpacing !== undefined) ctx.letterSpacing = '0px';
+  ctx.fillStyle = S2.red; ctx.fillRect(cx - 340, cy + 165, 6, 34);
+  ctx.font = '600 36px ' + S2.mono; ctx.fillStyle = S2.dim;
+  ctx.fillText('EARTH-ENDING WHAT-IFS. REAL SCIENCE.', cx - 314, cy + 195);
 }`;
 
 (async () => {
@@ -50,9 +50,9 @@ function draw(ctx) {
   fs.mkdirSync('art', { recursive: true });
   for (const [name, code, w, h] of [['avatar', avatar, 800, 800], ['banner', banner, 2560, 1440]]) {
     const page = await browser.newPage({ viewport: { width: w, height: h } });
-    await page.setContent(`<canvas id="c" width="${w}" height="${h}"></canvas><script>${lib}\n${code}\ndraw(document.getElementById('c').getContext('2d'));</script>`);
+    await page.setContent(`<canvas id="c" width="${w}" height="${h}"></canvas><script>const W0=${w};${lib}\n${shared}\n${code}</script>`);
     await page.evaluate(() => document.fonts.ready);
-    await page.evaluate(code => { /* redraw once fonts are ready */ draw(document.getElementById('c').getContext('2d')); }, null);
+    await page.evaluate(() => draw(document.getElementById('c').getContext('2d')));
     await page.locator('#c').screenshot({ path: `art/${name}.png` });
     await page.close();
   }
