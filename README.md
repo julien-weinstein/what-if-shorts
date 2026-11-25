@@ -24,17 +24,17 @@ A short is one file in `shorts/`. It holds a `SHORT` object (title, duration, so
 
 Shorts run 30 to 45 seconds. Every claim has to be real science or real history, because the comments will check.
 
-## Style (v2: cinematic)
+## Style (v3: pop editorial, the house style)
 
-New shorts use `engine/style2.js`. The first-generation cartoon kit in `engine/lib.js` stays as a drawing base.
+New shorts use `engine/style3.js`. `style2.js` (the dark cinematic test) is kept but retired. `lib.js` is the shared drawing base.
 
-- **Palette:** near-black `#0a0a0c`, off-white `#ece8e1`, one signal red `#ff3b30`. Blue `#4da3ff` is used only for "this is fine" information.
-- **Type:** Inter Display for statements and JetBrains Mono for anything that looks like data (clock, labels, counters).
-- **Captions:** `reveal()` slides lines up from behind a mask, left-aligned, with a staggered entrance and a fade-and-drift exit. No bouncing.
-- **Labels:** `kicker()` types a mono label such as "T+00:20:00 · CITIES" with a red tick.
-- **Frame:** a HUD on every frame (channel bug, in-world clock, progress bar), film grain and a vignette.
-- **Camera and cuts:** a slow `push()` in every scene, and hard cuts with a short `glitch()`. No wipes.
-- **Mascot:** none. The brand mark is the eye (`art/avatar.png`).
+- **Colour:** a rich, harmonious palette for each scene, with dusk magentas, tropical teals and sunrise corals. No black backgrounds, no flat primaries. Main tokens: violet `#6c4cff`, coral `#ff6b5b`, gold `#ffc93c`, teal `#14c8b4`, ink `#1b1640`.
+- **Depth:** gradients on shapes, soft drop shadows via `shadowed()`, `glow()`, light shafts, bokeh, clouds and a slow `drift()` push-in.
+- **Captions:** `say()` slides lines up from behind a mask in white with a soft shadow. An optional highlighter band (`mark`) sweeps in behind the key words. Nothing bounces.
+- **Labels:** `pill()` frosted labels with a coloured dot and mono text ("T+00:20:00 · CITIES"), and `note()` bubble callouts with leader lines.
+- **Frame:** `hudPop()` with channel and clock chips (readable on light and dark scenes) and a coral progress bar.
+- **Transitions:** `sequence()` whip-pans between scenes with motion smear.
+- **Brand:** the eye mark on a violet-to-coral gradient (`art/`).
 
 ## Plot-hole check (required before animating)
 
