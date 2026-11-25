@@ -97,6 +97,34 @@ Plot twist: this already happened. 4.5 billion years ago, a planet called Theia 
 
 ---
 
+## 4. What if AI created a super virus?
+
+**File:** `videos/ai-virus.mp4`
+
+**Title:** What If AI Created a Super Virus? 🦠🤖 #shorts
+
+**Description:**
+
+```
+As contagious as measles. As deadly as smallpox. Designed by a machine.
+
+It spreads for days before anyone feels sick. Within weeks it's in every country.
+Borders close too late. Hospitals overflow. Cities go dark.
+If it spread like measles and killed like smallpox: ~1.8 billion dead in a year (est.).
+That dwarfs the Black Death, the 1918 flu and COVID-19 combined.
+
+But AI can fight back too: COVID's vaccine was designed in 2 days.
+
+Plot twist: in 2022, researchers set a drug-design AI to look for toxins instead of cures.
+It proposed 40,000 potentially deadly molecules in under 6 hours.
+
+#whatif #ai #science #pandemic #shorts
+```
+
+**Pinned comment:** The 2022 study is real: Urbina et al., Nature Machine Intelligence. The researchers published it as a warning, and AI labs now test their models for exactly this risk. 🧪
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.

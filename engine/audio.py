@@ -274,6 +274,15 @@ def sfx(name):
             chunk = lp(rng.standard_normal(n), rng.uniform(0.1, 0.4)) * env(n, 0.001, 0.02) * rng.uniform(0.2, 0.8)
             out[st:st + n] += chunk[: len(out[st:st + n])]
         return norm(room(out, 0.3), 0.7)
+    if base == "heart":    # low heartbeat (lub-dub), ~80 bpm, no pitch content above ~120 Hz
+        tt = t(sec); out = np.zeros(len(tt))
+        def thump(at, g):
+            n = int(SR * 0.25); k = np.arange(n) / SR
+            x = np.sin(2 * np.pi * (55 - 20 * k / 0.25) * k) * np.exp(-k * 22) * g
+            s0 = int(at * SR); out[s0:s0 + n] += x[: len(out[s0:s0 + n])]
+        b = 0.0
+        while b < sec - 0.3: thump(b, 1.0); thump(b + 0.22, 0.7); b += 0.75
+        return norm(lp(out, 0.05), 0.8)
     if base == "air":      # soft cinematic whoosh (noise only)
         n = noise(1.2); e = np.sin(np.linspace(0, np.pi, len(n))) ** 3
         return norm(lp(n, 0.04) * e, 0.3)
