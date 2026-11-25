@@ -68,20 +68,8 @@ function globe(ctx, cx, cy, R, o = {}) {
     }
     c.closePath(); return true;
   };
-  for (const poly of LAND) {
-    let latSum = 0; for (const [lo, la] of poly) latSum += la;
-    const mlat = latSum / poly.length;
-    ctx.beginPath();
-    if (!trace(ctx, poly, cx, cy, R)) continue;
-    ctx.fillStyle = (Math.abs(mlat) > 62 && ice) ? '#eef4fb' : '#4f8a45';
-    ctx.fill();
-  }
-  // land mask at texture resolution (same projection), used for biome colour and city lights
-  const _globeTex = texFor('g', R), _globeMask = texFor('gm', R);
-  const N = _globeTex.width, mc = _globeMask.getContext('2d');
-  mc.setTransform(1, 0, 0, 1, 0, 0); mc.clearRect(0, 0, N, N); mc.fillStyle = '#fff';
-  for (const poly of LAND) { mc.beginPath(); if (trace(mc, poly, N / 2, N / 2, N / 2)) mc.fill(); }
-  const mask = mc.getImageData(0, 0, N, N).data;
+  const _globeTex = texFor('g', R), N = _globeTex.width;
+  const LM = landMap();
   // texture pass: biomes + clouds + night side + city lights, computed per pixel
   const tc = _globeTex.getContext('2d'), img = tc.createImageData(N, N), d = img.data;
   for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
@@ -93,16 +81,27 @@ function globe(ctx, cx, cy, R, o = {}) {
     const lat = Math.asin(Math.max(-1, Math.min(1, wy))), lon = Math.atan2(x, wz) + l0;
     const px = Math.cos(lat) * Math.sin(lon), py = Math.sin(lat), pz = Math.cos(lat) * Math.cos(lon);
     const light = x * sun[0] + y * sun[1] + z * sun[2];
-    const onLand = mask[k + 3] > 127;
+    // land coverage from the equirectangular map (bilinear, so coastlines are smooth)
+    let lonw = lon * 57.29578; lonw = ((lonw + 180) % 360 + 360) % 360;
+    const fx_ = lonw / 360 * LM.w - 0.5, fy_ = (90 - lat * 57.29578) / 180 * LM.h - 0.5;
+    const ix = Math.floor(fx_), iy = Math.max(0, Math.min(LM.h - 2, Math.floor(fy_))), ax_ = fx_ - ix, ay_ = fy_ - iy;
+    const i0 = ((ix % LM.w) + LM.w) % LM.w, i1 = (i0 + 1) % LM.w;
+    const cov = (LM.m[iy * LM.w + i0] * (1 - ax_) + LM.m[iy * LM.w + i1] * ax_) * (1 - ay_) + (LM.m[(iy + 1) * LM.w + i0] * (1 - ax_) + LM.m[(iy + 1) * LM.w + i1] * ax_) * ay_;
+    const onLand = cov > 0.5;
     // biome colour for land pixels (latitude bands + noise), written under the clouds
     let br = 0, bg = 0, bb = 0, ba = 0;
     if (onLand) {
       const al = Math.abs(lat) * 57.3, n = fbm(px * 6, py * 6, pz * 6, 3);
-      const desert = Math.max(0, 1 - Math.abs(al - 24) / 9 + n * 1.6), polar = (ice && al > 64) ? 1 : 0;
+      const lond = lon * 57.29578, latd = lat * 57.29578, lonn = ((lond + 180) % 360 + 360) % 360 - 180;
+      const greenland = latd > 59 && lonn > -75 && lonn < -10;
+      const desert = Math.max(0, 1 - Math.abs(al - 24) / 9 + n * 1.6), polar = (ice && (latd < -60 || greenland || latd > 78)) ? 1 : (latd > 64 ? 0.25 : 0);
       br = lerp(lerp(52 + n * 60, 196 + n * 40, Math.min(1, desert)), 236, polar);
       bg = lerp(lerp(118 + n * 60, 170 + n * 30, Math.min(1, desert)), 242, polar);
       bb = lerp(lerp(48 + n * 30, 110 + n * 20, Math.min(1, desert)), 250, polar);
       ba = 1;
+    }
+    if (cov > 0 && !onLand) { const lt = lat * 57.3, pi = ice && (lt < -60 || lt > 78); br = pi ? 236 : 70; bg = pi ? 242 : 120; bb = pi ? 250 : 60; ba = cov * 2; }
+    if (onLand) { ba = Math.min(1, cov * 2 - 0.0);
     }
     let cl = clouds > 0 ? fbm(px * 2.2 + t * 0.03, py * 2.6, pz * 2.2 - t * 0.02, 4) : -1;
     cl = Math.max(0, Math.min(1, (cl + 0.08) * 2.4)) * clouds;
@@ -133,6 +132,18 @@ function globe(ctx, cx, cy, R, o = {}) {
   rim.addColorStop(0, `rgba(${atmo},0)`); rim.addColorStop(1, `rgba(${atmo},0.45)`);
   ctx.fillStyle = rim; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R);
   ctx.restore();
+}
+
+// Equirectangular land coverage map (built once from LAND): 0..1 per cell.
+let _LM = null;
+function landMap() {
+  if (_LM) return _LM;
+  const w = 4096, h = 2048, c = makeCanvas(w, h), g = c.getContext('2d');
+  g.fillStyle = '#fff';
+  for (const poly of LAND) { g.beginPath(); poly.forEach(([lo, la], i) => { const x = (lo + 180) / 360 * w, y = (90 - la) / 180 * h; i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.closePath(); g.fill(); }
+  const d = g.getImageData(0, 0, w, h).data, m = new Float32Array(w * h);
+  for (let i = 0; i < w * h; i++) m[i] = d[i * 4 + 3] / 255;
+  _LM = { w, h, m }; return _LM;
 }
 
 // Realistic-ish Moon with noise-shaded maria and terminator.

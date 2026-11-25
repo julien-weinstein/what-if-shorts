@@ -156,7 +156,7 @@ function sAsh(ctx, t) {
   for (let i = 0; i < 18; i++) { const x = 30 + i * 60, col = mixHex('#7fbf4a', '#8a7a52', dim);
     ctx.strokeStyle = col; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(x, 1860); ctx.quadraticCurveTo(x, 1760, x + dim * 60, 1700 + dim * 60); ctx.stroke(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['The crust heaves too.', 'Volcanoes erupt everywhere.'], 300, 21.3, { size: 76, out: 24.6 });
+  say(ctx, t, ['The crust heaves too.', 'Volcanoes erupt', 'everywhere.'], 300, 21.3, { size: 76, out: 24.6 });
   say(ctx, t, ['Ash blots out the Sun.', 'Harvests fail.'], 300, 24.8, { size: 84, out: 27.7 });
   say(ctx, t, ['Billions more could starve'], 1600, 25.8, { size: 66, weight: 900, out: 27.7, mark: { line: 0, from: 0, to: 13, color: '#ff6b5b' } });
 }
