@@ -45,32 +45,29 @@ Which part would get you first? 👇
 
 ---
 
-## 2. What if every bacterium on Earth vanished?
+## 2. What if the Moon were 10 times closer?
 
-**File:** `videos/bacteria-vanish.mp4`
+**File:** `videos/moon-closer.mp4`
 
-**Title:** What If Every Bacterium on Earth Vanished? 🦠 #shorts
+**Title:** What If the Moon Were 10 Times Closer? 🌕 #shorts
 
 **Description:**
 
 ```
-Every bacterium on Earth, gone in a blink. 🦠✨
+Bring the Moon 10x closer and the whole planet changes.
 
-0 sec: you instantly lose ~0.2 kg (that was all bacteria)
-Seconds: no more bad breath, B.O. or (most) farts
-Instantly: tuberculosis, cholera and plague are cured
-Days: 1.5 billion cattle can't digest grass anymore
-Weeks: goodbye cheese, yogurt, salami, pickles (beer and bread survive: that's yeast)
-Months: soils stop feeding crops and harvests crash
+🌕 Over 10x wider in the sky, and full-moon nights ~100x brighter
+🌀 It orbits faster than Earth spins, so it rises in the WEST
+🌊 Tidal pull 1,000x stronger: tides hundreds of meters high
+🌋 The crust flexes too: constant quakes and eruptions, like Io
+🌑 Total solar eclipses become routine
 
-Plot twist: by cell count you're about HALF bacteria (~38 trillion vs ~30 trillion human cells).
+And it's doomed: too close to keep pace with Earth, it spirals inward until it's torn into a ring.
 
-Would you take this deal? 👇
-
-#whatif #science #biology #bacteria #shorts
+#whatif #moon #space #physics #shorts
 ```
 
-**Pinned comment:** Before anyone asks: no, we wouldn't suffocate. Plants still make oxygen, and the air holds enough for thousands of years. 🌿
+**Pinned comment:** Tidal force grows with the CUBE of distance. 10x closer = 1,000x the pull. 🌊
 
 ---
 

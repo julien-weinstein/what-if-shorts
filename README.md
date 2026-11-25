@@ -24,17 +24,23 @@ A short is one file in `shorts/`. It holds a `SHORT` object (title, duration, so
 
 Shorts run 30 to 45 seconds. Every claim has to be real science or real history, because the comments will check.
 
-## Style (v4, the house style): the original look, turned up
+## House style (settled)
 
-The bright cartoon look of the first shorts (`lib.js`: Blip, yellow time chips, bold outlined captions) with more craft from `style4.js`. Two experiments were retired and kept for reference: `style2.js` (dark cinematic) and `style3.js` (pop editorial). The whip-pan `sequence()`, `shadowed()`, `glow()` and `drift()` helpers are still used from `style3.js`.
+**Look:** the original planetary illustration (`lib.js`: space, Earth, Moon, skylines, waves, flames) with depth from `style3.js` (`glow`, `grad`, `drift`, whip-pan `sequence`).
 
-- **Captions:** `pop()` kinetic captions, where words land one by one with a small lift and settle. Wrap a word in `*stars*` to make it yellow.
-- **Facts:** `stat()` shows a big number with a label ("1.5 BILLION / cattle start to starve").
-- **People:** `human()` draws realistic proportions (about 7.5 heads tall) with skin tones, clothes, hair, poses (stand, sniff, cheer, shrug) and faces (neutral, happy, shock, gross). No stick figures.
-- **Props:** `bacterium()`, `cow()`, `redX()`, `greenCheck()`, plus everything in `lib.js` (Earth, Moon, skyline, wave, flames, debris…).
-- **Backgrounds:** `backdrop4()` bright gradients with soft light blobs. Every scene has a slow `drift()` push-in and a whip-pan to the next.
+**Captions:** `say()` from `style3.js`, which slides lines up in clean white type with an occasional highlighter band on the key phrase.
 
-**Content rules:** lead with the most jaw-dropping true facts and consequences, and show what really happens to people, animals and the planet with accurate physics and biology. Keep the tone light and fun, never grim. Every script still starts with the plot-hole check.
+**Never:**
+- the mascot in videos (Blip is only on the profile picture)
+- emoji, toilet humour or cartoon gags
+- bouncy word pops
+- time-stamp chips ("0 SECONDS LATER") or minute-by-minute timelines
+
+A small "WHAT IF, THOUGH?" watermark sits bottom-left.
+
+**Story:** broad strokes at planetary scale. Each beat is a system-level change (oceans, crust, sky, climate, orbits, civilisation) with one jaw-dropping true number. Physics and biology must check out (show the working in the script header), and the ending is a true twist that escalates the premise.
+
+The retired experiments are kept for reference: `style2.js` (dark), `style4.js` (cartoon people and kinetic captions), and the shorts in `archive/`.
 
 ## Plot-hole check (required before animating)
 
