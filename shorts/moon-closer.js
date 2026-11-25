@@ -24,7 +24,7 @@ const SHORT = {
   fps: 60,
   motionSamples: 1,
   sfx: [
-    [0.0, 'rumble:3'], [0.6, 'riser'], [1.6, 'braam'], [2.6, 'sparkle'],
+    [0.0, 'rumble:3'], [0.6, 'riser'], [0.7, 'boing'], [1.6, 'braam'], [2.6, 'sparkle'],
     [5.0, 'whoosh'], [6.4, 'pop'], [8.0, 'braam'], [8.2, 'sparkle'],
     [10.5, 'whoosh'], [11.4, 'sparkle'], [12.8, 'sparkle'],
     [15.0, 'whoosh'], [15.6, 'tick:2.6'], [18.6, 'boom'], [18.7, 'rumble:2.4'], [19.4, 'crash'],
@@ -82,6 +82,14 @@ function sHook(ctx, t) {
   bayCity(ctx, t, { moonY: lerp(1450, 720, rise), flare: rise });
   bay(ctx, t);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
+  // Blip, the channel mascot, reacts to the moonrise (happy, then shocked when the giant Moon lands)
+  if (t < 4.9) {
+    const out = 1 - easeInOut(prog(t, 4.5, 4.9));
+    ctx.save(); ctx.globalAlpha = out;
+    glow(ctx, 880, 1650, 170, '255,210,63', 0.25);
+    shadowed(ctx, () => blip(ctx, t, 880, 1650, t > 1.6 ? 'shock' : 'happy', 0.8, 0.6), 30, 14, 'rgba(0,0,0,0.35)');
+    ctx.restore();
+  }
   say(ctx, t, ['What if the Moon', 'were 10× closer?'], 300, 0.3, { size: 96, out: 4.7 });
   say(ctx, t, ["Here's what your life", 'would look like.'], 1640, 2.4, { size: 64, weight: 800, out: 4.7, mark: { line: 0, from: 7, to: 16, color: '#3a86ff' } });
 }

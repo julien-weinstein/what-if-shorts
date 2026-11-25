@@ -31,7 +31,7 @@ Shorts run 30 to 45 seconds. Every claim has to be real science or real history,
 **Captions:** `say()` from `style3.js`, which slides lines up in clean white type with an occasional highlighter band on the key phrase.
 
 **Never:**
-- the mascot in videos (Blip is only on the profile picture)
+- the mascot anywhere except the opening (Blip appears in the first few seconds of every short, reacting to the hook, then exits)
 - emoji, toilet humour or cartoon gags
 - bouncy word pops
 - time-stamp chips ("0 SECONDS LATER") or minute-by-minute timelines
