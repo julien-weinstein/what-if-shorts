@@ -1,8 +1,10 @@
 // 3D drone-shot of a giant surge destroying a city (Three.js / WebGL), composited into the 2D frame.
 // Deterministic: drone3d(ctx, t, o) renders the scene for local time t (seconds since the shot began).
 // Units are metres. Style: cel-shaded (MeshToonMaterial) to match the illustrated 2D look.
-const City3D = (() => {
+function makeCity3D(look = {}) {
+  const FIRE = !!look.fire;
   let S = null;
+  const _cc = new THREE.Color(), _char = new THREE.Color(0x2b1816);
   const rand = seed => { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); };
 
   function toonRamp() {
@@ -37,14 +39,14 @@ const City3D = (() => {
     ren.setPixelRatio(1); ren.setSize(W, H, false); ren.shadowMap.enabled = true; ren.shadowMap.type = THREE.PCFSoftShadowMap;
     ren.outputColorSpace = THREE.SRGBColorSpace;
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0xb9cdee, 1400, 6500);
+    scene.fog = new THREE.Fog(FIRE ? 0xd47a4c : 0xb9cdee, 1400, 6500);
     const cam = new THREE.PerspectiveCamera(48, W / H, 5, 12000);
     const ramp = toonRamp();
 
-    const sun = new THREE.DirectionalLight(0xfff0d6, 2.6); sun.position.set(-1500, 1400, 1200);
+    const sun = new THREE.DirectionalLight(FIRE ? 0xff9a5a : 0xfff0d6, FIRE ? 2.2 : 2.6); sun.position.set(-1500, 1400, 1200);
     sun.castShadow = true; sun.shadow.mapSize.set(4096, 4096);
     Object.assign(sun.shadow.camera, { left: -2600, right: 2600, top: 2600, bottom: -2600, near: 100, far: 6000 }); sun.shadow.bias = -0.0004;
-    scene.add(sun, new THREE.HemisphereLight(0xcfe0ff, 0x6a7a5a, 1.1));
+    scene.add(sun, new THREE.HemisphereLight(FIRE ? 0xff8a50 : 0xcfe0ff, FIRE ? 0x3a1a10 : 0x6a7a5a, FIRE ? 1.0 : 1.1));
 
     // ground with a street grid
     const gtex = (() => { const c = document.createElement('canvas'); c.width = c.height = 1024; const g = c.getContext('2d');
@@ -57,7 +59,7 @@ const City3D = (() => {
     far.rotation.x = -Math.PI / 2; far.position.set(0, -1, -7000); scene.add(far);
 
     // calm ocean in front of the city
-    const ocean = new THREE.Mesh(new THREE.PlaneGeometry(20000, 8000, 1, 1), new THREE.MeshToonMaterial({ color: 0x2f86d9, gradientMap: ramp }));
+    const ocean = new THREE.Mesh(new THREE.PlaneGeometry(20000, 8000, 1, 1), new THREE.MeshToonMaterial({ color: FIRE ? 0x3a2420 : 0x2f86d9, gradientMap: ramp }));
     ocean.rotation.x = -Math.PI / 2; ocean.position.set(0, -2, 4200); scene.add(ocean);
 
     // buildings
@@ -82,16 +84,16 @@ const City3D = (() => {
     prof.bezierCurveTo(-260, 290, -200, 250, -150, 280); prof.bezierCurveTo(-120, 200, -60, 60, -40, -60); prof.lineTo(0, -60);
     const wgeo = new THREE.ExtrudeGeometry(prof, { depth: 5200, bevelEnabled: false, curveSegments: 24 });
     wgeo.rotateY(Math.PI / 2); wgeo.translate(-2600, 0, 0);          // profile now faces -z (inland), spans x
-    { const pa = wgeo.attributes.position, cols = new Float32Array(pa.count * 3), top = new THREE.Color(0x7fe0ff), bot = new THREE.Color(0x1556a8), c = new THREE.Color();
+    { const pa = wgeo.attributes.position, cols = new Float32Array(pa.count * 3), top = new THREE.Color(FIRE ? 0xffe28a : 0x7fe0ff), bot = new THREE.Color(FIRE ? 0xa8200a : 0x1556a8), c = new THREE.Color();
       for (let i = 0; i < pa.count; i++) { const k = Math.max(0, Math.min(1, (pa.getY(i) + 60) / 460)); c.copy(bot).lerp(top, k * k); cols.set([c.r, c.g, c.b], i * 3); }
       wgeo.setAttribute('color', new THREE.BufferAttribute(cols, 3)); }
-    const wave = new THREE.Mesh(wgeo, new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: ramp, emissive: 0x0a2a55, emissiveIntensity: 0.2 }));
+    const wave = new THREE.Mesh(wgeo, new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: ramp, emissive: FIRE ? 0xff4a10 : 0x0a2a55, emissiveIntensity: FIRE ? 0.65 : 0.2 }));
     wave.castShadow = true; scene.add(wave);
-    const NF = 900, lip = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 1), new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: ramp }), NF);
+    const NF = 900, lip = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 1), new THREE.MeshToonMaterial(FIRE ? { color: 0xffb347, gradientMap: ramp, emissive: 0xff6a00, emissiveIntensity: 0.9 } : { color: 0xffffff, gradientMap: ramp }), NF);
     lip.castShadow = true; scene.add(lip);
     const foamSeed = [...Array(NF)].map(() => [r(), r(), r(), r()]);
     const floodGeo = new THREE.PlaneGeometry(9000, 9000, 140, 140);
-    const flood = new THREE.Mesh(floodGeo, new THREE.MeshToonMaterial({ color: 0x3a96e8, gradientMap: ramp, flatShading: true }));
+    const flood = new THREE.Mesh(floodGeo, new THREE.MeshToonMaterial(FIRE ? { color: 0xff5a14, gradientMap: ramp, flatShading: true, emissive: 0xff3a00, emissiveIntensity: 0.75 } : { color: 0x3a96e8, gradientMap: ramp, flatShading: true }));
     flood.rotation.x = -Math.PI / 2; scene.add(flood);
     const floodBase = floodGeo.attributes.position.array.slice();
 
@@ -101,7 +103,7 @@ const City3D = (() => {
     const sprite = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
       const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.5, 'rgba(255,255,255,0.8)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
       g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
-    const spray = new THREE.Points(spGeo, new THREE.PointsMaterial({ size: 11, map: sprite, transparent: true, depthWrite: false, color: 0xffffff, fog: true }));
+    const spray = new THREE.Points(spGeo, new THREE.PointsMaterial({ size: FIRE ? 16 : 11, map: sprite, transparent: true, depthWrite: false, color: FIRE ? 0xffa040 : 0xffffff, fog: true, blending: FIRE ? THREE.AdditiveBlending : THREE.NormalBlending }));
     scene.add(spray);
     const spSeed = [...Array(NSP)].map(() => [r(), r(), r(), r()]);
     const NDB = 700, dbMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshToonMaterial({ gradientMap: ramp }), NDB);
@@ -130,8 +132,9 @@ const City3D = (() => {
       e.set(-fall, 0, b.lean * k * 0.5); q.setFromEuler(e);
       p.set(b.x, -sink, b.z - b.d / 2 * Math.sin(fall)); sc.set(b.w, b.h, b.d);
       m.compose(p, q, sc); bmesh.setMatrixAt(i, m);
+      if (FIRE) { _cc.copy(b.col).lerp(_char, Math.min(1, Math.max(0, (lt - hitT + 0.8) / 1.2))); bmesh.setColorAt(i, _cc); }
     });
-    bmesh.instanceMatrix.needsUpdate = true;
+    bmesh.instanceMatrix.needsUpdate = true; if (FIRE) bmesh.instanceColor.needsUpdate = true;
     // the wall
     wave.position.set(0, 0, front); wave.scale.set(1, H0 / 300, H0 / 300);
     { const fm = new THREE.Matrix4(), fq = new THREE.Quaternion(), fp = new THREE.Vector3(), fs = new THREE.Vector3(), k3 = H0 / 300;
@@ -189,7 +192,9 @@ const City3D = (() => {
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(S.canvas, 0, 0); ctx.restore();
   }
   return { draw };
-})();
+}
+const City3D = makeCity3D();
+const FireCity3D = makeCity3D({ fire: true });
 
 // ================================================================ 3D quake: a city torn open, falling into the earth
 const Quake3D = (() => {
@@ -325,6 +330,157 @@ const Quake3D = (() => {
     const L = (u, v) => u.map((x, j) => x + (v[j] - x) * k), cp = L(a[1], b[1]), lk = L(a[2], b[2]);
     const sh = o.shake ? o.shake(lt) : 0;
     S.cam.position.set(cp[0] + Math.sin(lt * 31) * sh, cp[1] + Math.cos(lt * 27) * sh, cp[2] + Math.sin(lt * 23) * sh * 0.5);
+    S.cam.lookAt(lk[0], lk[1], lk[2]);
+    S.ren.render(S.scene, S.cam);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(S.canvas, 0, 0); ctx.restore();
+  }
+  return { draw };
+})();
+
+// ================================================================ 3D giant impact (space view) with gravity-simulated ejecta
+const Impact3D = (() => {
+  let S = null;
+  const rand = seed => { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); };
+  const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+  const easeIO = p => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+  const R = 100, GM = 30 * R * R;                                   // units: 1 = 63.7 km; surface gravity 30 u/s² (time-lapsed)
+
+  function ramp() { const d = new Uint8Array([70, 70, 70, 255, 160, 160, 160, 255, 255, 255, 255, 255]);
+    const tx = new THREE.DataTexture(d, 3, 1, THREE.RGBAFormat); tx.minFilter = tx.magFilter = THREE.NearestFilter; tx.needsUpdate = true; return tx; }
+
+  // equirectangular toon Earth texture from the coastline raster
+  function earthTexture() {
+    const w = 2048, h = 1024, c = document.createElement('canvas'); c.width = w; c.height = h;
+    const g = c.getContext('2d'), img = g.createImageData(w, h), d = img.data, LM = landMap();
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const lat = 90 - (j + 0.5) / h * 180, lon = (i + 0.5) / w * 360 - 180;
+      const mi = Math.floor((90 - lat) / 180 * LM.h) * LM.w + Math.floor((lon + 180) / 360 * LM.w);
+      const land = LM.m[Math.min(mi, LM.m.length - 1)] > 0.5, k = (j * w + i) * 4, al = Math.abs(lat);
+      const n = noise3(lon * 0.08, lat * 0.08, 1.7);
+      let col = [61, 155, 240];
+      if (land) col = (lat < -60 || lat > 78 || (lat > 59 && lon > -75 && lon < -10)) ? [242, 247, 255] : (Math.abs(al - 24) < 9 && n > -0.15) ? [232, 196, 122] : n > 0.05 ? [52, 160, 78] : [74, 182, 92];
+      else if (al > 70) col = [220, 235, 250];
+      d[k] = col[0]; d[k + 1] = col[1]; d[k + 2] = col[2]; d[k + 3] = 255;
+    }
+    g.putImageData(img, 0, 0);
+    const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; return tx;
+  }
+  function rockTexture(seed) {
+    const c = document.createElement('canvas'); c.width = 1024; c.height = 512; const g = c.getContext('2d'), img = g.createImageData(1024, 512), d = img.data;
+    for (let j = 0; j < 512; j++) for (let i = 0; i < 1024; i++) {
+      const n = fbm(i / 90 + seed, j / 90, 0.3, 4), k = (j * 1024 + i) * 4;
+      d[k] = 150 + n * 120; d[k + 1] = 82 + n * 70; d[k + 2] = 58 + n * 50; d[k + 3] = 255;
+    }
+    g.putImageData(img, 0, 0); const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; return tx;
+  }
+
+  function init(o) {
+    const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
+    const ren = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+    ren.setPixelRatio(1); ren.setSize(W, H, false); ren.outputColorSpace = THREE.SRGBColorSpace;
+    const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(42, W / H, 1, 20000), rp = ramp();
+    const sun = new THREE.DirectionalLight(0xfff3e0, 3.0); sun.position.set(-800, 400, 600); scene.add(sun, new THREE.AmbientLight(0x6070a0, 0.5));
+
+    // melt / heat layer painted onto the globe each frame (emissive map)
+    const mc = document.createElement('canvas'); mc.width = 1024; mc.height = 512;
+    const meltTex = new THREE.CanvasTexture(mc); meltTex.colorSpace = THREE.SRGBColorSpace;
+    const earth = new THREE.Mesh(new THREE.SphereGeometry(R, 128, 96), new THREE.MeshToonMaterial({ map: earthTexture(), gradientMap: rp }));
+    scene.add(earth);
+    const melt = new THREE.Mesh(new THREE.SphereGeometry(R * 1.003, 128, 96), new THREE.MeshBasicMaterial({ map: meltTex, transparent: true, depthWrite: false }));
+    scene.add(melt);
+    const atm = new THREE.Mesh(new THREE.SphereGeometry(R * 1.035, 64, 48), new THREE.MeshBasicMaterial({ color: 0x7fb8ff, transparent: true, opacity: 0.18, side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false }));
+    scene.add(atm);
+    const impactor = new THREE.Mesh(new THREE.SphereGeometry(R * 0.53, 96, 64), new THREE.MeshToonMaterial({ map: rockTexture(3), gradientMap: rp, emissive: 0xff5a10, emissiveIntensity: 0 }));
+    scene.add(impactor);
+    // ejecta particles
+    const r = rand(5), N = o.particles || 8000, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+    const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.BufferAttribute(pos, 3)); pg.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    const sprite = (() => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+      const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.4, 'rgba(255,255,255,0.6)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+    const pts = new THREE.Points(pg, new THREE.PointsMaterial({ size: 5.5, map: sprite, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    pts.frustumCulled = false; scene.add(pts);
+    const seeds = [...Array(N)].map(() => [r(), r(), r(), r(), r()]);
+    // flash + shock ring
+    const flash = new THREE.Sprite(new THREE.SpriteMaterial({ map: sprite, color: 0xfff0c0, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false })); scene.add(flash);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1, 0.035, 8, 128), new THREE.MeshBasicMaterial({ color: 0xffd9a0, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false })); scene.add(ring);
+    S = { canvas, ren, scene, cam, earth, melt, atm, impactor, mc, meltTex, pts, pos, col, seeds, N, flash, ring };
+  }
+
+  function update(lt, o) {
+    const n = new THREE.Vector3(...o.site).normalize();               // impact site direction (world)
+    const tc = o.contact, T = lt - tc;
+    // impactor: approaches along -n from far away, then sinks in and merges
+    const k = cl(lt / tc), dist = T < 0 ? R + R * 0.53 + (1 - easeIO(k)) * o.approach : R + R * 0.53 - Math.min(1, T / 2.2) * R * 0.9;
+    const side = new THREE.Vector3(...o.from).normalize();
+    const dir = n.clone().multiplyScalar(1).lerp(side, T < 0 ? (1 - k) * 0.6 : 0).normalize();
+    S.impactor.position.copy(dir.multiplyScalar(dist));
+    const sq = T > 0 ? 1 - Math.min(1, T / 2.4) * 0.8 : 1; S.impactor.scale.set(sq, sq, sq);
+    S.impactor.material.emissiveIntensity = T > 0 ? Math.min(1.2, T * 1.2) : 0;
+    S.impactor.visible = T < 2.6;
+    // melt map: a molten cap spreading from the site, with glowing cracks ahead of it
+    const g = S.mc.getContext('2d'), w = S.mc.width, h = S.mc.height; g.clearRect(0, 0, w, h);
+    if (T > 0) {
+      const lat0 = Math.asin(n.y), lon0 = Math.atan2(n.x, n.z);
+      const cap = Math.min(Math.PI, T * o.meltSpeed), img = g.createImageData(w, h), d = img.data;
+      for (let j = 0; j < h; j += 1) { const lat = Math.PI / 2 - (j + 0.5) / h * Math.PI;
+        for (let i = 0; i < w; i += 1) { const lon = (i + 0.5) / w * 2 * Math.PI - Math.PI;
+          const cosd = Math.sin(lat) * Math.sin(lat0) + Math.cos(lat) * Math.cos(lat0) * Math.cos(lon - lon0), ang = Math.acos(Math.max(-1, Math.min(1, cosd)));
+          const edge = cap - ang, nz = noise3(i * 0.02, j * 0.02, T * 0.3);
+          const kk = (j * w + i) * 4;
+          if (edge > 0) { const hot = Math.min(1, edge * 1.5); const c2 = 0.6 + 0.4 * Math.abs(nz);
+            d[kk] = 255; d[kk + 1] = (90 + 120 * c2) * hot; d[kk + 2] = 20 * hot; d[kk + 3] = 255; }
+          else if (edge > -0.35 && Math.abs(nz) < 0.06) { d[kk] = 255; d[kk + 1] = 120; d[kk + 2] = 30; d[kk + 3] = 255; }
+        } }
+      g.putImageData(img, 0, 0);
+    }
+    S.meltTex.needsUpdate = true;
+    // flash + expanding shock ring on the surface
+    const fk = T > 0 ? Math.exp(-T * 2.2) : 0; S.flash.visible = fk > 0.01; S.flash.position.copy(n.clone().multiplyScalar(R * 1.05)); S.flash.scale.setScalar(80 + 400 * (1 - fk)); S.flash.material.opacity = fk;
+    const rk = cl(T / 3.5); S.ring.visible = T > 0 && rk < 1;
+    const ra = rk * Math.PI * 0.55; S.ring.position.copy(n.clone().multiplyScalar(R * Math.cos(ra) * 1.01)); S.ring.scale.setScalar(R * Math.sin(ra) * 1.01);
+    S.ring.lookAt(n.clone().multiplyScalar(1000)); S.ring.material.opacity = 1 - rk;
+    // ejecta: simulated under Earth's gravity (GM/r²) from contact; particles that fall back vanish as fireballs
+    const steps = Math.max(0, Math.floor(T / (1 / 90)));
+    const t1 = new THREE.Vector3(), t2 = new THREE.Vector3();
+    t1.crossVectors(n, Math.abs(n.y) < 0.9 ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(1, 0, 0)).normalize(); t2.crossVectors(n, t1);
+    for (let i = 0; i < S.N; i++) {
+      const [a, b, c, d2, e2] = S.seeds[i];
+      let x = 0, y = 0, z = 0, alive = T > 0;
+      if (alive) {
+        const ang = a * Math.PI * 2, spread = Math.sqrt(b) * 0.9;
+        const vdir = n.clone().multiplyScalar(Math.cos(spread)).addScaledVector(t1, Math.sin(spread) * Math.cos(ang)).addScaledVector(t2, Math.sin(spread) * Math.sin(ang));
+        const tang = t1.clone().multiplyScalar(0.55);                     // net spin from an oblique hit: material swings into orbit
+        const sp = 38 + c * 55;
+        let vx = vdir.x * sp + tang.x * sp * 0.6, vy = vdir.y * sp + tang.y * sp * 0.6, vz = vdir.z * sp + tang.z * sp * 0.6;
+        x = n.x * R * 1.02; y = n.y * R * 1.02; z = n.z * R * 1.02;
+        const dt = 1 / 90, start = d2 * 0.5;                              // launches spread over half a second
+        const nsteps = Math.max(0, steps - Math.floor(start * 90));
+        if (nsteps <= 0) alive = false;
+        for (let s2 = 0; s2 < nsteps && alive; s2++) {
+          const rr = Math.sqrt(x * x + y * y + z * z), acc = -GM / (rr * rr * rr);
+          vx += acc * x * dt; vy += acc * y * dt; vz += acc * z * dt; x += vx * dt; y += vy * dt; z += vz * dt;
+          if (rr < R * 0.995 && s2 > 20) alive = false;
+        }
+      }
+      if (!alive) { S.pos[i * 3] = S.pos[i * 3 + 1] = S.pos[i * 3 + 2] = 1e6; continue; }
+      S.pos[i * 3] = x; S.pos[i * 3 + 1] = y; S.pos[i * 3 + 2] = z;
+      const cool = cl(T / 9), hot = 1 - cool;                            // white-hot -> orange -> grey rock
+      S.col[i * 3] = 1.0 * hot + 0.55 * cool; S.col[i * 3 + 1] = (0.55 + 0.4 * e2) * hot + 0.5 * cool; S.col[i * 3 + 2] = 0.25 * hot + 0.48 * cool;
+    }
+    S.pts.geometry.attributes.position.needsUpdate = true; S.pts.geometry.attributes.color.needsUpdate = true;
+    S.earth.rotation.y = lt * 0.03; S.melt.rotation.y = S.earth.rotation.y;
+  }
+
+  // o: { contact, site:[x,y,z], from:[x,y,z], approach, meltSpeed, path, shake(lt), particles }
+  function draw(ctx, lt, o) {
+    if (!S) init(o);
+    update(lt, o);
+    const P = o.path; let i = 0; while (i < P.length - 2 && lt > P[i + 1][0]) i++;
+    const a = P[i], b = P[i + 1], k = easeIO(cl((lt - a[0]) / (b[0] - a[0])));
+    const L = (u, v) => u.map((x, j) => x + (v[j] - x) * k), cp = L(a[1], b[1]), lk = L(a[2], b[2]);
+    const sh = o.shake ? o.shake(lt) : 0;
+    S.cam.position.set(cp[0] + Math.sin(lt * 31) * sh, cp[1] + Math.cos(lt * 27) * sh, cp[2]);
     S.cam.lookAt(lk[0], lk[1], lk[2]);
     S.ren.render(S.scene, S.cam);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(S.canvas, 0, 0); ctx.restore();

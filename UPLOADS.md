@@ -70,6 +70,33 @@ Earth would end up with rings... and no Moon at all.
 
 ---
 
+## 3. What if a planet the size of Mars hit Earth?
+
+**File:** `videos/planet-impact.mp4`
+
+**Title:** What If a Planet the Size of Mars Hit Earth? ☄️🌍 #shorts
+
+**Description:**
+
+```
+For weeks it's a new star. On the last day it's as big as the Moon. In the last hour, it fills the sky.
+
+At over 40,000 km/h it hits with 100 MILLION times the energy of the asteroid that killed the dinosaurs.
+More than a full day of the Sun's entire output, in an instant.
+Boiling every ocean on Earth takes less than 0.01% of that energy.
+
+A wall of molten rock sweeps the planet. Within a day (est.): all 8.2 billion of us.
+Earth becomes a ball of magma... and the wreckage forms a new moon.
+
+Plot twist: this already happened. 4.5 billion years ago, a planet called Theia hit the young Earth. Its wreckage became our Moon.
+
+#whatif #space #physics #moon #shorts
+```
+
+**Pinned comment:** The math: half × Mars's mass × (11.2 km/s)² ≈ 4×10³¹ joules. The dinosaur asteroid was about 4×10²³. 🌋
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.

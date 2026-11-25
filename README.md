@@ -92,6 +92,10 @@ Three.js is bundled once into `engine/vendor/three.iife.js`. To rebuild it: `npm
 
 **3D quake (`Quake3D.draw`):** a city on two ground slabs that tear apart along a fault. The slabs pull apart, tilt and sink, towers near the fault topple into a magma-lit rift, other towers shake and crumble, dust boils up, and a volcano erupts on the horizon with an ash column and lava bombs.
 
+**3D giant impact (`Impact3D.draw`):** a space shot. A toon Earth is textured from the coastline raster, a rusty impactor approaches and merges into it, and a molten layer spreads across the surface from the impact site. Thousands of ejecta particles are integrated under Earth's actual central gravity (GM/r²), so they fall back, orbit or escape. There's also a flash and a surface shock ring.
+
+**Fire city (`FireCity3D`):** the same 3D city template (`makeCity3D({ fire: true })`) as a wall of molten rock: hot lighting, glowing foam and flood, embers, and towers that char as they're struck.
+
 **Pacing:** `scaled(sceneFn, newStart, newEnd, origStart, origEnd)` compresses an existing scene into a tighter slot. Its sound cues are re-timed with it (see `SEG` and `remapSfx` in `moon-closer.js`). Aim for a new beat every 2 to 3 seconds and keep shorts under 60 seconds.
 
 **Death tolls:** give a timeline (first 24 hours, first week, first year) labelled "(est.)" on screen, and put the reasoning and sources in the script header.
