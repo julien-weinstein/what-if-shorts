@@ -182,6 +182,34 @@ Which timeline would you rather live in? 👇
 
 ---
 
+## 7. What if Germany won World War 2?
+
+**File:** `videos/germany-won.mp4`
+
+**Title:** What If Germany Won World War 2? 🌍 #shorts
+
+**Description:**
+
+```
+It came closer than you think. In December 1941, German tanks reached the edge of Moscow.
+A year earlier, Britain's cabinet had debated asking for peace.
+
+Say Moscow falls and Britain makes peace. The Reich stretches from the Atlantic to the Urals.
+The Holocaust doesn't stop: the Nazis' own list counted 11 million Jews in Europe.
+Generalplan Ost planned to remove 30–45 million people from the East. The Hunger Plan expected ~30 million to starve.
+Berlin becomes "Germania": a dome 290 m tall, and trains on tracks 3 meters wide.
+Their rockets had already reached space.
+But America was building the atomic bomb to beat Hitler.
+
+In our timeline, the Allies stopped it. It cost 70–85 million lives.
+
+#whatif #history #ww2 #alternatehistory #shorts
+```
+
+**Pinned comment:** Every plan in this video is real: Wannsee (1942), Generalplan Ost, the Hunger Plan, Germania. They were stopped. 🌺
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
