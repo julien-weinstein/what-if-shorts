@@ -419,13 +419,14 @@ def main():
     for at, name in cues["sfx"]:
         x = sfx(name); s = int(at * SR)
         mix[s:s + len(x)] += x[: len(mix) - s]
-    mix = norm(mix, 0.95)
+    mix = np.tanh(norm(mix, 0.95) * 1.2) / np.tanh(1.2)  # soft saturation, no hard clipping
+    mix = norm(mix, 0.9)
     raw = base.with_suffix(".f32")
     mix.astype(np.float32).tofile(raw)
     out = base.parent / f"{base.name}.mp4"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", f"{base}.silent.mp4",
                     "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", str(raw),
-                    "-af", "loudnorm=I=-14:TP=-1:LRA=11", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+                    "-af", "loudnorm=I=-14:TP=-2:LRA=11,alimiter=limit=0.75:attack=2:release=60:level=false", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
                     "-ar", "48000", "-shortest", str(out)], check=True)
     raw.unlink()
     print(f"wrote {out}")
