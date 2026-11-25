@@ -79,14 +79,14 @@ Earth would end up with rings... and no Moon at all.
 **Description:**
 
 ```
-For weeks it's a new star. On the last day it's as big as the Moon. In the last hour, it fills the sky.
+Weeks out, telescopes spot it. On the last night it fills the sky. In the final hour its gravity drags the ocean upward.
 
-At over 40,000 km/h it hits with 100 MILLION times the energy of the asteroid that killed the dinosaurs.
-More than a full day of the Sun's entire output, in an instant.
-Boiling every ocean on Earth takes less than 0.01% of that energy.
+At 40,000 km/h it hits with 100 MILLION times the energy of the asteroid that killed the dinosaurs.
+A shockwave laps the planet. Molten debris rains down everywhere. The oceans boil like soup (that takes less than 0.01% of the energy).
+Landmarks melt like candle wax. Even deep bunkers fail: the crust melts hundreds of kilometers down.
+Within a day (est.): all 8.2 billion of us.
 
-A wall of molten rock sweeps the planet. Within a day (est.): all 8.2 billion of us.
-Earth becomes a ball of magma... and the wreckage forms a new moon.
+Earth becomes a ball of magma, the debris forms a ring, then clumps into a new moon. Millions of years later, the rain brings the oceans back.
 
 Plot twist: this already happened. 4.5 billion years ago, a planet called Theia hit the young Earth. Its wreckage became our Moon.
 

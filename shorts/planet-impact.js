@@ -1,75 +1,71 @@
-// What if a planet the size of Mars hit Earth?
+// What if a planet the size of Mars hit Earth?   (v2: fast cartoon montage, ~16 distinct vignettes)
 //
-// ARC: a new "star" that keeps growing -> it fills the sky -> IMPACT (3D, simulated ejecta)
-//      -> energy scale -> a wall of molten rock sweeps the planet (3D city) -> death toll: everyone
-//      -> Earth becomes a magma world -> debris ring -> a new moon -> TWIST: it already happened (Theia).
-//
-// PHYSICS / NUMBERS (checked):
-//  - Mars mass 6.42e23 kg. Anything falling onto Earth arrives at >= escape velocity, 11.2 km/s
-//    (~40,300 km/h): "over 40,000 km/h". KE = 0.5 * 6.42e23 * 11,200² ≈ 4.0e31 J.
-//  - Chicxulub impact ≈ 4e23 J (~100 teratons TNT) -> ratio ≈ 1e8: "100 million times".
-//  - Sun's luminosity 3.83e26 W -> 4.0e31 J ≈ 1.05e5 s ≈ 29 hours: "more than a full day of the Sun's output".
-//  - Oceans 1.4e21 kg × ~2.6 MJ/kg (heat + vaporise) ≈ 3.6e27 J ≈ 0.009% of the impact energy: "<0.01%".
-//  - Approach (assume ~15 km/s closing speed): a day out ≈ 1.3 million km -> ~0.3° (about the Moon's
-//    size); an hour out ≈ 54,000 km -> ~7°; minutes out it fills the sky. Weeks out it is a brilliant
-//    "star" (Mars-sized body at tens of millions of km is brighter than Mars at opposition).
-//  - Outcome per giant-impact studies: global melting, a rock-vapour atmosphere thousands of degrees hot,
-//    oceans vaporised, a debris disk around Earth. A 2022 simulation (Kegerreis et al., ApJL) found a
-//    moon could form within hours. Theia: the Mars-sized body thought to have hit the young Earth ~4.5
-//    billion years ago, forming the Moon (leading hypothesis).
-//  - Death toll (est.): billions in the first hour as the ejecta heat pulse and molten curtain spread;
-//    everyone (8.2 billion) within about a day. Labelled "est." on screen.
-// PLOT HOLES: why weren't we warned? We would be, for weeks, and it wouldn't matter: no technology can
-// deflect a planet. Shelters? The crust itself melts ("no shelter is deep enough").
+// Every vignette shows a different consequence with its own visual; no reused set pieces.
+// PHYSICS / NUMBERS (checked; see archive/planet-impact-v1.js for the working):
+//  - Arrives at >= 11.2 km/s (~40,000 km/h). Energy ≈ 4e31 J ≈ 1e8 × Chicxulub; ~29 h of solar output.
+//  - Boiling all oceans ≈ 3.6e27 J < 0.01% of the impact energy.
+//  - In the final hour its gravity raises enormous tides (tidal force at a few Earth radii from a Mars-mass
+//    body dwarfs the Moon's) -> "drags the oceans up toward it".
+//  - Global shockwave, ejecta re-entering as fireballs worldwide, rock-vapour atmosphere thousands of
+//    degrees hot, a magma ocean hundreds of kilometres deep (giant-impact models): landmarks melt,
+//    bunkers fail.
+//  - Debris disk -> new moon (a 2022 simulation: possibly within hours). Over millions of years the
+//    magma cools, the steam atmosphere rains out, oceans return (as on the early Earth).
+//  - Death toll (est.): all 8.2 billion within about a day.
+//  - Twist: Theia, a Mars-sized planet, hit the young Earth ~4.5 billion years ago; our Moon formed
+//    from the wreckage (leading hypothesis).
 const SHORT = {
   title: 'What if a planet the size of Mars hit Earth?',
-  duration: 52.5,
+  duration: 48,
   fps: 60,
   motionSamples: 1,
   sfx: [
-    [0.0, 'swell:2.4'], [3.5, 'air'], [3.7, 'swell:4'],
-    [8.0, 'air'], [8.2, 'swell:2'], [10.2, 'impact'], [10.25, 'boom'], [10.3, 'quake:5.5'], [12.0, 'roar:4'],
-    [16.0, 'air'], [16.2, 'boom'], [17.6, 'boom'],
-    [20.0, 'air'], [20.2, 'roar:7.8'], [20.4, 'quake:7.6'], [22.0, 'crumble'], [23.5, 'crumble'], [25.0, 'impact'], [26.0, 'crumble'],
-    [28.0, 'air'], [28.3, 'impact'], [30.0, 'boom'],
-    [32.5, 'air'], [32.7, 'rumble:5'],
-    [37.5, 'air'], [37.7, 'swell:3'], [40.5, 'boom'],
-    [43.5, 'air'], [43.8, 'swell:3'], [45.5, 'impact'],
-    [49.5, 'air'], [50.0, 'swell:2.5'],
+    [0.0, 'swell:2.6'], [3.0, 'air'], [5.5, 'air'], [5.7, 'swell:2.2'],
+    [8.0, 'air'], [8.2, 'roar:2.4'], [10.5, 'air'], [10.9, 'impact'], [10.95, 'boom'], [11.0, 'quake:3'],
+    [13.5, 'air'], [13.7, 'rumble:2.4'], [14.4, 'boom'],
+    [16.0, 'air'], [16.4, 'boom'], [17.0, 'impact'], [17.6, 'crumble'], [18.2, 'boom'],
+    [19.0, 'air'], [19.2, 'roar:3'], [22.0, 'air'], [22.3, 'crumble'], [23.8, 'crumble'],
+    [25.5, 'air'], [25.8, 'quake:2.8'], [28.5, 'air'], [28.7, 'impact'],
+    [31.0, 'air'], [31.2, 'rumble:3'], [34.0, 'air'], [34.2, 'swell:3'], [37.5, 'air'], [37.8, 'swell:2.6'],
+    [40.5, 'air'], [40.8, 'swell:2.4'], [43.0, 'impact'], [45.0, 'air'], [45.4, 'swell:2.5'],
   ],
-  music: { bpm: 70, mode: 'cinematic', until: 52.2, duckAt: [] },
+  music: { bpm: 74, mode: 'cinematic', until: 47.7, duckAt: [] },
 };
 
 const SUN = [-0.6, -0.35, 0.72];
-const toonGlobe = (ctx, x, y, R, t, extra = {}) => globe(ctx, x, y, R, { toon: true, t, sun: SUN, lights: false, clouds: 0.75, ...extra });
-
 function render(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  sequence(ctx, t, [[0, sHook], [3.5, sSky], [8, sImpact], [16, sEnergy], [20, sFire], [28, sToll], [32.5, sMagma], [37.5, sRing], [43.5, sTwist], [49.5, sEnd]], 0.3);
+  sequence(ctx, t, [[0, vHook], [3, vScope], [5.5, vCrowd], [8, vTide], [10.5, vCrown], [13.5, vShock], [16, vRain], [19, vBoil],
+                    [22, vMelt], [25.5, vBunker], [28.5, vToll], [31, vMagma], [34, vMoon], [37.5, vCool], [40.5, vTwist], [45, vEnd]], 0.25);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  if (t < 49.5) { ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850); }
-  post(ctx, { bloom: 0.2 });
+  if (t < 45) { ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850); }
+  post(ctx, { bloom: 0.15 });
 }
 
-// ---------------------------------------------------------------- helpers
-function rogue(ctx, x, y, r, o = {}) {      // the Mars-sized impactor: rusty, cel-shaded, ink outline
-  const { sun = SUN, glowK = 0 } = o;
-  ctx.save();
+// ---------------------------------------------------------------- shared cartoon pieces
+const R2 = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+function rogue(ctx, x, y, r, glowK = 0) {
   if (glowK > 0) glow(ctx, x, y, r * 2.2, '255,120,60', 0.35 * glowK);
   const g = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r);
-  g.addColorStop(0, '#d9774a'); g.addColorStop(1, '#9c4326');
+  g.addColorStop(0, '#e08050'); g.addColorStop(1, '#9c4326');
   ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill();
   ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.clip();
   const rr = rng(21);
   for (let i = 0; i < 12; i++) { const a = rr() * 6.283, d = Math.sqrt(rr()) * r * 0.85, s2 = r * (0.05 + rr() * 0.13);
     ctx.fillStyle = '#7f3420'; ctx.beginPath(); ctx.arc(x + Math.cos(a) * d, y + Math.sin(a) * d, s2, 0, 6.283); ctx.fill(); }
-  ctx.fillStyle = 'rgba(255,220,180,0.35)'; ctx.beginPath(); ctx.ellipse(x, y - r * 0.82, r * 0.35, r * 0.1, 0, 0, 6.283); ctx.fill();
-  ctx.fillStyle = 'rgba(40,20,40,0.5)'; ctx.beginPath(); ctx.arc(x - sun[0] * r * 0.55, y - sun[1] * r * 0.55, r * 1.05, 0, 6.283); ctx.fill();
-  ctx.restore();
-  ctx.lineWidth = Math.max(4, r * 0.035); ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.stroke();
+  ctx.fillStyle = 'rgba(40,20,40,0.45)'; ctx.beginPath(); ctx.arc(x + r * 0.45, y + r * 0.3, r * 1.05, 0, 6.283); ctx.fill();
+  ctx.restore(); ctx.lineWidth = Math.max(4, r * 0.035); ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.stroke();
+}
+function person(ctx, x, y, h, col = '#141b33', phone = false, t = 0) {   // simple cartoon silhouette
+  const u = h / 8; ctx.save(); ctx.translate(x, y); ctx.fillStyle = col; ctx.strokeStyle = col; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.arc(0, -7.2 * u, 0.6 * u, 0, 6.283); ctx.fill();
+  roundRect(ctx, -0.9 * u, -6.4 * u, 1.8 * u, 3 * u, 0.6 * u); ctx.fill();
+  ctx.lineWidth = 0.6 * u; ctx.beginPath(); ctx.moveTo(-0.4 * u, -3.5 * u); ctx.lineTo(-0.45 * u, 0); ctx.moveTo(0.4 * u, -3.5 * u); ctx.lineTo(0.45 * u, 0); ctx.stroke();
+  if (phone) { ctx.lineWidth = 0.45 * u; ctx.beginPath(); ctx.moveTo(0.8 * u, -6 * u); ctx.lineTo(1.4 * u, -8.4 * u); ctx.stroke();
+    ctx.fillStyle = '#bfe8ff'; ctx.fillRect(1.15 * u, -9.4 * u, 0.7 * u, 1.0 * u); glow(ctx, 1.5 * u, -8.9 * u, 1.6 * u, '190,232,255', 0.5); }
   ctx.restore();
 }
-function magmaWorld(ctx, t, cx, cy, R, crust = 0) {   // glowing molten Earth with drifting dark crust plates
+function magmaWorld(ctx, t, cx, cy, R, crust = 0) {
   glow(ctx, cx, cy, R * 1.5, '255,110,40', 0.55);
   const g = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.1, cx, cy, R);
   g.addColorStop(0, '#ffe08a'); g.addColorStop(0.5, '#ff8a2a'); g.addColorStop(1, '#c7360e');
@@ -77,173 +73,295 @@ function magmaWorld(ctx, t, cx, cy, R, crust = 0) {   // glowing molten Earth wi
   ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
   const r = rng(8);
   for (let i = 0; i < 26; i++) { const a = r() * 6.283 + t * 0.05, d = Math.sqrt(r()) * R, s2 = R * (0.08 + r() * 0.16);
-    ctx.fillStyle = `rgba(60,24,20,${0.35 + crust * 0.4})`; ctx.beginPath(); ctx.ellipse(cx + Math.cos(a) * d, cy + Math.sin(a) * d, s2, s2 * 0.6, a, 0, 6.283); ctx.fill(); }
+    ctx.fillStyle = `rgba(60,24,20,${0.35 + crust * 0.5})`; ctx.beginPath(); ctx.ellipse(cx + Math.cos(a) * d, cy + Math.sin(a) * d, s2, s2 * 0.6, a, 0, 6.283); ctx.fill(); }
   ctx.fillStyle = 'rgba(30,10,30,0.45)'; ctx.beginPath(); ctx.arc(cx + R * 0.55, cy + R * 0.35, R * 1.05, 0, 6.283); ctx.fill();
-  ctx.restore();
-  ctx.lineWidth = 8; ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.stroke();
+  ctx.restore(); ctx.lineWidth = 8; ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.stroke();
 }
-function statRow(ctx, t, y, at, big, text, o = {}) {
-  const { out = 1e9, color = C.yellow, size = 108 } = o;
-  if (t < at || t > out + 0.4) return;
-  const p = easeOut(prog(t, at, at + 0.5)), e = 1 - prog(t, out, out + 0.35);
-  ctx.save(); ctx.globalAlpha = e * Math.min(1, p * 1.5); ctx.translate((1 - p) * -60, 0);
-  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.lineJoin = 'round';
-  ctx.font = `900 ${size}px ${FONT}`; ctx.lineWidth = size * 0.19; ctx.strokeStyle = INK; ctx.strokeText(big, 84, y); ctx.fillStyle = color; ctx.fillText(big, 84, y);
-  ctx.font = `800 40px ${FONT}`; ctx.lineWidth = 9; const lines = wrap(ctx, text, 900);
-  lines.forEach((ln, i) => { ctx.strokeText(ln, 88, y + 62 + i * 48); ctx.fillStyle = '#ffffff'; ctx.fillText(ln, 88, y + 62 + i * 48); });
+function bigNum(ctx, t, text, y, at, o = {}) {   // cartoon number slam: drops in with a squash
+  const { size = 140, color = C.yellow, out = 1e9 } = o;
+  if (t < at || t > out + 0.3) return;
+  const p = prog(t, at, at + 0.35), s2 = p < 1 ? easeBack(p) : 1, e = 1 - prog(t, out, out + 0.3);
+  ctx.save(); ctx.globalAlpha = e; ctx.translate(W / 2, y); ctx.scale(s2 * (1 + 0.08 * Math.exp(-(t - at - 0.35) * 8)), s2);
+  ctx.font = `900 ${size}px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  ctx.lineWidth = size * 0.2; ctx.strokeStyle = INK; ctx.strokeText(text, 0, 0); ctx.fillStyle = color; ctx.fillText(text, 0, 0);
   ctx.restore();
 }
 
 // ---------------------------------------------------------------- 1. hook
-function sHook(ctx, t) {
+function vHook(ctx, t) {
   space(ctx, t);
-  drift(ctx, t, 0, 3.5, 1.0, 1.06, W / 2, 1200);
-  toonGlobe(ctx, W / 2 - 110, 1300, 330, t, { lon0: -40 + t * 4, lat0: 18 });
-  const k = easeInOut(prog(t, 0.2, 3.4));
-  rogue(ctx, lerp(W + 100, W / 2 + 260, k), lerp(240, 820, k), lerp(30, 175, k), { glowK: k });
+  drift(ctx, t, 0, 3, 1.0, 1.08, W / 2, 1200);
+  earth(ctx, W / 2 - 100, 1300, 320, t * 0.4);
+  const k = easeInOut(prog(t, 0.1, 2.9));
+  rogue(ctx, lerp(W + 120, W / 2 + 250, k), lerp(200, 820, k), lerp(30, 170, k), k);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  if (t < 3.4) { ctx.save(); ctx.globalAlpha = 1 - easeInOut(prog(t, 3.0, 3.4));
-    shadowed(ctx, () => blip(ctx, t, 890, 1700, t > 1.5 ? 'shock' : 'happy', 0.8, 0.4), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
-  say(ctx, t, ['What if a planet', 'the size of Mars', 'hit Earth?'], 300, 0.2, { size: 88, out: 3.3, mark: { line: 1, from: 12, to: 16, color: '#ff6b5b' } });
+  if (t < 2.9) { ctx.save(); ctx.globalAlpha = 1 - easeInOut(prog(t, 2.5, 2.9));
+    shadowed(ctx, () => blip(ctx, t, 890, 1700, t > 1.3 ? 'shock' : 'happy', 0.8, 0.3), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
+  say(ctx, t, ['What if a planet', 'the size of Mars', 'hit Earth?'], 300, 0.15, { size: 88, out: 2.85, mark: { line: 1, from: 12, to: 16, color: '#ff6b5b' } });
 }
 
-// ---------------------------------------------------------------- 2. it grows in the sky
-function sSky(ctx, t) {
-  const p = prog(t, 3.6, 7.8);
-  ctx.fillStyle = grad(ctx, [mixHex('#0d1638', '#5a1a20', p), mixHex('#2a3a6e', '#b0402a', p), mixHex('#4b5f93', '#f08a4a', p)]); ctx.fillRect(0, 0, W, H);
-  stars(ctx, t, 0.7 * (1 - p));
-  const r = p < 0.4 ? 6 + p * 20 : p < 0.7 ? 18 + (p - 0.4) * 160 : 66 + Math.pow((p - 0.7) / 0.3, 2) * 900;
-  const py = lerp(560, 760, p);
-  glow(ctx, W / 2, py, r * 3 + 40, '255,150,90', 0.8);
-  rogue(ctx, W / 2, py, r, { sun: [0.2, -0.3, 0.93], glowK: 1 });
-  const g = rng(4);
-  for (let i = 0; i < 9; i++) block3d(ctx, t, -40 + i * 125, 1700, 100, 260 + g() * 380, { col: '#1f2a4a', depth: 40, seed: 90 + i, lit: 'rgba(255,200,140,0.9)' });
-  ctx.fillStyle = '#121a30'; ctx.fillRect(0, 1700, W, H);
+// ---------------------------------------------------------------- 2. observatory
+function vScope(ctx, t) {
+  ctx.fillStyle = grad(ctx, ['#0b1230', '#1d2c5c', '#33467e']); ctx.fillRect(0, 0, W, H); stars(ctx, t, 1);
+  drift(ctx, t, 3, 5.5, 1.0, 1.05, W / 2, 1300);
+  const px = 300, py = 520; glow(ctx, px, py, 60, '255,150,90', 0.9); rogue(ctx, px, py, 12, 1);
+  ctx.fillStyle = '#3b4568'; ctx.beginPath(); ctx.moveTo(0, 1500); ctx.quadraticCurveTo(540, 1350, W, 1500); ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+  // dome + slit + telescope tube
+  const dx = 620, dy = 1380;
+  ctx.fillStyle = '#d9dde8'; ctx.beginPath(); ctx.arc(dx, dy, 230, Math.PI, 0); ctx.fill(); ctx.fillRect(dx - 230, dy, 460, 180);
+  ctx.lineWidth = 7; ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(dx, dy, 230, Math.PI, 0); ctx.stroke(); ctx.strokeRect(dx - 230, dy, 460, 180);
+  ctx.save(); ctx.translate(dx, dy - 40); ctx.rotate(-0.75); ctx.fillStyle = '#2b3150'; ctx.fillRect(-20, -330, 70, 330); ctx.strokeRect(-20, -330, 70, 330); ctx.restore();
+  ctx.fillStyle = '#ffd88a'; ctx.fillRect(dx - 40, dy + 60, 80, 110); ctx.strokeRect(dx - 40, dy + 60, 80, 110);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['For weeks: a new star', 'that keeps getting brighter'], 300, 3.6, { size: 72, out: 5.0 });
-  say(ctx, t, ['On the last day,', 'it’s as big as the Moon'], 300, 5.1, { size: 80, out: 6.4 });
-  say(ctx, t, ['In the last hour,', 'it fills the sky.'], 300, 6.5, { size: 92, out: 7.9, mark: { line: 1, from: 3, to: 16, color: '#ff6b5b' } });
+  say(ctx, t, ['Weeks out,', 'telescopes spot it.'], 300, 3.15, { size: 88, out: 5.3 });
+  say(ctx, t, ['Nothing on Earth', 'can stop a planet.'], 1640, 4.0, { size: 64, weight: 900, out: 5.3, mark: { line: 1, from: 0, to: 17, color: '#ff6b5b' } });
 }
 
-// ---------------------------------------------------------------- 3. impact (3D)
-const IMPACT = { contact: 2.2, site: [0.55, 0.45, 0.7], from: [1, 0.6, 0.2], approach: 700, meltSpeed: 0.5, particles: 8000,
-  path: [[0, [0, 40, 560], [30, 20, 0]], [2.2, [80, 60, 470], [40, 30, 0]], [8, [-170, 170, 660], [0, 0, 0]]],
-  shake: lt => (lt > 2.2 ? 7 * Math.exp(-(lt - 2.2) * 1.4) : 0) };
-function sImpact(ctx, t) {
-  const lt = t - 8;
-  ctx.setTransform(1, 0, 0, 1, 0, 0); space(ctx, t);
-  Impact3D.draw(ctx, lt, IMPACT);
-  flash(ctx, t, 10.2, 0.35);
-  say(ctx, t, ['At over 40,000 km/h…'], 300, 8.2, { size: 80, out: 10.1 });
-  say(ctx, t, ['IMPACT.'], 360, 10.25, { size: 150, out: 12.4, color: '#ffd23f' });
-  statRow(ctx, t, 1600, 12.6, '100 MILLION×', 'the energy of the asteroid that killed the dinosaurs', { out: 15.8, color: '#ffb0a0' });
+// ---------------------------------------------------------------- 3. the last night: everyone looks up
+function vCrowd(ctx, t) {
+  const p = prog(t, 5.5, 8);
+  ctx.fillStyle = grad(ctx, ['#2a0f2a', '#8a2f2a', '#f08a4a']); ctx.fillRect(0, 0, W, H);
+  drift(ctx, t, 5.5, 8, 1.0, 1.06, W / 2, 800);
+  const r = lerp(260, 520, p); glow(ctx, W / 2, 620, r * 1.8, '255,150,90', 0.7); rogue(ctx, W / 2, 620, r, 1);
+  for (const [x, w, h] of [[-20, 300, 520], [300, 260, 420], [560, 280, 600], [840, 260, 460]]) {
+    ctx.fillStyle = '#1a1022'; ctx.fillRect(x, 1900 - h, w, h);
+    const g = rng(x + 7); for (let k = 0; k < 7; k++) person(ctx, x + 30 + g() * (w - 60), 1900 - h, 90 + g() * 30, '#0e0a16', g() > 0.3);
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['The last night:', 'it fills the sky.'], 300, 5.65, { size: 92, out: 7.8 });
 }
 
-// ---------------------------------------------------------------- 4. energy scale
-function sEnergy(ctx, t) {
+// ---------------------------------------------------------------- 4. its gravity drags the sea upward
+function vTide(ctx, t) {
+  const p = easeInOut(prog(t, 8.1, 10.3));
+  ctx.fillStyle = grad(ctx, ['#3a1a3a', '#c0503a', '#ffb070']); ctx.fillRect(0, 0, W, H);
+  drift(ctx, t, 8, 10.5, 1.0, 1.05, W / 2, 1200);
+  rogue(ctx, W / 2 + 120, 260, 420, 1);
+  // the sea heaped into a tall hump reaching toward the planet
+  const base = 1450, peak = lerp(base - 60, 620, p);
+  ctx.fillStyle = grad(ctx, ['#5fd0ff', '#1f7fd6', '#0d4a92'], 0, peak, 0, base + 200);
+  ctx.beginPath(); ctx.moveTo(-40, base + 300); ctx.lineTo(-40, base);
+  for (let x = -40; x <= W + 40; x += 20) { const d = (x - W / 2 - 60) / 420, y = base - (base - peak) * Math.exp(-d * d) + Math.sin(x * 0.03 + t * 4) * 10; ctx.lineTo(x, y); }
+  ctx.lineTo(W + 40, base + 300); ctx.closePath(); ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke();
+  // boats sliding up the slope, beach drained below
+  [[200, 0.6], [820, 0.5]].forEach(([x, s2], i) => { const d = (x - W / 2 - 60) / 420, y = base - (base - peak) * Math.exp(-d * d) * (0.7 + 0.3 * p);
+    ctx.save(); ctx.translate(x + (W / 2 - x) * p * 0.25, y - 20); ctx.rotate((i ? -1 : 1) * 0.5 * p); ship(ctx, 0, 0, s2, 0); ctx.restore(); });
+  ctx.fillStyle = '#e6c98a'; ctx.fillRect(-40, base + 140, W + 80, H);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['In the final hour,', 'its gravity drags', 'the ocean upward'], 1560, 8.15, { size: 72, out: 10.3 });
+}
+
+// ---------------------------------------------------------------- 5. impact: a crown-splash of molten rock on the horizon
+function vCrown(ctx, t) {
+  const [sx, sy] = shakeOffset(t, 10.9, 2.2, 40); ctx.translate(sx, sy);
+  const k = prog(t, 10.9, 13.4);
+  ctx.fillStyle = grad(ctx, ['#1a0a1a', mixHex('#3a1020', '#ff7a2a', k), mixHex('#6a2a2a', '#ffd08a', k)]); ctx.fillRect(0, 0, W, H);
+  if (t < 10.9) rogue(ctx, W / 2, lerp(-300, 1180, easeIn2(prog(t, 10.5, 10.9))), 700, 1);
+  // curved horizon of the planet
+  ctx.fillStyle = '#2f6fd0'; ctx.beginPath(); ctx.ellipse(W / 2, 2500, 1800, 1150, 0, 0, 6.283); ctx.fill(); ctx.lineWidth = 8; ctx.strokeStyle = INK; ctx.stroke();
+  if (t >= 10.9) {
+    // crown of molten rock: spikes rising and arcing out, each tipped with a blob
+    const r = rng(14);
+    for (let i = 0; i < 26; i++) { const a = -Math.PI / 2 + (r() - 0.5) * 2.4, len = (420 + r() * 600) * easeOut(k);
+      const bx = W / 2 + Math.cos(a) * 140, by = 1360, tx = bx + Math.cos(a) * len, ty = by + Math.sin(a) * len + 300 * k * k * r();
+      ctx.strokeStyle = '#ff8a2a'; ctx.lineWidth = 46 * (1 - k * 0.5); ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(bx, by); ctx.quadraticCurveTo((bx + tx) / 2, (by + ty) / 2 - 80, tx, ty); ctx.stroke();
+      ctx.fillStyle = '#ffd36a'; ctx.beginPath(); ctx.arc(tx, ty, 30 + r() * 26, 0, 6.283); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); }
+    ctx.fillStyle = '#ffb347'; ctx.beginPath(); ctx.ellipse(W / 2, 1360, 360 + 300 * k, 140, 0, 0, 6.283); ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = INK; ctx.stroke();
+    glow(ctx, W / 2, 1300, 900, '255,220,150', 0.8 * (1 - k * 0.6));
+  }
+  flash(ctx, t, 10.9, 0.4);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  bigNum(ctx, t, 'IMPACT', 420, 10.95, { size: 170, out: 12.2 });
+  say(ctx, t, ['at 40,000 km/h'], 560, 11.3, { size: 72, weight: 900, out: 12.2 });
+  bigNum(ctx, t, '100,000,000×', 420, 12.3, { size: 120, out: 13.3, color: '#ffb0a0' });
+  say(ctx, t, ['the dinosaur asteroid'], 540, 12.5, { size: 64, weight: 900, out: 13.3 });
+}
+
+// ---------------------------------------------------------------- 6. shockwave lapping the globe
+function vShock(ctx, t) {
   space(ctx, t);
-  drift(ctx, t, 16, 20, 1.0, 1.04, W / 2, 1400);
-  magmaWorld(ctx, t, W / 2, 1520, 420, 0);
+  const [sx, sy] = shakeOffset(t, 13.5, 2.5, 16); ctx.translate(sx, sy);
+  const cx = W / 2, cy = 1100, R = 420, k = prog(t, 13.6, 15.8);
+  earth(ctx, cx, cy, R, 1.2 + t * 0.1);
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
+  const ix = cx + 150, iy = cy - 180;
+  glow(ctx, ix, iy, 120 + 300 * k, '255,140,50', 0.9);
+  for (let j = 0; j < 3; j++) { const kk = R2(k * 1.2 - j * 0.15); ctx.strokeStyle = `rgba(255,${220 - j * 40},150,${1 - kk})`; ctx.lineWidth = 16 - j * 4;
+    ctx.beginPath(); ctx.ellipse(ix - kk * 150, iy + kk * 180, kk * R * 1.4, kk * R * 1.1, 0.4, 0, 6.283); ctx.stroke(); }
+  const r = rng(5); ctx.strokeStyle = 'rgba(255,120,40,0.95)'; ctx.lineWidth = 6;
+  for (let i = 0; i < 10; i++) { let x = ix, y = iy, a = r() * 6.283; ctx.beginPath(); ctx.moveTo(x, y);
+    for (let s2 = 0; s2 < 8 * k; s2++) { a += (r() - 0.5) * 0.8; x += Math.cos(a) * 50; y += Math.sin(a) * 50; ctx.lineTo(x, y); } ctx.stroke(); }
+  ctx.restore();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  statRow(ctx, t, 420, 16.2, 'A FULL DAY', 'of the Sun’s entire energy output, released in an instant', { out: 19.8 });
-  statRow(ctx, t, 760, 17.6, '<0.01%', 'of that energy is enough to boil away every ocean on Earth', { out: 19.8, color: '#ffb0a0' });
+  say(ctx, t, ['A shockwave laps', 'the entire planet'], 300, 13.65, { size: 88, out: 15.8 });
+  say(ctx, t, ['Every continent cracks'], 1700, 14.6, { size: 64, weight: 900, out: 15.8 });
 }
 
-// ---------------------------------------------------------------- 5. the firestorm (3D city)
-const FIREWALL = { height: 380, z0: 1500, z1: -1800, dur: 8,
-  path: [[0, [500, 650, -2100], [0, 160, 900]], [2.6, [1300, 450, -1250], [-100, 170, 200]], [5.2, [1400, 700, -2500], [-300, 150, -700]], [8, [650, 1500, -3400], [0, 20, -1300]]],
-  shake: lt => 5 + 4 * Math.exp(-Math.abs(lt - 2.4)) };
-function sFire(ctx, t) {
-  const lt = t - 20;
+// ---------------------------------------------------------------- 7. molten debris rains on a city
+function vRain(ctx, t) {
+  ctx.fillStyle = grad(ctx, ['#1a0812', '#6a1a1a', '#d0582a']); ctx.fillRect(0, 0, W, H);
+  const [sx, sy] = shakeOffset(t, 16.4, 2.6, 14); ctx.translate(sx, sy);
+  drift(ctx, t, 16, 19, 1.0, 1.06, W / 2, 1500);
+  for (let i = 0; i < 14; i++) fireball(ctx, t, 80 + i * 75 + 300, -200, 40 + i * 75, 1000 + (i % 4) * 140, 16.0 + (i % 7) * 0.32 + Math.floor(i / 7) * 0.2, 0.9, 0.8);
+  const g = rng(3);
+  for (let i = 0; i < 9; i++) { const x = -30 + i * 125, h = 300 + g() * 420, hit = 16.6 + (i % 5) * 0.45;
+    block3d(ctx, t, x, 1560, 100, h, { col: '#3a2a4a', depth: 40, seed: 50 + i, crumble: easeInOut(R2((t - hit) / 1.3)) * (i % 2), lit: 'rgba(255,180,110,0.9)' });
+    if (t > hit && i % 2) { glow(ctx, x + 50, 1560 - h * 0.6, 160, '255,140,50', 0.8 * Math.exp(-(t - hit))); } }
+  ctx.fillStyle = '#20141c'; ctx.fillRect(-60, 1560, W + 120, H);
+  // a flipped car
+  const ck = R2((t - 17.6) / 0.7); ctx.save(); ctx.translate(lerp(820, 560, ck), 1560 - Math.sin(ck * Math.PI) * 220); ctx.rotate(ck * Math.PI);
+  ctx.fillStyle = '#4fa3ff'; roundRect(ctx, -70, -50, 140, 50, 14); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+  ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(-40, 0, 16, 0, 6.283); ctx.arc(40, 0, 16, 0, 6.283); ctx.fill(); ctx.restore();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.fillStyle = grad(ctx, ['#2a0f12', '#a8331c', '#ff9a4a']); ctx.fillRect(0, 0, W, H);
-  FireCity3D.draw(ctx, lt, FIREWALL);
-  say(ctx, t, ['A wall of molten rock', 'races around the planet'], 300, 20.2, { size: 80, out: 23.2 });
-  say(ctx, t, ['The sky turns to fire.'], 300, 23.4, { size: 88, out: 25.6, mark: { line: 0, from: 4, to: 21, color: '#ff6b5b' } });
-  say(ctx, t, ['No shelter is', 'deep enough.'], 300, 25.8, { size: 96, out: 27.8 });
-  say(ctx, t, ['Even the ground melts'], 1700, 26.2, { size: 64, weight: 900, out: 27.8 });
+  say(ctx, t, ['Molten debris rains', 'back down. Everywhere.'], 300, 16.15, { size: 82, out: 18.8 });
 }
 
-// ---------------------------------------------------------------- 6. the toll
-function sToll(ctx, t) {
-  ctx.fillStyle = grad(ctx, ['#1a0c14', '#4a1418', '#8a2a1a']); ctx.fillRect(0, 0, W, H);
-  drift(ctx, t, 28, 32.5, 1.0, 1.04, W / 2, 1700);
-  magmaWorld(ctx, t, W / 2, 2150, 760, 0.2);
+// ---------------------------------------------------------------- 8. the oceans boil
+function vBoil(ctx, t) {
+  ctx.fillStyle = grad(ctx, ['#5a2a2a', '#c86a3a', '#ffc090']); ctx.fillRect(0, 0, W, H);
+  drift(ctx, t, 19, 22, 1.0, 1.05, W / 2, 1300);
+  const sea = 1150;
+  ctx.fillStyle = grad(ctx, ['#3a8ad0', '#1d4f8a'], 0, sea, 0, H); ctx.fillRect(0, sea, W, H);
+  const r = rng(6);
+  for (let i = 0; i < 70; i++) { const life = (t * (0.6 + r() * 0.8) + r()) % 1, x = r() * W, y = sea + 40 + r() * 700 - life * 120, rr = (10 + r() * 34) * (0.4 + life);
+    ctx.fillStyle = 'rgba(220,240,255,0.85)'; ctx.beginPath(); ctx.arc(x, y, rr, 0, 6.283); ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(27,22,64,0.5)'; ctx.stroke(); }
+  for (let i = 0; i < 9; i++) { const x = 60 + i * 120, h = 500 + Math.sin(t * 2 + i) * 80;      // steam columns
+    for (let k = 0; k < 6; k++) { const yy = sea - k * h / 6 - (t * 120 % (h / 6)); ctx.fillStyle = `rgba(250,245,240,${0.5 - k * 0.07})`; ctx.beginPath(); ctx.arc(x + Math.sin(t + k + i) * 30, yy, 50 + k * 12, 0, 6.283); ctx.fill(); } }
+  const sink = R2((t - 19.6) / 2.2); ctx.save(); ctx.translate(560, sea + 30 + sink * 260); ctx.rotate(0.35 * sink); ship(ctx, 0, 0, 1.0, 0); ctx.restore();
+  ctx.fillStyle = grad(ctx, ['#3a8ad0', '#1d4f8a'], 0, sea, 0, H); ctx.globalAlpha = 0.55; ctx.fillRect(0, sea + 90, W, H); ctx.globalAlpha = 1;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['IMPACT + 1 HOUR (est.)'], 300, 28.2, { size: 72, out: 32.3 });
-  statRow(ctx, t, 520, 28.4, 'BILLIONS', 'dead: vaporized, burned, buried', { out: 32.3, color: '#ffb0a0' });
-  say(ctx, t, ['IMPACT + 1 DAY (est.)'], 860, 30.0, { size: 72, out: 32.3 });
-  statRow(ctx, t, 1080, 30.2, '8.2 BILLION', 'Everyone. Every human, every animal, every plant on the surface.', { out: 32.3, color: '#ff6b5b' });
+  say(ctx, t, ['The oceans boil', 'like a pot of soup'], 300, 19.15, { size: 88, out: 21.8 });
+  say(ctx, t, ['Less than 0.01% of', 'the impact’s energy'], 1640, 20.2, { size: 62, weight: 900, out: 21.8, mark: { line: 0, from: 10, to: 18, color: '#ff6b5b' } });
 }
 
-// ---------------------------------------------------------------- 7. magma world
-function sMagma(ctx, t) {
+// ---------------------------------------------------------------- 9. landmarks melt like wax
+function drip(ctx, x, y, w, k, col) { const r = rng(Math.floor(x));
+  for (let i = 0; i < 5; i++) { const dx = x + (r() - 0.5) * w, len = k * (40 + r() * 140); ctx.fillStyle = col; roundRect(ctx, dx - 8, y, 16, len, 8); ctx.fill(); } }
+function vMelt(ctx, t) {
+  const k = easeInOut(prog(t, 22.3, 25.2));
+  ctx.fillStyle = grad(ctx, ['#4a1010', '#d0401a', '#ffb050']); ctx.fillRect(0, 0, W, H);
+  drift(ctx, t, 22, 25.5, 1.0, 1.05, W / 2, 1300);
+  const ground = 1600;
+  // lattice tower (Eiffel-style)
+  ctx.save(); ctx.translate(250, ground); ctx.scale(1 + k * 0.25, 1 - k * 0.55); ctx.rotate(-0.15 * k);
+  ctx.fillStyle = '#5a4a3a'; ctx.beginPath(); ctx.moveTo(-140, 0); ctx.quadraticCurveTo(-30, -300, -12, -760); ctx.lineTo(12, -760); ctx.quadraticCurveTo(30, -300, 140, 0); ctx.lineTo(80, 0); ctx.quadraticCurveTo(0, -120, -80, 0); ctx.closePath(); ctx.fill();
+  ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke(); ctx.restore();
+  // pyramid
+  ctx.save(); ctx.translate(560, ground); ctx.scale(1 + k * 0.4, 1 - k * 0.6);
+  ctx.fillStyle = '#d9b26a'; ctx.beginPath(); ctx.moveTo(-200, 0); ctx.lineTo(0, -330); ctx.lineTo(200, 0); ctx.closePath(); ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke();
+  ctx.fillStyle = '#b8914f'; ctx.beginPath(); ctx.moveTo(0, -330); ctx.lineTo(200, 0); ctx.lineTo(60, 0); ctx.closePath(); ctx.fill(); ctx.restore();
+  // clock tower
+  ctx.save(); ctx.translate(860, ground); ctx.rotate(0.2 * k); ctx.scale(1 + k * 0.2, 1 - k * 0.5);
+  ctx.fillStyle = '#c9a77a'; ctx.fillRect(-55, -620, 110, 620); ctx.beginPath(); ctx.moveTo(-60, -620); ctx.lineTo(0, -760); ctx.lineTo(60, -620); ctx.fill();
+  ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.strokeRect(-55, -620, 110, 620);
+  ctx.fillStyle = '#fff6dc'; ctx.beginPath(); ctx.arc(0, -520, 40, 0, 6.283); ctx.fill(); ctx.stroke(); ctx.restore();
+  drip(ctx, 250, ground - 760 * (1 - k * 0.55) + 200, 160, k, '#5a4a3a'); drip(ctx, 860, ground - 300, 110, k, '#c9a77a');
+  ctx.fillStyle = '#ff7a24'; ctx.fillRect(-40, ground - 10 - k * 60, W + 80, H); glow(ctx, W / 2, ground, 700, '255,140,40', 0.5 * k);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['Landmarks melt', 'like candle wax'], 300, 22.15, { size: 92, out: 25.3 });
+  say(ctx, t, ['The air itself: vaporized rock,', 'thousands of degrees'], 1700, 23.3, { size: 54, weight: 900, out: 25.3 });
+}
+
+// ---------------------------------------------------------------- 10. bunkers fail
+function vBunker(ctx, t) {
+  const k = easeInOut(prog(t, 25.8, 28.3));
+  ctx.fillStyle = grad(ctx, ['#ff9a4a', '#d0401a'], 0, 0, 0, 500); ctx.fillRect(0, 0, W, 500);
+  ctx.fillStyle = grad(ctx, ['#6b4a34', '#3e2a1e', '#22140e'], 0, 500, 0, H); ctx.fillRect(0, 500, W, H);
+  drift(ctx, t, 25.5, 28.5, 1.0, 1.05, W / 2, 1200);
+  // molten layer creeping down from the surface and up from below
+  ctx.fillStyle = '#ff6a1a'; ctx.fillRect(0, 500, W, 80 + k * 520); glow(ctx, W / 2, 500 + k * 520, 600, '255,120,40', 0.6);
+  ctx.fillStyle = '#ff5a10'; ctx.fillRect(0, H - k * 520, W, k * 520);
+  // the bunker
+  const bx = W / 2, by = 1250;
+  ctx.fillStyle = '#9aa3b8'; roundRect(ctx, bx - 260, by - 140, 520, 280, 40); ctx.fill(); ctx.lineWidth = 8; ctx.strokeStyle = INK; ctx.stroke();
+  ctx.fillStyle = '#ffe6a8'; roundRect(ctx, bx - 220, by - 100, 440, 200, 24); ctx.fill();
+  for (let i = 0; i < 4; i++) person(ctx, bx - 150 + i * 100, by + 95, 150, '#2a2f4a');
+  ctx.fillStyle = `rgba(255,90,20,${0.6 * R2((k - 0.6) / 0.4)})`; roundRect(ctx, bx - 220, by - 100, 440, 200, 24); ctx.fill();
+  ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = '#ffffff'; ctx.lineWidth = 9; ctx.strokeStyle = INK;
+  ctx.strokeText('−1 km', 40, by); ctx.fillText('−1 km', 40, by);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['Deep bunkers?'], 300, 25.65, { size: 92, out: 28.3 });
+  say(ctx, t, ['The crust melts hundreds', 'of kilometers down'], 1640, 26.4, { size: 62, weight: 900, out: 28.3, mark: { line: 0, from: 10, to: 24, color: '#ff6b5b' } });
+}
+
+// ---------------------------------------------------------------- 11. the toll
+function vToll(ctx, t) {
+  ctx.fillStyle = grad(ctx, ['#14080e', '#3a0e12']); ctx.fillRect(0, 0, W, H);
+  const n = Math.round(8200000000 * easeOut(prog(t, 28.7, 30.6)));
+  bigNum(ctx, t, n.toLocaleString('en-US'), 900, 28.7, { size: 120, color: '#ff6b5b' });
+  say(ctx, t, ['Within a day (est.):'], 600, 28.65, { size: 72, x: W / 2, align: 'center', out: 30.9 });
+  say(ctx, t, ['Everyone.'], 1180, 30.0, { size: 110, x: W / 2, align: 'center', out: 30.9 });
+}
+
+// ---------------------------------------------------------------- 12. magma world
+function vMagma(ctx, t) {
   space(ctx, t);
-  drift(ctx, t, 32.5, 37.5, 1.0, 1.05, W / 2, 1150);
-  magmaWorld(ctx, t, W / 2, 1150, 430, prog(t, 33, 37));
-  // rock-vapour atmosphere
-  for (let k = 0; k < 3; k++) { ctx.strokeStyle = `rgba(255,170,90,${0.25 - k * 0.06})`; ctx.lineWidth = 30 - k * 8; ctx.beginPath(); ctx.arc(W / 2, 1150, 470 + k * 30 + Math.sin(t * 2 + k) * 6, 0, 6.283); ctx.stroke(); }
+  drift(ctx, t, 31, 34, 1.0, 1.06, W / 2, 1150);
+  magmaWorld(ctx, t, W / 2, 1150, 440, 0);
+  for (let k = 0; k < 3; k++) { ctx.strokeStyle = `rgba(255,170,90,${0.25 - k * 0.06})`; ctx.lineWidth = 30 - k * 8; ctx.beginPath(); ctx.arc(W / 2, 1150, 480 + k * 30 + Math.sin(t * 2 + k) * 6, 0, 6.283); ctx.stroke(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['Earth becomes a', 'ball of magma.'], 300, 32.7, { size: 92, out: 37.3 });
-  say(ctx, t, ['A sky of vaporized rock,', 'thousands of degrees hot'], 1660, 33.9, { size: 56, weight: 900, out: 35.6 });
-  say(ctx, t, ['The oceans? Gone.'], 1700, 35.7, { size: 66, weight: 900, out: 37.3, mark: { line: 0, from: 12, to: 17, color: '#ff6b5b' } });
+  say(ctx, t, ['Earth becomes', 'a ball of magma'], 300, 31.15, { size: 92, out: 33.8 });
 }
 
-// ---------------------------------------------------------------- 8. debris ring -> new moon
-function sRing(ctx, t) {
+// ---------------------------------------------------------------- 13. ring -> new moon
+function vMoon(ctx, t) {
   space(ctx, t);
-  drift(ctx, t, 37.5, 43.5, 1.0, 1.05, W / 2, 1150);
-  const cx = W / 2, cy = 1150, R = 300;
-  const form = prog(t, 37.6, 40.4), clump = easeInOut(prog(t, 40.4, 42.8));
-  const r = rng(9);
-  const drawDebris = back => { for (let i = 0; i < 1600; i++) {
-    const a0 = r() * 6.283, a = a0 + t * 0.4 * (0.8 + r() * 0.4), rr = 420 + r() * 260;
+  drift(ctx, t, 34, 37.5, 1.0, 1.05, W / 2, 1150);
+  const cx = W / 2, cy = 1150, R = 300, form = prog(t, 34.1, 35.4), clump = easeInOut(prog(t, 35.4, 37.0));
+  const r = rng(9), target = 0.6 + t * 0.5;
+  const debris = back => { for (let i = 0; i < 1400; i++) { const a0 = r() * 6.283, a = a0 + t * 0.5 * (0.8 + r() * 0.4), rr = 420 + r() * 260;
     if ((Math.sin(a) < 0) !== back) continue;
-    const target = 0.6 + t * 0.4;                                   // clumps toward one orbiting point
     const ang = lerp(a, target + (a0 - Math.PI) * 0.05, clump), rad = lerp(rr, 560, clump);
-    const x = cx + Math.cos(ang) * rad, y = cy + Math.sin(ang) * rad * 0.28;
-    ctx.fillStyle = `rgba(255,${150 + r() * 80},${80 + r() * 60},${(0.5 + r() * 0.5) * form})`; ctx.fillRect(x, y, 3 + r() * 3, 3 + r() * 3); } };
-  drawDebris(true);
-  magmaWorld(ctx, t, cx, cy, R, 0.6);
-  drawDebris(false);
-  if (clump > 0.6) { const ang = 0.6 + t * 0.4, mx = cx + Math.cos(ang) * 560, my = cy + Math.sin(ang) * 560 * 0.28;
-    ctx.save(); ctx.globalAlpha = (clump - 0.6) / 0.4; glow(ctx, mx, my, 90, '255,170,90', 0.7); moonToon(ctx, mx, my, 46, { sun: SUN, crack: 1.2 }); ctx.restore(); }
+    ctx.fillStyle = `rgba(255,${150 + r() * 80},${80 + r() * 60},${(0.5 + r() * 0.5) * form})`; ctx.fillRect(cx + Math.cos(ang) * rad, cy + Math.sin(ang) * rad * 0.28, 3 + r() * 3, 3 + r() * 3); } };
+  debris(true); magmaWorld(ctx, t, cx, cy, R, 0.5); debris(false);
+  if (clump > 0.6) { const mx = cx + Math.cos(target) * 560, my = cy + Math.sin(target) * 560 * 0.28; ctx.save(); ctx.globalAlpha = (clump - 0.6) / 0.4; moonToon(ctx, mx, my, 50, { sun: SUN, crack: 1.2 }); ctx.restore(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['The debris forms a ring…'], 300, 37.7, { size: 84, out: 40.3 });
-  say(ctx, t, ['…that clumps into', 'a brand-new moon'], 300, 40.5, { size: 88, out: 43.3, mark: { line: 1, from: 0, to: 16, color: '#3a86ff' } });
-  say(ctx, t, ['A 2022 simulation: it could', 'take just a few hours'], 1660, 41.3, { size: 54, weight: 900, out: 43.3 });
+  say(ctx, t, ['The debris spins into a ring…'], 300, 34.15, { size: 76, out: 35.5 });
+  say(ctx, t, ['…then clumps into', 'a new moon'], 300, 35.6, { size: 88, out: 37.3, mark: { line: 1, from: 0, to: 10, color: '#3a86ff' } });
 }
 
-// ---------------------------------------------------------------- 9. twist
-function sTwist(ctx, t) {
+// ---------------------------------------------------------------- 14. millions of years: rain, oceans return
+function vCool(ctx, t) {
   space(ctx, t);
-  drift(ctx, t, 43.5, 49.5, 1.0, 1.05, W / 2, 1150);
-  const p = prog(t, 45.0, 49.4);
-  if (p < 0.5) {
-    magmaWorld(ctx, t, W / 2 - 60, 1200, 300, 0.4);
-    rogue(ctx, lerp(W + 100, W / 2 + 220, easeInOut(prog(t, 43.6, 45.4))), lerp(600, 980, easeInOut(prog(t, 43.6, 45.4))), 160, { glowK: 1 });
-    ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'center'; ctx.lineJoin = 'round'; ctx.lineWidth = 9; ctx.strokeStyle = INK;
-    ctx.strokeText('young Earth', W / 2 - 60, 1540); ctx.fillStyle = '#fff'; ctx.fillText('young Earth', W / 2 - 60, 1540);
-    ctx.strokeText('Theia', W / 2 + 300, 800); ctx.fillStyle = '#ffb0a0'; ctx.fillText('Theia', W / 2 + 300, 800);
+  const k = easeInOut(prog(t, 37.7, 40.3)), cx = W / 2, cy = 1150, R = 420;
+  ctx.save(); ctx.globalAlpha = 1 - k; magmaWorld(ctx, t, cx, cy, R, 0.8); ctx.restore();
+  ctx.save(); ctx.globalAlpha = k; earth(ctx, cx, cy, R, t * 0.2); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R * 1.25, 0, 6.283); ctx.clip();          // rain streaks
+  ctx.strokeStyle = `rgba(200,225,255,${0.7 * Math.sin(Math.PI * k)})`; ctx.lineWidth = 3;
+  const r = rng(4); for (let i = 0; i < 120; i++) { const x = cx + (r() - 0.5) * R * 2.4, y = (cy - R * 1.2 + ((t * 900 + r() * 1000) % (R * 2.4))); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 8, y + 40); ctx.stroke(); }
+  ctx.restore();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['Over millions of years,', 'it cools… and rains…'], 300, 37.65, { size: 76, out: 39.1 });
+  say(ctx, t, ['…and the oceans', 'come back.'], 300, 39.2, { size: 88, out: 40.3 });
+}
+
+// ---------------------------------------------------------------- 15. the twist
+function vTwist(ctx, t) {
+  space(ctx, t);
+  const p = prog(t, 40.6, 44.8);
+  if (t < 42.9) {
+    magmaWorld(ctx, t, W / 2 - 80, 1200, 300, 0.4);
+    const k = easeInOut(prog(t, 40.6, 42.9)); rogue(ctx, lerp(W + 100, W / 2 + 180, k), lerp(600, 1040, k), 150, 1);
+    ctx.font = `900 44px ${FONT}`; ctx.textAlign = 'center'; ctx.lineJoin = 'round'; ctx.lineWidth = 10; ctx.strokeStyle = INK;
+    ctx.strokeText('Theia', W / 2 + 280, 820); ctx.fillStyle = '#ffb0a0'; ctx.fillText('Theia', W / 2 + 280, 820);
   } else {
-    toonGlobe(ctx, W / 2 - 60, 1250, 330, t, { lon0: 30 + t * 4, lat0: 15 });
+    earth(ctx, W / 2 - 60, 1250, 330, t * 0.3);
     moonToon(ctx, W / 2 + 300, 760, 110, { sun: SUN });
   }
-  flash(ctx, t, 47.2, 0.5);
+  flash(ctx, t, 42.9, 0.5);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['Here’s the thing:', 'this already happened.'], 300, 43.7, { size: 84, out: 46.8, mark: { line: 1, from: 5, to: 20, color: '#ff6b5b' } });
-  say(ctx, t, ['4.5 billion years ago, a planet', 'we call Theia hit the young Earth'], 1640, 44.6, { size: 52, weight: 900, out: 47.0 });
-  say(ctx, t, ['Its wreckage', 'became our Moon.'], 300, 47.3, { size: 96, out: 49.3, mark: { line: 1, from: 7, to: 15, color: '#3a86ff' } });
+  say(ctx, t, ['Plot twist:', 'this already happened.'], 300, 40.65, { size: 84, out: 42.8, mark: { line: 1, from: 5, to: 20, color: '#ff6b5b' } });
+  say(ctx, t, ['4.5 billion years ago, Theia', 'hit the young Earth'], 1640, 41.3, { size: 56, weight: 900, out: 42.8 });
+  say(ctx, t, ['The wreckage became', 'our Moon.'], 300, 43.0, { size: 96, out: 44.8, mark: { line: 1, from: 0, to: 8, color: '#3a86ff' } });
 }
 
-function sEnd(ctx, t) {
+function vEnd(ctx, t) {
   space(ctx, t);
-  toonGlobe(ctx, W / 2, 1400, 260, t, { lon0: 60 + t * 3, lat0: 15 });
-  moonToon(ctx, W / 2 + 300, 1080, 70, { sun: SUN });
+  earth(ctx, W / 2, 1400, 260, t * 0.3); moonToon(ctx, W / 2 + 300, 1080, 70, { sun: SUN });
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['WHAT IF,'], 720, 49.7, { size: 150, x: W / 2, align: 'center' });
-  say(ctx, t, ['THOUGH?'], 880, 49.9, { size: 150, x: W / 2, align: 'center', color: C.yellow });
-  say(ctx, t, ['Follow for more'], 1000, 50.4, { size: 50, weight: 800, x: W / 2, align: 'center' });
+  say(ctx, t, ['WHAT IF,'], 720, 45.2, { size: 150, x: W / 2, align: 'center' });
+  say(ctx, t, ['THOUGH?'], 880, 45.4, { size: 150, x: W / 2, align: 'center', color: C.yellow });
+  say(ctx, t, ['Follow for more'], 1000, 45.9, { size: 50, weight: 800, x: W / 2, align: 'center' });
 }
 
 function mixHex(a, b, p) {
