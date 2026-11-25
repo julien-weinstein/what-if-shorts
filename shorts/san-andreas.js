@@ -1,30 +1,29 @@
-// What if the San Andreas Fault ruptured?  ("The Big One")
+// What if the San Andreas Fault ruptured?   (v2: "Michael Bay" cut: action set pieces, no maps)
 //
 // FACTS (checked; USGS unless noted):
-//  - The San Andreas Fault is ~1,200 km long. The Pacific Plate slides NW past North America at ~3-5 cm/yr,
-//    about as fast as fingernails grow. The southern section last ruptured in a big quake in 1857 (Fort Tejon, M7.9).
-//  - 1906 San Francisco (M7.9): ~3,000 deaths; ground offsets up to ~6 m.
-//  - ShakeOut Scenario (USGS 2008): M7.8 rupture of ~300 km from the Salton Sea toward Lake Hughes; shaking lasting up to
-//    ~2 minutes; ~1,600 fire ignitions with broken water mains; aqueducts, power lines, pipelines and freeways that cross the
-//    fault are cut; some areas without water for weeks to months; est. ~1,800 deaths, ~50,000 injuries, ~$200 billion.
-//  - Rupture speeds ~2-3 km/s: a 300 km rupture unzips in roughly 1-2 minutes.
-//  - ShakeAlert earthquake early warning can give seconds to tens of seconds of warning on phones.
-//  - UCERF3: >99% chance of an M6.7+ quake somewhere in California in the next 30 years.
-//  - California will not fall into the ocean; the plates slide sideways. In ~15 million years Los Angeles and
-//    San Francisco will be side by side.
-// PLOT HOLES: Evacuate? quakes can't be predicted, only warned seconds ahead. M10? the fault isn't long enough (USGS).
+//  - The Pacific Plate slides NW past North America ~3-5 cm/yr; LA (~560 km from SF in a straight line) will sit
+//    beside San Francisco in ~15 million years. California will not fall into the ocean.
+//  - ShakeAlert early warning: seconds to tens of seconds before shaking.
+//  - ShakeOut Scenario (USGS 2008): M7.8 on the southern San Andreas; up to ~2 minutes of shaking; ~1,600 fires;
+//    broken water and gas mains; est. ~1,800 deaths, ~50,000 injuries, ~$200 billion.
+//  - Ground offsets of several meters (1906: up to ~6 m). Surface waves make the ground visibly roll.
+//  - Northridge 1994: freeway bridges collapsed (I-10, I-5/SR-14); on Balboa Blvd a broken gas main caught fire while a
+//    broken water main flooded the same street.
+//  - Kobe 1995: port quay walls slid and liquefied; container cranes were knocked out. The ports of LA/Long Beach sit on
+//    similar fill (hedged: "the port's ground can turn to liquid").
+//  - UCERF3: >99% chance of an M6.7+ in California in the next 30 years.
 
 const SCENES = [
   ['hook', 3.5, [[0, 'swell:2.6']]],
-  ['fault', 5.0, [[0.2, 'rumble:4.6']]],
-  ['alert', 4.0, [[0.2, 'heart:3.8']]],
-  ['unzip', 5.5, [[0.1, 'impact'], [0.15, 'boom'], [0.2, 'rumble:5.2'], [2.4, 'boom']]],
-  ['offset', 4.5, [[0.6, 'impact'], [0.65, 'boom']]],
-  ['city', 5.5, [[0.1, 'rumble:5.2'], [1.6, 'boom'], [3.0, 'boom']]],
-  ['fires', 5.0, [[0.2, 'roar:4.6']]],
-  ['life', 5.0, [[0.2, 'rumble:4.6'], [1.0, 'impact']]],
-  ['toll', 5.0, [[0.2, 'heart:4.6'], [2.4, 'boom']]],
-  ['myth', 6.0, [[0.2, 'swell:5.6']]],
+  ['alert', 3.5, [[0.2, 'heart:3.2']]],
+  ['wave', 4.5, [[0.2, 'rumble:4.2'], [0.6, 'boom'], [1.6, 'boom']]],
+  ['overpass', 5.5, [[0.2, 'rumble:5'], [1.2, 'impact'], [1.25, 'boom'], [2.9, 'impact'], [2.95, 'boom']]],
+  ['tower', 5.0, [[0.2, 'rumble:4.6'], [1.0, 'boom'], [2.2, 'roar:2.6']]],
+  ['crack', 4.5, [[0.3, 'impact'], [0.35, 'boom'], [1.5, 'impact'], [1.55, 'boom']]],
+  ['fire', 5.0, [[0.5, 'impact'], [0.55, 'boom'], [0.6, 'roar:4.2']]],
+  ['port', 4.5, [[0.2, 'rumble:4'], [1.6, 'boom'], [2.6, 'roar:1.8'], [2.7, 'boom']]],
+  ['heli', 5.0, [[0.1, 'heart:4.8'], [0.7, 'impact'], [1.7, 'impact'], [2.7, 'impact']]],
+  ['sign', 5.5, [[0.2, 'swell:5']]],
   ['end', 3.0, [[0.2, 'swell:2.5']]],
 ];
 const START = {}; let _acc = 0; const _sfx = [];
@@ -37,217 +36,279 @@ const SHORT = {
   fps: 60,
   motionSamples: 1,
   sfx: _sfx,
-  music: { bpm: 72, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
+  music: { bpm: 84, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHook, fault: vFault, alert: vAlert, unzip: vUnzip, offset: vOffset, city: vCity, fires: vFires, life: vLife,
-              toll: vToll, myth: vMyth, end: vEnd };
+const FNS = { hook: vHook, alert: vAlert2, wave: vWave, overpass: vOverpass, tower: vTower, crack: vCrack, fire: vFireWater, port: vPort,
+              heli: vHeli, sign: vSign, end: vEnd };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 function render(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  sequence(ctx, t, SCENES.map(([n]) => [START[n], (c, tt) => FNS[n](c, Math.max(0, tt - START[n]))]), 0.3);
+  sequence(ctx, t, SCENES.map(([n]) => [START[n], (c, tt) => FNS[n](c, Math.max(0, tt - START[n]))]), 0.24);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (t < START.end) { ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850); }
-  post(ctx, { bloom: 0.15 });
+  post(ctx, { bloom: 0.26, contrast: 1.1, saturate: 1.18, vignette: 0.38 });
 }
 
-// ================================================================ stylised California map (Natural Earth coast + fault trace)
-const FAULT = [[-115.7, 33.35], [-116.2, 33.7], [-116.8, 33.95], [-117.3, 34.2], [-117.45, 34.3], [-118.1, 34.55], [-118.95, 34.8], [-119.8, 35.2], [-120.43, 35.9],
-  [-121.4, 36.85], [-122.45, 37.6], [-122.8, 38.0], [-123.7, 38.95], [-124.1, 40.1]];
-const CA_BORDER = [[-124.2, 42.0], [-120.0, 42.0], [-120.0, 39.0], [-114.63, 35.0], [-114.45, 34.3], [-114.72, 33.0], [-114.72, 32.72], [-117.12, 32.53]];
-const CAC = [['Los Angeles', -118.24, 34.05, 1], ['San Francisco', -122.42, 37.77, 1], ['San Diego', -117.16, 32.72, 0], ['San Bernardino', -117.29, 34.11, 0], ['Palm Springs', -116.55, 33.83, 0], ['Bakersfield', -119.0, 35.37, 0], ['Sacramento', -121.49, 38.58, 0]];
-function caMap(ctx, o) {
-  const { lon0 = -119, lat0 = 36, k = 150, cx = W / 2, cy = 1150, t = 0, rupture = 0, rupFrom = 0, rupTo = 6 } = o, cl = Math.cos(lat0 * Math.PI / 180);
-  const P = (lo, la) => [cx + (lo - lon0) * k * cl, cy - (la - lat0) * k];
-  bgSky(ctx, ['#2a6aaa', '#3a86c8', '#5aa6e0']);
-  ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 2; for (let i = 0; i < 30; i++) { ctx.beginPath(); ctx.moveTo(0, i * 70 + (t * 10) % 70); ctx.lineTo(W, i * 70 + (t * 10) % 70); ctx.stroke(); }
-  for (const poly of LAND) { const [lo, la] = poly[0]; if (poly.length < 30 && !(lo > -140 && lo < -60 && la > 10 && la < 70)) continue;
-    let near = false; for (const [a, b] of poly) if (a > -135 && a < -100 && b > 25 && b < 50) { near = true; break; } if (!near) continue;
-    ctx.fillStyle = '#e6d6a8'; ctx.beginPath(); poly.forEach(([a, b], i) => { const [x, y] = P(a, b); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = '#c8b480'; ctx.lineWidth = 4; ctx.stroke(); }
-  ctx.strokeStyle = 'rgba(120,100,70,0.6)'; ctx.lineWidth = 4; ctx.setLineDash([14, 10]); ctx.beginPath(); CA_BORDER.forEach(([a, b], i) => { const [x, y] = P(a, b); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); ctx.setLineDash([]);
-  // the fault
-  ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#b02a3a'; ctx.lineWidth = 8; ctx.beginPath(); FAULT.forEach(([a, b], i) => { const [x, y] = P(a, b); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
-  if (rupture > 0) { const seg = FAULT.slice(rupFrom, rupTo + 1), L = []; let tot = 0; for (let i = 1; i < seg.length; i++) { const d = Math.hypot(...P(...seg[i]).map((v, j) => v - P(...seg[i - 1])[j])); L.push(d); tot += d; }
-    let rem = tot * rupture, end = P(...seg[0]); ctx.strokeStyle = '#ffd25a'; ctx.lineWidth = 16; ctx.beginPath(); ctx.moveTo(...end);
-    for (let i = 1; i < seg.length && rem > 0; i++) { const q = Math.min(1, rem / L[i - 1]), a = P(...seg[i - 1]), b = P(...seg[i]); end = [lerp(a[0], b[0], q), lerp(a[1], b[1], q)]; ctx.lineTo(...end); rem -= L[i - 1]; }
-    ctx.stroke(); glow(ctx, end[0], end[1], 90, '255,220,120', 0.9); return { P, tip: end }; }
-  return { P };
-}
-function cityDots(ctx, P, which, size = 40) {
-  for (const [name, lo, la, big] of CAC) { if (which && !which.includes(name)) continue; const [x, y] = P(lo, la);
-    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(x, y, big ? 14 : 10, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#1b1b2e'; ctx.lineWidth = 4; ctx.stroke();
-    ctx.font = `900 ${size}px ${FONT}`; ctx.textAlign = 'left'; ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 10; ctx.fillStyle = '#ffffff'; ctx.fillText(name, x + 22, y + 12); ctx.shadowBlur = 0; }
-}
+// ================================================================ action kit
+const tm = (u, a, b, f) => (u < a ? u : u < b ? a + (u - a) * f : a + (b - a) * f + (u - b));   // slow-motion time remap
+function puff(ctx, x, y, r, col, a = 1) { if (r <= 0) return; const g = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r); g.addColorStop(0, mixHex(col, '#ffffff', 0.25)); g.addColorStop(1, col);
+  ctx.globalAlpha = a; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; }
+function dustBlast(ctx, x, y, dt, seed, o = {}) {   // a rolling dust cloud that grows toward the camera
+  const { n = 40, spread = 700, col = '#b8a090', up = 300, life = 3 } = o; if (dt <= 0) return; const r = rng(seed);
+  for (let i = 0; i < n; i++) { const a = -Math.PI * r(), sp = 0.3 + r() * 0.7, k = 1 - Math.exp(-dt * 2.2), px = x + Math.cos(a) * spread * sp * k * 1.3, py = y + Math.sin(a) * up * sp * k;
+    puff(ctx, px, py, (40 + r() * 70) * (0.5 + k * 1.6), mixHex(col, '#6a5a50', r() * 0.5), 0.9 * R2(1 - dt / life)); } }
+function debrisAtCam(ctx, x, y, dt, seed, n = 40, col = '#3a3030') {   // chunks that fly outward and swell as if toward the lens
+  if (dt <= 0) return; const r = rng(seed); ctx.fillStyle = col;
+  for (let i = 0; i < n; i++) { const a = r() * 6.283, sp = 300 + r() * 900, d = sp * dt, sc = 1 + dt * (1 + r() * 3), px = x + Math.cos(a) * d, py = y + Math.sin(a) * d * 0.7 + 400 * dt * dt, s = (6 + r() * 12) * sc;
+    if (px < -100 || px > W + 100 || py > H + 100) continue; ctx.save(); ctx.translate(px, py); ctx.rotate(dt * (4 + r() * 8) + i); ctx.fillRect(-s / 2, -s / 3, s, s * 0.66); ctx.restore(); } }
+function carSide(ctx, x, y, s, col, rot = 0, dir = 1) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s * dir, s);
+  ctx.fillStyle = col; roundRect(ctx, -80, -46, 160, 34, 12); ctx.fill(); roundRect(ctx, -46, -74, 86, 34, 14); ctx.fill();
+  ctx.fillStyle = '#bfe8ff'; roundRect(ctx, -38, -68, 34, 24, 6); ctx.fill(); roundRect(ctx, 2, -68, 30, 24, 6); ctx.fill();
+  ctx.fillStyle = '#16161e'; ctx.beginPath(); ctx.arc(-46, -10, 15, 0, 6.283); ctx.arc(48, -10, 15, 0, 6.283); ctx.fill();
+  ctx.fillStyle = '#ffe9a0'; ctx.fillRect(74, -40, 8, 8); ctx.fillStyle = '#ff3a3a'; ctx.fillRect(-82, -40, 6, 8); ctx.restore(); }
+function carRear(ctx, x, y, s, col, toward = false) { const w = 150 * s, h = 80 * s; ctx.fillStyle = col; roundRect(ctx, x - w / 2, y - h, w, h, 14 * s); ctx.fill();
+  ctx.fillStyle = 'rgba(20,24,40,0.6)'; roundRect(ctx, x - w * 0.36, y - h * 0.95, w * 0.72, h * 0.4, 8 * s); ctx.fill();
+  ctx.fillStyle = toward ? '#fff6d0' : '#ff2a2a'; ctx.fillRect(x - w * 0.46, y - h * 0.45, w * 0.16, h * 0.14); ctx.fillRect(x + w * 0.3, y - h * 0.45, w * 0.16, h * 0.14);
+  if (s > 0.12) glow(ctx, x, y - h * 0.4, w * 0.8, toward ? '255,240,200' : '255,60,40', 0.25); }
+function palm(ctx, x, base, h, sway = 0) { ctx.strokeStyle = '#2a1a24'; ctx.lineWidth = h * 0.035; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x, base); ctx.quadraticCurveTo(x + h * 0.08, base - h * 0.5, x + sway, base - h); ctx.stroke();
+  ctx.lineWidth = h * 0.025; for (let i = 0; i < 7; i++) { const a = -Math.PI + i * Math.PI / 6 + sway * 0.002; ctx.beginPath(); ctx.moveTo(x + sway, base - h); ctx.quadraticCurveTo(x + sway + Math.cos(a) * h * 0.2, base - h - h * 0.12, x + sway + Math.cos(a) * h * 0.32, base - h + Math.abs(Math.sin(a)) * h * 0.05 + h * 0.08); ctx.stroke(); } }
+const CARCOL = ['#e63946', '#3a86ff', '#ffbe0b', '#f1f1f1', '#2ec4b6', '#8338ec', '#fb5607', '#16161e'];
 
-// ================================================================ 1. hook
+// ================================================================ 1. hook: LA at golden hour
 function vHook(ctx, u) {
-  const { P } = caMap(ctx, { lon0: -119.2, lat0: 36.2, k: 118, cy: 1200, t: u });
-  const pulse = 0.5 + 0.5 * Math.sin(u * 5); FAULT.forEach(([a, b]) => { const [x, y] = P(a, b); glow(ctx, x, y, 50, '255,80,80', 0.3 * pulse); });
+  bgSky(ctx, ['#2a3a7a', '#e07a5a', '#ffc07a']);
+  drift(ctx, u, 0, 3.5, 1.0, 1.08, W / 2, 1300);
+  glow(ctx, W / 2, 1150, 420, '255,210,140', 0.6); ctx.fillStyle = '#ffe0a0'; ctx.beginPath(); ctx.arc(W / 2, 1150, 110, 0, 6.283); ctx.fill();
+  cityLayer(ctx, u, { base: 1250, seed: 3, hMin: 140, hMax: 640, wMin: 50, wMax: 130, gap: 8, col: '#5a2a4a', win: 'rgba(255,220,160,0.6)', winP: 0.4, ws: 7, top: 'rgba(255,170,120,0.6)' });
+  ctx.fillStyle = '#3a1a34'; ctx.fillRect(0, 1250, W, H);
+  for (const [x, h] of [[90, 620], [220, 520], [880, 600], [1000, 500]]) palm(ctx, x, 1500, h, Math.sin(u * 1.5 + x) * 10);
+  ctx.fillStyle = '#2a1428'; ctx.fillRect(0, 1480, W, 60);
+  for (let i = 0; i < 16; i++) { const x = ((i * 140 + u * 220) % (W + 300)) - 150; carSide(ctx, x, 1478, 0.55, CARCOL[i % 8]); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (u < 3.4) { ctx.save(); ctx.globalAlpha = 1 - easeInOut(prog(u, 3.0, 3.4));
-    shadowed(ctx, () => blip(ctx, u, 890, 1700, u > 1.4 ? 'shock' : 'happy', 0.8, 0.3), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
-  say(ctx, u, ['What if the', 'San Andreas', 'ruptured?'], 300, 0.15, { size: 104, out: OUT('hook'), mark: { line: 1, from: 0, to: 11, color: '#b02a3a' } });
+    shadowed(ctx, () => blip(ctx, u, 890, 1720, u > 1.4 ? 'shock' : 'happy', 0.8, 0.3), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
+  say(ctx, u, ['What if the', 'San Andreas', 'finally snapped?'], 300, 0.15, { size: 100, out: OUT('hook'), mark: { line: 1, from: 0, to: 11, color: '#e63946' } });
 }
 
-// ================================================================ 2. the fault: sliding as fast as fingernails grow
-function vFault(ctx, u) {
-  const { P } = caMap(ctx, { lon0: -119.2, lat0: 36.2, k: 118, cy: 1200, t: u });
-  // plate arrows
-  const sh = Math.sin(u * 2) * 10;
-  const arrow = (x, y, ang, col) => { ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.fillStyle = col; ctx.fillRect(-70, -14, 110, 28); ctx.beginPath(); ctx.moveTo(40, -36); ctx.lineTo(90, 0); ctx.lineTo(40, 36); ctx.fill(); ctx.restore(); };
-  arrow(250 + sh, 1250 + sh, -2.2, 'rgba(255,255,255,0.9)'); arrow(800 - sh, 1050 - sh, 0.95, 'rgba(255,255,255,0.9)');
-  ctx.font = `900 34px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.fillText('PACIFIC PLATE', 230, 1380); ctx.fillText('NORTH AMERICAN', 820, 900); ctx.fillText('PLATE', 820, 940);
-  // fingernail comparison
-  if (u > 1.6) { const k = easeBack(R2((u - 1.6) / 0.4)); ctx.save(); ctx.translate(820, 1560); ctx.scale(k, k); ctx.fillStyle = 'rgba(255,255,255,0.95)'; roundRect(ctx, -200, -90, 400, 180, 28); ctx.fill();
-    ctx.fillStyle = '#f2c4a8'; roundRect(ctx, -170, -50, 120, 100, 40); ctx.fill(); ctx.fillStyle = '#ffe6e0'; roundRect(ctx, -150, -44, 80, 50, 20); ctx.fill();
-    ctx.font = `900 46px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = '#1b1b2e'; ctx.fillText('~4 cm', -30, -6); ctx.font = `800 28px ${FONT}`; ctx.fillText('a year', -30, 34); ctx.restore(); }
+// ================================================================ 2. the alert, from the driver's seat
+function vAlert2(ctx, u) {
+  bgSky(ctx, ['#e07a5a', '#ffb07a', '#ffd6a0']);
+  const vy = 1000, buzz = u > 0.4 ? Math.sin(u * 70) * 7 : 0;
+  ctx.fillStyle = '#6a4a4a'; ctx.beginPath(); ctx.moveTo(W / 2 - 40, vy); ctx.lineTo(W / 2 + 40, vy); ctx.lineTo(W + 600, H); ctx.lineTo(-600, H); ctx.fill();
+  for (let lane = -1; lane <= 1; lane++) for (let z = 1.2; z < 30; z *= 1.25) { const s = 1 / z; carRear(ctx, W / 2 + lane * 300 * s, vy + 900 * s, s * 1.3, CARCOL[(Math.floor(z * 7) + lane + 8) % 8]); }
+  // windshield frame + dash
+  ctx.fillStyle = '#16161e'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(W, 0); ctx.lineTo(W, 260); ctx.quadraticCurveTo(W / 2, 200, 0, 260); ctx.fill();
+  ctx.fillRect(0, 0, 70, H); ctx.fillRect(W - 70, 0, 70, H);
+  ctx.fillStyle = '#20202a'; ctx.beginPath(); ctx.moveTo(0, 1500); ctx.quadraticCurveTo(W / 2, 1420, W, 1500); ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+  // phone on its mount
+  ctx.save(); ctx.translate(W / 2 + buzz, 1380); ctx.rotate(-0.05 + buzz * 0.004);
+  ctx.fillStyle = '#0e0e14'; roundRect(ctx, -170, -300, 340, 600, 50); ctx.fill(); ctx.fillStyle = u > 0.4 ? '#e63946' : '#1b2a4a'; roundRect(ctx, -152, -282, 304, 564, 40); ctx.fill();
+  if (u > 0.4) { ctx.font = `900 46px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.fillText('EARTHQUAKE', 0, -190); ctx.font = `800 28px ${FONT}`; ctx.fillText('Drop · Cover · Hold On', 0, -140);
+    const sec = Math.max(0, Math.ceil(9 - (u - 0.4) * 3)); ctx.font = `900 190px ${FONT}`; ctx.fillText(sec, 0, 90); ctx.font = `800 30px ${FONT}`; ctx.fillText('seconds', 0, 150);
+    glow(ctx, 0, 0, 420, '255,60,60', 0.35 + 0.25 * Math.sin(u * 14)); }
+  ctx.restore();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 600, 0.55);
-  say(ctx, u, ['1,200 km long. Sliding', 'as fast as fingernails grow'], 230, 0.15, { size: 70, out: 2.5 });
-  say(ctx, u, ['But the south has been', 'stuck since 1857'], 230, 2.6, { size: 80, out: OUT('fault'), mark: { line: 1, from: 0, to: 5, color: '#b02a3a' } });
+  say(ctx, u, ['Your phone screams.', 'Seconds to go.'], 330, 0.15, { size: 84, out: OUT('alert') });
 }
 
-// ================================================================ 3. phones buzz: early warning
-function vAlert(ctx, u) {
-  bgSky(ctx, ['#ffd6a8', '#ffb98a', '#ff9a7a']);
-  drift(ctx, u, 0, 4, 1.0, 1.05, W / 2, 1300);
-  cityLayer(ctx, u, { base: 1200, seed: 3, hMin: 120, hMax: 520, wMin: 50, wMax: 130, gap: 8, col: '#c87a6a', win: 'rgba(255,240,210,0.6)', winP: 0.4, ws: 7 });
-  ctx.fillStyle = '#e8a07a'; ctx.fillRect(0, 1200, W, H);
-  massCrowd(ctx, u, { n: 1200, yFar: 1220, yNear: 2150, sFar: 10, sNear: 190, seed: 4, col: '#6a3a3a', rim: 'rgba(255,240,200,0.4)', phones: u > 0.8 ? 0.6 : 0.1, arms: 0 });
-  // giant phone with the alert
-  const k = easeBack(R2((u - 0.6) / 0.5)), buzz = Math.sin(u * 60) * 6 * (u > 0.6 ? 1 : 0);
-  if (k > 0) { ctx.save(); ctx.translate(W / 2 + buzz, 1000); ctx.scale(k, k); ctx.rotate(-0.06);
-    ctx.fillStyle = '#16161e'; roundRect(ctx, -200, -360, 400, 720, 60); ctx.fill(); ctx.fillStyle = '#ffffff'; roundRect(ctx, -180, -330, 360, 660, 44); ctx.fill();
-    ctx.fillStyle = '#e63946'; roundRect(ctx, -160, -300, 320, 260, 30); ctx.fill();
-    ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.fillText('EARTHQUAKE', 0, -210); ctx.font = `800 30px ${FONT}`; ctx.fillText('Expect strong shaking', 0, -160); ctx.fillText('Drop · Cover · Hold On', 0, -110);
-    const sec = Math.max(0, Math.ceil(12 - (u - 0.6) * 4)); ctx.font = `900 150px ${FONT}`; ctx.fillStyle = '#1b1b2e'; ctx.fillText(sec, 0, 130); ctx.font = `800 30px ${FONT}`; ctx.fillText('seconds until shaking', 0, 190);
-    ctx.restore(); }
+// ================================================================ 3. the ground rolls like the ocean, through rush-hour traffic
+function vWave(ctx, u) {
+  const vy = 860, [sx, sy] = shakeOffset(u, 0.4, 4, 18);
+  bgSky(ctx, ['#3a4a8a', '#d07a6a', '#ffb07a']); ctx.translate(sx, sy);
+  cityLayer(ctx, u, { base: vy + 6, seed: 5, hMin: 60, hMax: 300, wMin: 30, wMax: 80, gap: 5, col: '#6a3a5a', win: 'rgba(255,220,160,0.5)', winP: 0.3, ws: 4 });
+  const zc = lerp(16, -3, easeIn2(prog(u, 0.2, 3.6))), disp = z => { const d = (z - zc) / 2.6; return Math.exp(-d * d) * Math.cos((z - zc) * 1.3) * 300; };
+  const Zs = []; for (let z = 1; z < 45; z *= 1.04) Zs.push(z);
+  const edge = (z, side) => { const s = 1 / z; return [W / 2 + side * 560 * s, vy + 900 * s - disp(z) * Math.min(1, s * 4)]; };
+  ctx.fillStyle = '#4a3a4a'; ctx.beginPath(); Zs.forEach((z, i) => { const [x, y] = edge(z, -1); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); [...Zs].reverse().forEach(z => ctx.lineTo(...edge(z, 1))); ctx.fill();
+  ctx.strokeStyle = '#ffd25a'; ctx.lineWidth = 6; ctx.beginPath(); Zs.forEach((z, i) => { const s = 1 / z, y = vy + 900 * s - disp(z) * Math.min(1, s * 4); i ? ctx.lineTo(W / 2, y) : ctx.moveTo(W / 2, y); }); ctx.stroke();
+  const cars = []; for (let lane = -2; lane <= 2; lane++) { if (lane === 0) continue; for (let z = 1.25; z < 18; z *= 1.32) cars.push([lane, z * (1 + ((lane * 13 + Math.floor(z * 9)) % 5) * 0.04)]); }
+  cars.sort((a, b) => b[1] - a[1]);
+  for (const [lane, z] of cars) { const s = 1 / z, x = W / 2 + (lane - Math.sign(lane) * 0.5) * 230 * s, y = vy + 900 * s - disp(z) * Math.min(1, s * 4) - Math.abs(disp(z)) * s * 0.4;
+    carRear(ctx, x, y, s * 1.6, CARCOL[(lane + 3 + Math.floor(z * 3)) % 8], lane < 0); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 560, 0.6);
-  say(ctx, u, ['Your phone buzzes', 'seconds before it hits'], 230, 0.15, { size: 80, out: OUT('alert') });
+  bigNum(ctx, u, 'M7.8', 330, 0.2, { size: 170, color: '#ffd25a', out: 1.9 });
+  say(ctx, u, ['The ground rolls', 'like an ocean wave'], 230, 2.0, { size: 88, out: OUT('wave') });
 }
 
-// ================================================================ 4. M7.8: the fault unzips
-function vUnzip(ctx, u) {
-  const [sx, sy] = shakeOffset(u, 0.1, 5.2, 14);
-  ctx.translate(sx, sy);
-  const { P, tip: tip0 } = caMap(ctx, { lon0: -117.5, lat0: 34.1, k: 330, cy: 1150, t: u, rupture: easeInOut(prog(u, 0.2, 4.6)), rupFrom: 0, rupTo: 5 });
-  const tip = tip0 || P(...FAULT[0]);
-  for (let i = 0; i < 5; i++) { const ph = ((u * 0.8 + i / 5) % 1); ctx.strokeStyle = `rgba(255,220,120,${0.7 * (1 - ph)})`; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(tip[0], tip[1], ph * 700, 0, 6.283); ctx.stroke(); }
-  cityDots(ctx, P, ['Los Angeles', 'San Bernardino', 'Palm Springs', 'San Diego'], 42);
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 580, 0.6);
-  bigNum(ctx, u, 'M7.8', 300, 0.2, { size: 150, color: '#ffd25a', out: 2.4 });
-  say(ctx, u, ['The fault unzips', 'for 300 km'], 230, 2.5, { size: 92, out: OUT('unzip') });
-  if (u > 1.0) { scrimB(ctx, 1560, 0.55); say(ctx, u, ['at ~10,000 km/h'], 1760, 1.0, { size: 56, weight: 900, x: W / 2, align: 'center', out: OUT('unzip') }); }
-}
-
-// ================================================================ 5. the ground lurches sideways
-function vOffset(ctx, u) {
-  const jolt = easeOut(R2((u - 0.6) / 0.35)) * 260, [sx, sy] = shakeOffset(u, 0.6, 2.4, 30);
-  bgSky(ctx, ['#7ab8e8', '#b8dcf0', '#f0e8c8']); ctx.translate(sx, sy);
-  ctx.fillStyle = '#c8a870'; ctx.fillRect(0, 900, W, H);
-  // the fault line runs diagonally; everything on the far side shifts
-  const fx = y => 300 + (y - 900) * 0.45;
-  const side = (fn, off) => { ctx.save(); ctx.beginPath(); if (off) { ctx.moveTo(fx(900), 900); ctx.lineTo(W + 400, 900); ctx.lineTo(W + 400, H); ctx.lineTo(fx(H), H); }
-    else { ctx.moveTo(-400, 900); ctx.lineTo(fx(900), 900); ctx.lineTo(fx(H), H); ctx.lineTo(-400, H); } ctx.closePath(); ctx.clip(); ctx.translate(off ? jolt * 0.9 : 0, off ? -jolt * 0.2 : 0); fn(); ctx.restore(); };
-  const scene = () => { ctx.fillStyle = '#3a3a44'; ctx.beginPath(); ctx.moveTo(-200, 1500); ctx.lineTo(W + 200, 1260); ctx.lineTo(W + 200, 1420); ctx.lineTo(-200, 1700); ctx.fill();
-    ctx.strokeStyle = '#ffd25a'; ctx.lineWidth = 8; ctx.setLineDash([40, 30]); ctx.beginPath(); ctx.moveTo(-200, 1600); ctx.lineTo(W + 200, 1340); ctx.stroke(); ctx.setLineDash([]);
-    ctx.strokeStyle = '#8a5a3a'; ctx.lineWidth = 8; for (let i = 0; i < 12; i++) { const x = -100 + i * 110; ctx.beginPath(); ctx.moveTo(x, 1180 - i * 18); ctx.lineTo(x, 1260 - i * 18); ctx.stroke(); }
-    ctx.beginPath(); ctx.moveTo(-100, 1200); ctx.lineTo(W + 100, 1000); ctx.stroke();
-    const r = rng(3); for (let i = 0; i < 9; i++) { const x = r() * W, y = 1720 + r() * 160; ctx.fillStyle = '#7a9a4a'; ctx.beginPath(); ctx.arc(x, y, 30 + r() * 20, 0, 6.283); ctx.fill(); } };
-  side(scene, false); side(scene, true);
-  ctx.strokeStyle = '#3a2a1a'; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(fx(900), 900); for (let y = 900; y <= H; y += 40) ctx.lineTo(fx(y) + Math.sin(y * 0.05) * 8, y); ctx.stroke();
-  if (u > 0.6) { const r = rng(9); for (let i = 0; i < 30; i++) { const dt = u - 0.6, y = 900 + r() * 1000, x = fx(y); ctx.fillStyle = `rgba(160,130,90,${0.7 * R2(1 - dt / 2)})`; ctx.beginPath(); ctx.arc(x + (r() - 0.5) * 60, y - dt * 200 * r(), 20 + r() * 30, 0, 6.283); ctx.fill(); } }
+// ================================================================ 4. the overpass collapses (slow motion)
+function vOverpass(ctx, u) {
+  const brk = 1.2, vt = tm(u, brk, 4.6, 0.35), fdt = Math.max(0, vt - brk), drop = Math.min(700, 0.5 * 2400 * fdt * fdt), landed = drop >= 700;
+  const landAt = brk + Math.sqrt(700 * 2 / 2400) / 0.35, ldt = u - landAt;
+  const [sx, sy] = shakeOffset(u, 0, 5.4, 10 + (ldt > 0 ? 30 * Math.exp(-ldt * 2) : 0));
+  bgSky(ctx, ['#1e3a5a', '#2a7a8a', '#ffa06a']); ctx.translate(sx, sy);
+  glow(ctx, 820, 900, 380, '255,190,120', 0.6);
+  cityLayer(ctx, u, { base: 1300, seed: 7, hMin: 120, hMax: 520, wMin: 50, wMax: 120, gap: 8, col: '#1e3048', win: 'rgba(255,220,160,0.5)', winP: 0.35, ws: 6 });
+  ctx.fillStyle = '#3a3440'; ctx.fillRect(0, 1700, W, H);
+  // columns
+  ctx.fillStyle = '#8a8690'; for (const x of [60, 300, 760, 1000]) ctx.fillRect(x - 28, 1060, 56, 640);
+  const deck = (x0, x1, y, rot = 0, px = x0) => { ctx.save(); ctx.translate(px, y); ctx.rotate(rot); ctx.translate(-px, -y); ctx.fillStyle = '#b0acb6'; ctx.fillRect(x0, y, x1 - x0, 70); ctx.fillStyle = '#7a7680'; ctx.fillRect(x0, y + 54, x1 - x0, 16);
+    ctx.fillStyle = '#d0ccd6'; ctx.fillRect(x0, y - 18, x1 - x0, 18); ctx.restore(); };
+  deck(-60, 300, 1000); deck(760, 1140, 1000);
+  const rot = landed ? 0.12 : fdt * 0.08;
+  ctx.save(); ctx.translate(530, 1000 + drop); ctx.rotate(rot); ctx.translate(-530, -1000); deck(300, 760, 1000);
+  [[380, '#e63946'], [560, '#3a86ff'], [700, '#ffbe0b']].forEach(([x, c], i) => { const slide = landed ? Math.min(80, (u - landAt) * 120) * (i % 2 ? 1 : -1) : 0, flip = !landed ? fdt * (i - 1) * 0.6 : (i - 1) * 0.5;
+    carSide(ctx, x + slide, 982 - (landed ? 0 : fdt * 60 * (i % 2)), 0.9, c, flip); });
+  ctx.restore();
+  // cars that stop at the brink
+  carSide(ctx, lerp(-100, 210, easeOut(R2(u / 1.4))), 982, 0.9, '#2ec4b6', u > brk ? Math.sin(u * 8) * 0.05 + 0.08 : 0);
+  carSide(ctx, lerp(W + 100, 870, easeOut(R2(u / 1.4))), 982, 0.9, '#f1f1f1', 0, -1);
+  if (u > brk && !landed) { const r = rng(2); ctx.fillStyle = '#9a96a0'; for (let i = 0; i < 16; i++) { const x = 300 + r() * 460, y = 1070 + drop * (0.6 + r() * 0.6); ctx.fillRect(x, y, 20 + r() * 30, 14 + r() * 20); } }
+  if (ldt > 0) { dustBlast(ctx, 530, 1700, ldt * 0.6, 5, { n: 46, spread: 900, up: 700, col: '#c8b0a0', life: 3 }); debrisAtCam(ctx, 530, 1600, ldt * 0.6, 9, 50, '#5a5058'); }
+  flash(ctx, u, landAt, 0.3);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 560, 0.55);
-  say(ctx, u, ['The ground lurches', 'meters sideways'], 230, 0.15, { size: 88, out: OUT('offset') });
-  scrimB(ctx, 1560, 0.55); say(ctx, u, ['In 1906: up to 6 m'], 1760, 1.4, { size: 56, weight: 900, x: W / 2, align: 'center', out: OUT('offset') });
+  say(ctx, u, ['Freeway bridges', 'collapse'], 230, 0.15, { size: 96, out: OUT('overpass') });
+  if (u > 3.2) say(ctx, u, ['Like Northridge, 1994'], 470, 3.2, { size: 52, weight: 800, out: OUT('overpass') });
 }
 
-// ================================================================ 6. Los Angeles shakes
-function vCity(ctx, u) {
-  const [sx, sy] = shakeOffset(u, 0, 5.4, 26 * (1 - prog(u, 3.5, 5.4) * 0.6));
-  bgSky(ctx, ['#ffb98a', '#ffd6a8', '#ffe8c8']); ctx.translate(sx, sy);
-  const collapse = x => (Math.floor(x / 97) % 3 === 0 ? 1.4 + (x / W) * 1.6 : 1e9);
-  cityLayer(ctx, u, { base: 1150, seed: 31, hMin: 120, hMax: 420, wMin: 50, wMax: 120, gap: 8, col: '#c8907a', win: 'rgba(255,245,220,0.6)', winP: 0.4, ws: 6 });
-  cityLayer(ctx, u, { base: 1330, seed: 32, hMin: 220, hMax: 720, wMin: 90, wMax: 170, gap: 16, col: '#a8706a', win: 'rgba(255,245,220,0.7)', winP: 0.45, ws: 9, hit: collapse, dir: (u % 2) > 1 ? 1 : -1 });
-  // freeway overpass that gives way
-  const fall = easeIn2(R2((u - 3.0) / 0.6));
-  ctx.fillStyle = '#9a9aa4'; ctx.fillRect(0, 1420, 380, 50); ctx.fillRect(700, 1420, W - 700, 50);
-  ctx.save(); ctx.translate(380, 1420); ctx.rotate(fall * 0.35); ctx.fillRect(0, 0, 330, 50); ctx.restore();
-  for (const x of [120, 300, 760, 950]) ctx.fillRect(x, 1470, 36, 160);
-  ctx.fillStyle = '#7a6a64'; ctx.fillRect(-40, 1630, W + 80, H);
-  if (u > 3.0) { const r = rng(4); for (let i = 0; i < 24; i++) { const dt = u - 3.0; ctx.fillStyle = `rgba(200,180,160,${0.6 * R2(1 - dt / 2.4)})`; ctx.beginPath(); ctx.arc(520 + (r() - 0.5) * 400, 1600 - dt * 150 * r(), 40 + r() * 50, 0, 6.283); ctx.fill(); } }
+// ================================================================ 5. glass rains from a tower (slow motion)
+function vTower(ctx, u) {
+  const vt = tm(u, 1.0, 4.4, 0.4), [sx, sy] = shakeOffset(u, 0, 5, 14);
+  bgSky(ctx, ['#1a3a6a', '#3a8aba', '#a8dcf0']); ctx.translate(sx, sy);
+  const sway = Math.sin(u * 6) * 0.012 * (1 - prog(u, 3.5, 5));
+  ctx.save(); ctx.translate(W / 2, H); ctx.rotate(sway); ctx.translate(-W / 2, -H);
+  const T = y => { const f = y / H; return [lerp(W / 2 - 160, W / 2 - 420, f), lerp(W / 2 + 160, W / 2 + 420, f)]; };
+  const g = ctx.createLinearGradient(0, 0, W, 0); g.addColorStop(0, '#1a4a6a'); g.addColorStop(0.5, '#5ab0d0'); g.addColorStop(1, '#1a3a5a');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(...[T(0)[0], 0]); ctx.lineTo(T(0)[1], 0); ctx.lineTo(T(H)[1], H); ctx.lineTo(T(H)[0], H); ctx.fill();
+  const rows = 26, cols = 8, panes = [];
+  for (let r = 0; r < rows; r++) { const y0 = (r / rows) * H, y1 = ((r + 1) / rows) * H, [a0, b0] = T(y0), [a1, b1] = T(y1);
+    for (let c = 0; c < cols; c++) { const f0 = c / cols, f1 = (c + 1) / cols, P = [[lerp(a0, b0, f0), y0], [lerp(a0, b0, f1), y0], [lerp(a1, b1, f1), y1], [lerp(a1, b1, f0), y1]];
+      const bt = 1.0 + ((r * 7 + c * 13) % 23) / 23 * 1.4 + (r < 12 ? 0 : 99); panes.push([P, bt, r, c]);
+      ctx.fillStyle = vt > bt ? 'rgba(10,20,30,0.85)' : `rgba(200,240,255,${0.12 + ((r + c) % 3) * 0.06})`; ctx.beginPath(); ctx.moveTo(...P[0]); P.slice(1).forEach(p => ctx.lineTo(...p)); ctx.fill();
+      ctx.strokeStyle = '#0e2a3a'; ctx.lineWidth = 4; ctx.stroke(); } }
+  ctx.restore();
+  // shards: burst outward, fall, swell toward the lens, glint
+  for (const [P, bt, r, c] of panes) { const dt = vt - bt; if (dt <= 0 || bt > 50) continue; const rr = rng(r * 31 + c), cx = (P[0][0] + P[2][0]) / 2, cy = (P[0][1] + P[2][1]) / 2;
+    for (let k = 0; k < 5; k++) { const vx = (cx - W / 2) * (0.6 + rr()) * 1.2 + (rr() - 0.5) * 300, x = cx + vx * dt, y = cy + 140 * dt + 900 * dt * dt, sc = 1 + dt * 1.8, s = (10 + rr() * 16) * sc, rot = dt * (6 + rr() * 6) + k;
+      if (y > H + 60) continue; ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.fillStyle = 'rgba(210,245,255,0.85)'; ctx.beginPath(); ctx.moveTo(0, -s); ctx.lineTo(s * 0.6, s * 0.4); ctx.lineTo(-s * 0.5, s * 0.7); ctx.fill(); ctx.restore();
+      if (Math.sin(rot * 3) > 0.92) glow(ctx, x, y, s * 2, '255,255,255', 0.8); } }
+  massCrowd(ctx, u, { n: 260, yFar: 1840, yNear: 2300, sFar: 120, sNear: 360, seed: 12, col: '#0e1420', flow: -260, panic: 1, arms: 0.5 });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 520, 0.6);
+  say(ctx, u, ['Glass rains', 'from the towers'], 230, 0.15, { size: 96, out: OUT('tower') });
+}
+
+// ================================================================ 6. the fault rips across the road, straight at us
+function vCrack(ctx, u) {
+  const vy = 980, p = easeIn2(prog(u, 0.3, 1.5)), shear = easeOut(R2((u - 1.5) / 0.25)) * 240, [sx, sy] = shakeOffset(u, 0.3, 4, 16 + (u > 1.5 ? 20 : 0));
+  bgSky(ctx, ['#3a5a9a', '#e8a06a', '#ffd6a0']); ctx.translate(sx, sy);
+  mountainsS(ctx, vy, 3, '#8a6a7a', 160);
+  const crackX = y => W / 2 + 40 + (y - vy) * 0.18 + Math.sin(y * 0.03) * 14;
+  const world = () => { ctx.fillStyle = '#d0a070'; ctx.fillRect(-300, vy, W + 600, H); ctx.fillStyle = '#4a4048'; ctx.beginPath(); ctx.moveTo(W / 2 - 30, vy); ctx.lineTo(W / 2 + 30, vy); ctx.lineTo(W + 500, H); ctx.lineTo(-500, H); ctx.fill();
+    ctx.strokeStyle = '#ffd25a'; ctx.lineWidth = 10; ctx.setLineDash([60, 50]); ctx.beginPath(); ctx.moveTo(W / 2, vy); ctx.lineTo(W / 2, H); ctx.stroke(); ctx.setLineDash([]);
+    const r = rng(4); for (let i = 0; i < 14; i++) { const y = vy + 30 + r() * 900, x = r() < 0.5 ? r() * 200 : W - r() * 200; ctx.fillStyle = '#7a8a4a'; ctx.beginPath(); ctx.arc(x, y, 14 + (y - vy) * 0.05, 0, 6.283); ctx.fill(); } };
+  const half = (right, off) => { ctx.save(); ctx.beginPath(); ctx.moveTo(crackX(vy), vy); for (let y = vy; y <= H; y += 30) ctx.lineTo(crackX(y), y);
+    ctx.lineTo(right ? W + 600 : -600, H); ctx.lineTo(right ? W + 600 : -600, vy); ctx.closePath(); ctx.clip(); ctx.translate(off, 0); world(); ctx.restore(); };
+  half(false, 0); half(true, shear);
+  const yEnd = lerp(vy, H, p); ctx.strokeStyle = '#1a1014'; ctx.lineWidth = 14 + (u > 1.5 ? 30 : 0); ctx.beginPath(); ctx.moveTo(crackX(vy), vy); for (let y = vy; y <= yEnd; y += 30) ctx.lineTo(crackX(y) + shear * 0.5, y); ctx.stroke();
+  if (u > 0.3 && u < 1.6) { const tip = [crackX(yEnd), yEnd]; dustBlast(ctx, tip[0], tip[1], 0.4, Math.floor(u * 10), { n: 10, spread: 200, up: 160, col: '#c8a080', life: 1 }); }
+  if (u > 1.5) { for (let k = 0; k < 6; k++) { const y = vy + 100 + k * 150; dustBlast(ctx, crackX(y) + shear * 0.5, y, (u - 1.5) * 0.7, k + 20, { n: 8, spread: 300, up: 260, col: '#c8a080', life: 2.5 }); } debrisAtCam(ctx, crackX(1700), 1700, (u - 1.5) * 0.6, 4, 30, '#5a4038'); }
+  // a car skids to a stop at the edge
+  const k = easeOut(R2((u - 0.6) / 1.6)), cy = lerp(1050, 1560, k), cs = lerp(0.3, 1.5, k);
+  ctx.save(); ctx.translate(W / 2 - 140 * cs * 0.6, cy); ctx.rotate(k > 0.7 ? (k - 0.7) * 1.2 : 0); carRear(ctx, 0, 0, cs, '#e63946', true); ctx.restore();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 560, 0.55);
-  say(ctx, u, ['Up to 2 minutes', 'of shaking'], 230, 0.15, { size: 92, out: 2.6 });
-  say(ctx, u, ['Old buildings and', 'freeway bridges give way'], 230, 2.7, { size: 76, out: OUT('city') });
+  say(ctx, u, ['The ground rips open', 'and lurches sideways'], 230, 0.15, { size: 84, out: OUT('crack') });
+}
+function mountainsS(ctx, base, seed, col, amp) { const r = rng(seed); ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(-50, base); let x = -50; while (x < W + 50) { const w = 140 + r() * 160; ctx.lineTo(x + w / 2, base - amp * (0.4 + r() * 0.6)); x += w; ctx.lineTo(x, base - r() * amp * 0.2); } ctx.lineTo(W + 50, base); ctx.fill(); }
+
+// ================================================================ 7. gas main fireball + water main geyser on one street
+function vFireWater(ctx, u) {
+  const boom = 0.5, dt = Math.max(0, u - boom), [sx, sy] = shakeOffset(u, boom, 3, 30);
+  bgSky(ctx, ['#1a1430', '#4a2a4a', '#a0503a']); ctx.translate(sx, sy);
+  const vy = 1000; ctx.fillStyle = '#2a2230'; ctx.fillRect(0, vy, W, H); ctx.fillStyle = '#3a3240'; ctx.beginPath(); ctx.moveTo(W / 2 - 40, vy); ctx.lineTo(W / 2 + 40, vy); ctx.lineTo(W + 500, H); ctx.lineTo(-500, H); ctx.fill();
+  for (let k = 0; k < 5; k++) { const z = 1 + k * 0.9, s = 1 / z; for (const side of [-1, 1]) { const x = W / 2 + side * 520 * s, w = 340 * s, h = 220 * s, b = vy + 760 * s;
+    ctx.fillStyle = '#2a2034'; ctx.fillRect(x - w / 2, b - h, w, h); ctx.beginPath(); ctx.moveTo(x - w * 0.6, b - h); ctx.lineTo(x, b - h * 1.6); ctx.lineTo(x + w * 0.6, b - h); ctx.fill();
+    ctx.fillStyle = 'rgba(255,200,120,0.7)'; ctx.fillRect(x - w * 0.25, b - h * 0.7, w * 0.18, h * 0.3); } }
+  const fx = W / 2 - 150, fy = 1380, wx = W / 2 + 200, wy = 1420;
+  if (dt > 0) {
+    // the water geyser
+    const r = rng(7); ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 260; i++) { const life = ((dt * 0.9 + r()) % 1.2), vx = (r() - 0.5) * 260, vyv = -(900 + r() * 500), x = wx + vx * life, y = wy + vyv * life + 900 * life * life;
+      if (y > wy + 40) continue; ctx.fillStyle = `rgba(160,220,255,${0.55 * (1 - life / 1.2)})`; ctx.beginPath(); ctx.arc(x, y, 4 + r() * 8, 0, 6.283); ctx.fill(); }
+    ctx.restore();
+    // the gas fireball column
+    const h = lerp(100, 900, easeOut(R2(dt / 1.0)));
+    for (let i = 0; i < 30; i++) { const f = i / 30, y = fy - f * h, w = (70 + 130 * f) * (1 + 0.15 * Math.sin(u * 9 + i)); puff(ctx, fx + Math.sin(u * 5 + i) * 30 * f, y, w, mixHex('#fff0a0', '#c82a10', f * 0.9 + 0.1)); }
+    for (let i = 0; i < 12; i++) { const f = i / 12; puff(ctx, fx + Math.sin(u + i) * 60, fy - h - f * 400, 140 + f * 120, '#2a1a20', 0.75 * (1 - f * 0.5)); }
+    glow(ctx, fx, fy - h * 0.4, 700, '255,140,50', 0.8);
+    debrisAtCam(ctx, fx, fy, dt * 0.8, 3, 36, '#2a1a1a');
+  }
+  carSide(ctx, 230, 1720, 1.4, '#3a86ff', u > boom ? 0.12 : 0); carSide(ctx, 880, 1760, 1.5, '#ffbe0b', 0, -1);
+  flash(ctx, u, boom, 0.35);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 560, 0.55);
+  say(ctx, u, ['Gas mains explode.', 'Water mains burst.'], 230, 0.15, { size: 88, out: OUT('fire') });
+  if (u > 2.4) { scrimB(ctx, 1560, 0.6); say(ctx, u, ['(Both happened on one LA street in 1994)'], 1780, 2.4, { size: 40, weight: 800, x: W / 2, align: 'center', out: OUT('fire') }); }
 }
 
-// ================================================================ 7. fires, and no water to fight them
-function vFires(ctx, u) {
-  bgSky(ctx, ['#1a0e1a', '#4a1a1a', '#8a3a1e']);
-  drift(ctx, u, 0, 5, 1.0, 1.05, W / 2, 1200);
-  cityLayer(ctx, u, { base: 1250, seed: 41, hMin: 100, hMax: 460, wMin: 40, wMax: 110, gap: 6, col: '#2a1a24', win: 'rgba(255,170,90,0.5)', winP: 0.3, ws: 6, fires: 0.4 });
-  const r = rng(42); const n = Math.floor(30 * easeOut(prog(u, 0.2, 3.4)));
-  for (let i = 0; i < n; i++) { const x = r() * W, y = 1000 + r() * 260, s = 0.6 + r();
-    glow(ctx, x, y, 120 * s, '255,140,40', 0.7); for (let k = 0; k < 5; k++) { ctx.fillStyle = `rgba(50,30,34,${0.35 - k * 0.06})`; ctx.beginPath(); ctx.arc(x + Math.sin(u + k + i) * 20, y - 60 - k * 70 * s, 40 * s + k * 14, 0, 6.283); ctx.fill(); } }
-  ctx.fillStyle = '#24161c'; ctx.fillRect(0, 1250, W, H);
-  // broken water main: a hydrant with no water, a cracked pipe
-  ctx.fillStyle = '#e63946'; roundRect(ctx, 760, 1560, 70, 130, 20); ctx.fill(); ctx.fillRect(740, 1600, 110, 26);
-  ctx.fillStyle = '#5a6a7a'; ctx.fillRect(0, 1760, 420, 40); ctx.fillRect(470, 1770, 610, 40);
-  const drip = (u * 1.5) % 1; ctx.fillStyle = 'rgba(120,190,255,0.9)'; ctx.beginPath(); ctx.ellipse(445, 1790 + drip * 60, 8, 12, 0, 0, 6.283); ctx.fill();
-  person2(ctx, 600, 1820, 300, { seed: 6, t: u });
+// ================================================================ 8. the port liquefies; cranes topple (slow motion)
+function crane(ctx, x, base, s, rot, col) { ctx.save(); ctx.translate(x, base); ctx.rotate(rot); ctx.scale(s, s); ctx.strokeStyle = col; ctx.lineWidth = 22; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-90, 0); ctx.lineTo(-70, -520); ctx.moveTo(90, 0); ctx.lineTo(70, -520); ctx.moveTo(-80, -260); ctx.lineTo(80, -260); ctx.moveTo(-90, 0); ctx.lineTo(70, -520); ctx.stroke();
+  ctx.lineWidth = 26; ctx.beginPath(); ctx.moveTo(-420, -520); ctx.lineTo(260, -520); ctx.stroke(); ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(0, -700); ctx.lineTo(-420, -520); ctx.moveTo(0, -700); ctx.lineTo(260, -520); ctx.moveTo(0, -700); ctx.lineTo(0, -520); ctx.stroke(); ctx.restore(); }
+function vPort(ctx, u) {
+  const vt = tm(u, 1.4, 4.2, 0.4), [sx, sy] = shakeOffset(u, 0, 4.4, 12);
+  bgSky(ctx, ['#2a4a7a', '#7aaad0', '#ffd0a0']); ctx.translate(sx, sy);
+  ctx.fillStyle = '#2a6a9a'; ctx.fillRect(0, 1300, W, H);
+  const tilt = easeIn2(R2((vt - 1.4) / 1.4)) * 0.18, sink = tilt * 400;
+  ctx.save(); ctx.translate(0, sink * 0.5); ctx.rotate(tilt * 0.3);
+  ctx.fillStyle = '#7a7480'; ctx.fillRect(-100, 1260, W + 200, 60);
+  const CC = ['#e63946', '#3a86ff', '#ffbe0b', '#2ec4b6', '#8338ec', '#fb5607'];
+  for (let i = 0; i < 18; i++) { const c = i % 6, r = Math.floor(i / 6), x = 40 + c * 170, y = 1260 - r * 70, slide = Math.max(0, vt - 1.6 - c * 0.08) * 200 * (r + 1) * 0.5;
+    ctx.save(); ctx.translate(x + 70 + slide, y - 30 + slide * 0.6 * (r === 2 ? 1 : 0)); ctx.rotate(slide * 0.004 * (r + 1)); ctx.fillStyle = CC[(i * 5) % 6]; ctx.fillRect(-75, -30, 150, 62);
+    ctx.fillStyle = 'rgba(0,0,0,0.18)'; for (let k = 0; k < 7; k++) ctx.fillRect(-66 + k * 20, -24, 6, 50); ctx.restore(); }
+  ctx.restore();
+  [[260, 0], [700, 0.3]].forEach(([x, d]) => { const f = easeIn2(R2((vt - 1.6 - d) / 1.6)); crane(ctx, x, 1260 + sink * 0.5, 1.0, f * 1.25, ['#ff7a2a', '#e6c84a'][d ? 1 : 0]);
+    const land = 1.6 + d + 1.6; if (vt > land) { const dd = (vt - land); const r = rng(Math.floor(x)); for (let i = 0; i < 40; i++) { const a = -Math.PI * r(), sp = 300 + r() * 600; ctx.fillStyle = `rgba(220,240,255,${0.8 * R2(1 - dd)})`;
+      ctx.beginPath(); ctx.arc(x + 500 + Math.cos(a) * sp * dd, 1330 + Math.sin(a) * sp * dd + 700 * dd * dd, 6 + r() * 10, 0, 6.283); ctx.fill(); } } });
+  ctx.fillStyle = 'rgba(40,90,130,0.6)'; ctx.fillRect(0, 1330, W, H);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['Then: 1,600 fires.', 'And the water mains', 'are broken.'], 230, 0.15, { size: 80, out: OUT('fires') });
+  scrim(ctx, 560, 0.55);
+  say(ctx, u, ['The port’s ground', 'turns to liquid'], 230, 0.15, { size: 88, out: 2.4 });
+  say(ctx, u, ['Cranes topple', 'into the harbor'], 230, 2.5, { size: 92, out: OUT('port') });
 }
 
-// ================================================================ 8. lifelines cut where they cross the fault
-function vLife(ctx, u) {
-  const { P } = caMap(ctx, { lon0: -118.2, lat0: 34.6, k: 380, cy: 1150, t: u });
-  const cut = R2((u - 1.0) / 0.4);
-  const lines = [[[-119.3, 36.2], [-118.6, 34.6], [-118.3, 34.1]], [[-117.3, 35.6], [-117.6, 34.4], [-118.1, 34.1]], [[-115.8, 34.3], [-117.0, 34.0], [-118.0, 34.0]], [[-119.0, 35.4], [-118.9, 34.9], [-118.5, 34.3]]];
-  const cols = ['#4cc9f0', '#ffbe0b', '#7dffb0', '#ff7ab6'], names = ['WATER', 'POWER', 'GAS', 'I-5'];
-  lines.forEach((pts, i) => { const sp = pts.map(p => P(...p)); ctx.strokeStyle = cols[i]; ctx.lineWidth = 12; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(...sp[0]); ctx.lineTo(...sp[1]); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(sp[1][0] + cut * 40, sp[1][1] + cut * 30); ctx.lineTo(sp[2][0] + cut * 40, sp[2][1] + cut * 30); ctx.stroke();
-    if (cut > 0 && u < 2.2) glow(ctx, sp[1][0], sp[1][1], 100, '255,240,180', 0.8 * (1 - (u - 1.0) / 1.2));
-    ctx.font = `900 34px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 10; ctx.fillText(names[i], sp[0][0], sp[0][1] - 22); ctx.shadowBlur = 0; });
-  cityDots(ctx, P, ['Los Angeles'], 44);
+// ================================================================ 9. night: helicopter over the burning city; the toll
+function vHeli(ctx, u) {
+  bgSky(ctx, ['#05060e', '#120e20', '#2a1424']);
+  cityLayer(ctx, u, { base: 1500, seed: 21, hMin: 160, hMax: 700, wMin: 50, wMax: 130, gap: 8, col: '#0e0c18', win: 'rgba(255,200,130,0.35)', winP: 0.25, ws: 7, fires: 0.3 });
+  const r = rng(22); for (let i = 0; i < 16; i++) { const x = r() * W, y = 1300 + r() * 300; glow(ctx, x, y, 140, '255,130,40', 0.6); for (let k = 0; k < 5; k++) puff(ctx, x + Math.sin(u + k + i) * 20, y - 80 - k * 90, 50 + k * 20, '#1a1218', 0.5); }
+  ctx.fillStyle = '#08060c'; ctx.fillRect(0, 1500, W, H);
+  // searchlight
+  const a = Math.sin(u * 0.9) * 0.35, hx = 300 + u * 60, hy = 640;
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = 'rgba(220,235,255,0.12)'; ctx.beginPath(); ctx.moveTo(hx, hy + 30); ctx.lineTo(hx + Math.sin(a) * 1400 - 160, hy + 1300); ctx.lineTo(hx + Math.sin(a) * 1400 + 160, hy + 1300); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.translate(hx, hy); ctx.fillStyle = '#05050a'; ctx.beginPath(); ctx.ellipse(0, 0, 110, 46, 0, 0, 6.283); ctx.fill(); ctx.fillRect(60, -12, 190, 18); ctx.fillRect(230, -40, 18, 50);
+  ctx.strokeStyle = 'rgba(30,30,40,0.6)'; ctx.lineWidth = 10; ctx.beginPath(); ctx.moveTo(-220 * Math.cos(u * 40), -60); ctx.lineTo(220 * Math.cos(u * 40), -60); ctx.stroke(); ctx.fillRect(-60, 46, 140, 8);
+  ctx.fillStyle = Math.sin(u * 10) > 0 ? '#ff3a3a' : '#05050a'; ctx.beginPath(); ctx.arc(-100, 0, 8, 0, 6.283); ctx.fill(); ctx.restore();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 580, 0.6);
-  say(ctx, u, ['Water, power, gas and', 'highways into LA', 'all cross the fault'], 230, 0.15, { size: 72, out: 2.7 });
-  say(ctx, u, ['Some places go without', 'water for months'], 230, 2.8, { size: 76, out: OUT('life') });
+  const lines = [['~1,800 dead', '#ffffff', 0.7], ['~50,000 injured', '#ffd25a', 1.7], ['$200 billion', '#7dffb0', 2.7]];
+  lines.forEach(([txt, col, at], i) => bigNum(ctx, u, txt, 840 + i * 170, at, { size: 104, color: col, out: OUT('heli') }));
+  say(ctx, u, ['The toll (USGS est.)'], 330, 0.15, { size: 84, out: OUT('heli') });
 }
 
-// ================================================================ 9. the toll (USGS ShakeOut estimates)
-function vToll(ctx, u) {
-  bgSky(ctx, ['#2a2440', '#3a3050', '#4a3a5a']);
-  const rows = [['Killed', 1800, '#ffffff', ''], ['Injured', 50000, '#ffd25a', ''], ['Damage', 200, '#7dffb0', 'B']];
-  rows.forEach(([label, v, col, unit], i) => { const at = 0.4 + i * 0.7; if (u < at) return; const k = easeOut(prog(u, at, at + 1.0)), y = 760 + i * 300;
-    ctx.save(); ctx.globalAlpha = R2((u - at) / 0.3); ctx.font = `800 46px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText(label, W / 2, y - 90);
-    ctx.font = `900 120px ${FONT}`; ctx.fillStyle = col; ctx.fillText(unit ? `$${Math.round(v * k)} billion` : `~${Math.round(v * k).toLocaleString('en-US')}`, W / 2, y + 30); ctx.restore(); });
+// ================================================================ 10. ending: the road-sign gag (15 million years)
+function vSign(ctx, u) {
+  const k = easeInOut(prog(u, 1.6, 4.8)), days = u > 1.6 && u < 4.8;
+  const ph = days ? (u * 6) % 1 : 0.3, sunUp = Math.sin(ph * Math.PI * 2) > -0.1;
+  bgSky(ctx, sunUp ? ['#4a9ae0', '#9ad0f0', '#ffe0b0'] : ['#05060e', '#141a38', '#2a2a50']);
+  if (!sunUp) stars(ctx, u, 1);
+  const sxp = lerp(-100, W + 100, ph), syp = 900 - Math.sin(ph * Math.PI * 2) * 600; if (sunUp) { glow(ctx, sxp, syp, 160, '255,230,160', 0.8); ctx.fillStyle = '#fff0c0'; ctx.beginPath(); ctx.arc(sxp, syp, 60, 0, 6.283); ctx.fill(); }
+  mountainsS(ctx, 1150, 8, sunUp ? '#b08a7a' : '#2a2438', 200);
+  ctx.fillStyle = sunUp ? '#e0b880' : '#3a3040'; ctx.fillRect(0, 1150, W, H);
+  ctx.fillStyle = sunUp ? '#5a5058' : '#2a2430'; ctx.beginPath(); ctx.moveTo(W / 2 - 30, 1150); ctx.lineTo(W / 2 + 30, 1150); ctx.lineTo(W + 400, H); ctx.lineTo(-400, H); ctx.fill();
+  // the sign
+  ctx.fillStyle = '#8a8a90'; ctx.fillRect(250, 900, 22, 700); ctx.fillRect(810, 900, 22, 700);
+  ctx.fillStyle = '#0a6a3a'; roundRect(ctx, 180, 700, 720, 300, 24); ctx.fill(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 8; roundRect(ctx, 196, 716, 688, 268, 16); ctx.stroke();
+  const km = Math.round(560 * (1 - k)); ctx.font = `900 64px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = '#ffffff'; ctx.fillText('San Francisco', 240, 830);
+  ctx.textAlign = 'right'; ctx.font = `900 96px ${FONT}`; ctx.fillText(`${km}`, 840, 940); ctx.font = `800 40px ${FONT}`; ctx.fillText('km', 840, 975);
+  if (u > 1.6 && u < 4.9) { ctx.font = `900 54px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffd25a'; ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 12;
+    ctx.fillText(`${(k * 15).toFixed(1)} million years later`, W / 2, 1260); ctx.shadowBlur = 0; }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['The toll (USGS est.)'], 230, 0.15, { size: 88, out: OUT('toll') });
-  say(ctx, u, ['1906 San Francisco: ~3,000 dead'], 1700, 2.6, { size: 46, weight: 800, x: W / 2, align: 'center', out: OUT('toll') });
-}
-
-// ================================================================ 10. myth-busting: sideways, not into the sea
-function vMyth(ctx, u) {
-  const { P } = caMap(ctx, { lon0: -119.8, lat0: 36.0, k: 150, cy: 1200, t: u });
-  const k = easeInOut(prog(u, 2.4, 5.2)), [lx, ly] = P(-118.24, 34.05), [fx, fy] = P(-122.42, 37.77);
-  const x = lerp(lx, fx + 60, k), y = lerp(ly, fy + 40, k);
-  const [x2, y2] = P(-122.42, 37.77); ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(x2, y2, 14, 0, 6.283); ctx.fill();
-  ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = '#ffffff'; ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 10; ctx.fillText('San Francisco', x2 + 24, y2 - 16);
-  glow(ctx, x, y, 60, '255,210,90', 0.8); ctx.fillStyle = '#ffd25a'; ctx.beginPath(); ctx.arc(x, y, 16, 0, 6.283); ctx.fill(); ctx.textAlign = 'left'; ctx.fillStyle = '#ffd25a'; ctx.fillText('Los Angeles', x + 26, y + 14); ctx.shadowBlur = 0;
-  if (u > 2.4) { ctx.strokeStyle = 'rgba(255,210,90,0.6)'; ctx.lineWidth = 6; ctx.setLineDash([12, 10]); ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(x, y); ctx.stroke(); ctx.setLineDash([]); }
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 600, 0.6);
-  say(ctx, u, ['Will California fall', 'into the ocean? No.'], 230, 0.15, { size: 80, out: 2.3 });
-  say(ctx, u, ['In ~15 million years, LA', 'slides up next to San Francisco'], 230, 2.4, { size: 64, out: OUT('myth') });
-  scrimB(ctx, 1560, 0.6); say(ctx, u, ['Chance of an M6.7+ in California', 'in the next 30 years: over 99%'], 1700, 3.4, { size: 46, weight: 800, out: OUT('myth') });
+  scrim(ctx, 560, 0.55);
+  say(ctx, u, ['California won’t fall', 'into the ocean.'], 230, 0.15, { size: 84, out: 1.6 });
+  say(ctx, u, ['It slides north', '~4 cm a year…'], 230, 1.7, { size: 88, out: OUT('sign') });
+  if (u > 4.4) { scrimB(ctx, 1500, 0.65); say(ctx, u, ['Next big quake? Over 99% chance of', 'an M6.7+ in the next 30 years.'], 1680, 4.4, { size: 46, weight: 800, out: OUT('sign') }); }
 }
 
 function vEnd(ctx, u) {

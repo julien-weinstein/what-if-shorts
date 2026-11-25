@@ -243,22 +243,22 @@ Relax: it's not "overdue." Odds of a supereruption: 1 in 730,000 a year (USGS).
 
 **File:** `videos/san-andreas.mp4`
 
-**Title:** What If the San Andreas Fault Ruptured? 🌎💥 #shorts
+**Title:** What If the San Andreas Fault Finally Snapped? 🌎💥 #shorts
 
 **Description:**
 
 ```
-1,200 km long. Sliding as fast as your fingernails grow. But the southern section has been stuck since 1857.
+Your phone screams: seconds to go.
+M7.8. The ground rolls like an ocean wave.
+Freeway bridges collapse, like Northridge in 1994.
+Glass rains from the towers.
+The ground rips open and lurches sideways.
+Gas mains explode. Water mains burst. (Both happened on one LA street in 1994.)
+The port's ground turns to liquid. Cranes topple into the harbor.
+The toll (USGS est.): ~1,800 dead, ~50,000 injured, $200 billion.
 
-Your phone buzzes seconds before it hits.
-M7.8: the fault unzips for 300 km at ~10,000 km/h. The ground lurches meters sideways.
-Up to 2 minutes of shaking. Old buildings and freeway bridges give way.
-Then: 1,600 fires, and the water mains are broken.
-Water, power, gas and highways into LA all cross the fault. Some places go without water for months.
-The toll (USGS est.): ~1,800 killed, ~50,000 injured, $200 billion.
-
-Will California fall into the ocean? No. In ~15 million years, LA slides up next to San Francisco.
-Chance of an M6.7+ in California in the next 30 years: over 99%.
+California won't fall into the ocean. It slides north ~4 cm a year: in 15 million years, LA meets San Francisco.
+Next big quake? Over 99% chance of an M6.7+ in California in the next 30 years.
 
 #whatif #sanandreas #earthquake #california #shorts
 ```
