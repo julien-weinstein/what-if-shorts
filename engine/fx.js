@@ -1,0 +1,335 @@
+// FX engine (v5): realistic globe, procedural noise, physics particles, smoke, fire, water,
+// building collapse, and a post pass (bloom + grade). Deterministic: everything is a pure
+// function of time t, so any frame can be rendered independently.
+
+// ---------------------------------------------------------------- noise (improved Perlin)
+const _perm = (() => { const p = [...Array(256).keys()], r = rng(1337);
+  for (let i = 255; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [p[i], p[j]] = [p[j], p[i]]; }
+  return new Uint8Array([...p, ...p]); })();
+function _fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+function _grad(h, x, y, z) { const u = h < 8 ? x : y, v = h < 4 ? y : h === 12 || h === 14 ? x : z; return ((h & 1) ? -u : u) + ((h & 2) ? -v : v); }
+function noise3(x, y, z) {
+  const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+  x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+  const u = _fade(x), v = _fade(y), w = _fade(z), P = _perm;
+  const A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z, B = P[X + 1] + Y, BA = P[B] + Z, BB = P[B + 1] + Z;
+  const L = (a, b, t) => a + t * (b - a);
+  return L(L(L(_grad(P[AA] & 15, x, y, z), _grad(P[BA] & 15, x - 1, y, z), u), L(_grad(P[AB] & 15, x, y - 1, z), _grad(P[BB] & 15, x - 1, y - 1, z), u), v),
+           L(L(_grad(P[AA + 1] & 15, x, y, z - 1), _grad(P[BA + 1] & 15, x - 1, y, z - 1), u), L(_grad(P[AB + 1] & 15, x, y - 1, z - 1), _grad(P[BB + 1] & 15, x - 1, y - 1, z - 1), u), v), w);
+}
+function fbm(x, y, z, oct = 4) { let a = 0, f = 1, amp = 0.5; for (let i = 0; i < oct; i++) { a += amp * noise3(x * f, y * f, z * f); f *= 2.03; amp *= 0.5; } return a; }
+
+function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+const _fxBufs = {};
+function fxBuf(name, w = W, h = H) { const k = name + w + 'x' + h; if (!_fxBufs[k]) _fxBufs[k] = makeCanvas(w, h); return _fxBufs[k]; }
+
+// ---------------------------------------------------------------- globe
+// opts: lon0/lat0 view centre (degrees), sun (unit vector in view space, z toward viewer),
+// clouds (0..1), t (for cloud drift), tint for land, night lights.
+const _globeTex = makeCanvas(420, 420), _globeMask = makeCanvas(420, 420);
+function globe(ctx, cx, cy, R, o = {}) {
+  const { lon0 = 0, lat0 = 15, sun = [-0.55, -0.35, 0.76], clouds = 0.55, t = 0, atmo = '120,180,255', lights = true, ice = true } = o;
+  const l0 = lon0 * Math.PI / 180, p0 = lat0 * Math.PI / 180, sp0 = Math.sin(p0), cp0 = Math.cos(p0);
+  // atmosphere halo
+  const halo = ctx.createRadialGradient(cx, cy, R * 0.96, cx, cy, R * 1.22);
+  halo.addColorStop(0, `rgba(${atmo},0.55)`); halo.addColorStop(0.35, `rgba(${atmo},0.18)`); halo.addColorStop(1, `rgba(${atmo},0)`);
+  ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(cx, cy, R * 1.22, 0, 6.283); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
+  // ocean
+  const oc = ctx.createRadialGradient(cx + sun[0] * R * 0.5, cy + sun[1] * R * 0.5, R * 0.1, cx, cy, R);
+  oc.addColorStop(0, '#2f7fd8'); oc.addColorStop(0.7, '#14508f'); oc.addColorStop(1, '#0b2f5c');
+  ctx.fillStyle = oc; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R);
+  // land
+  const v3 = (lon, lat) => {                       // view-space unit vector
+    const l = lon * Math.PI / 180 - l0, p = lat * Math.PI / 180, cp = Math.cos(p);
+    return [cp * Math.sin(l), -(cp0 * Math.sin(p) - sp0 * cp * Math.cos(l)), sp0 * Math.sin(p) + cp0 * cp * Math.cos(l)];
+  };
+  const proj = (lon, lat) => { const [x, y, z] = v3(lon, lat); return [cx + x * R, cy + y * R, z]; };
+  // Trace a polygon clipped to the visible hemisphere: edges that cross the horizon are cut at z = 0
+  // and joined along the limb, so continents wrapping round the edge never smear across the ocean.
+  const trace = (c, poly, X, Y, S) => {
+    const pts = poly.map(([lo, la]) => v3(lo, la));
+    if (!pts.some(q => q[2] > 0)) return false;
+    let start = pts.findIndex(q => q[2] > 0), started = false, exitA = null;
+    const n = pts.length, px = q => X + q[0] * S, py = q => Y + q[1] * S;
+    for (let k = 0; k <= n; k++) {
+      const a = pts[(start + k) % n], b = pts[(start + k + 1) % n];
+      if (!started) { c.moveTo(px(a), py(a)); started = true; }
+      if (k === n) break;
+      if (a[2] > 0 && b[2] > 0) c.lineTo(px(b), py(b));
+      else if (a[2] > 0 && b[2] <= 0) { const u = a[2] / (a[2] - b[2]); const h = [lerp(a[0], b[0], u), lerp(a[1], b[1], u)]; const m = Math.hypot(h[0], h[1]) || 1;
+        c.lineTo(X + h[0] / m * S, Y + h[1] / m * S); exitA = Math.atan2(h[1], h[0]); }
+      else if (a[2] <= 0 && b[2] > 0) { const u = a[2] / (a[2] - b[2]); const h = [lerp(a[0], b[0], u), lerp(a[1], b[1], u)];
+        const enA = Math.atan2(h[1], h[0]);
+        if (exitA !== null) { let d = enA - exitA; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; c.arc(X, Y, S, exitA, exitA + d, d < 0); }
+        c.lineTo(px(b), py(b)); exitA = null; }
+    }
+    c.closePath(); return true;
+  };
+  for (const poly of LAND) {
+    let latSum = 0; for (const [lo, la] of poly) latSum += la;
+    const mlat = latSum / poly.length;
+    ctx.beginPath();
+    if (!trace(ctx, poly, cx, cy, R)) continue;
+    ctx.fillStyle = (Math.abs(mlat) > 62 && ice) ? '#eef4fb' : '#4f8a45';
+    ctx.fill();
+  }
+  // land mask at texture resolution (same projection), used for biome colour and city lights
+  const N = _globeTex.width, mc = _globeMask.getContext('2d');
+  mc.setTransform(1, 0, 0, 1, 0, 0); mc.clearRect(0, 0, N, N); mc.fillStyle = '#fff';
+  for (const poly of LAND) { mc.beginPath(); if (trace(mc, poly, N / 2, N / 2, N / 2)) mc.fill(); }
+  const mask = mc.getImageData(0, 0, N, N).data;
+  // texture pass: biomes + clouds + night side + city lights, computed per pixel
+  const tc = _globeTex.getContext('2d'), img = tc.createImageData(N, N), d = img.data;
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const x = (i + 0.5) / N * 2 - 1, y = (j + 0.5) / N * 2 - 1, rr = x * x + y * y, k = (j * N + i) * 4;
+    if (rr > 1) { d[k + 3] = 0; continue; }
+    const z = Math.sqrt(1 - rr);
+    // view -> world (undo lat0 tilt, then lon0 spin)
+    const wy = -y * cp0 + z * sp0, wz = y * sp0 + z * cp0;
+    const lat = Math.asin(Math.max(-1, Math.min(1, wy))), lon = Math.atan2(x, wz) + l0;
+    const px = Math.cos(lat) * Math.sin(lon), py = Math.sin(lat), pz = Math.cos(lat) * Math.cos(lon);
+    const light = x * sun[0] + y * sun[1] + z * sun[2];
+    const onLand = mask[k + 3] > 127;
+    // biome colour for land pixels (latitude bands + noise), written under the clouds
+    let br = 0, bg = 0, bb = 0, ba = 0;
+    if (onLand) {
+      const al = Math.abs(lat) * 57.3, n = fbm(px * 6, py * 6, pz * 6, 3);
+      const desert = Math.max(0, 1 - Math.abs(al - 24) / 9 + n * 1.6), polar = (ice && al > 64) ? 1 : 0;
+      br = lerp(lerp(52 + n * 60, 196 + n * 40, Math.min(1, desert)), 236, polar);
+      bg = lerp(lerp(118 + n * 60, 170 + n * 30, Math.min(1, desert)), 242, polar);
+      bb = lerp(lerp(48 + n * 30, 110 + n * 20, Math.min(1, desert)), 250, polar);
+      ba = 1;
+    }
+    let cl = clouds > 0 ? fbm(px * 2.2 + t * 0.03, py * 2.6, pz * 2.2 - t * 0.02, 4) : -1;
+    cl = Math.max(0, Math.min(1, (cl + 0.08) * 2.4)) * clouds;
+    const day = Math.max(0, Math.min(1, light * 3 + 0.35));
+    const night = 1 - day;
+    // city lights on the night side (noise-gated speckle)
+    let city = 0;
+    if (lights && onLand && night > 0.45) { const n = noise3(px * 60, py * 60, pz * 60); city = n > 0.5 ? (n - 0.5) * 5 : 0; }
+    // composite: biome (lit) -> clouds -> night darkening -> city lights
+    const lit = 0.35 + 0.65 * day;
+    let r0 = br * lit, g0 = bg * lit, b0 = bb * lit, a0 = ba;
+    r0 = lerp(r0, 255 * lit, cl); g0 = lerp(g0, 250 * lit, cl); b0 = lerp(b0, 245 * lit, cl); a0 = Math.max(a0, cl);
+    const shade = 0.82 * night;
+    r0 = lerp(r0, 4, shade); g0 = lerp(g0, 8, shade); b0 = lerp(b0, 26, shade); a0 = Math.max(a0, shade);
+    r0 += city * 255; g0 += city * 190; b0 += city * 110; a0 = Math.min(1, a0 + city);
+    d[k] = Math.min(255, r0); d[k + 1] = Math.min(255, g0); d[k + 2] = Math.min(255, b0); d[k + 3] = Math.min(255, a0 * 255);
+  }
+  tc.putImageData(img, 0, 0);
+  ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(_globeTex, cx - R, cy - R, 2 * R, 2 * R);
+  // specular glint
+  const gx = cx + sun[0] * R * 0.55, gy = cy + sun[1] * R * 0.55;
+  const sg = ctx.createRadialGradient(gx, gy, 0, gx, gy, R * 0.35);
+  sg.addColorStop(0, 'rgba(255,255,240,0.35)'); sg.addColorStop(1, 'rgba(255,255,240,0)');
+  ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = sg; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R); ctx.globalCompositeOperation = 'source-over';
+  // inner rim light
+  const rim = ctx.createRadialGradient(cx, cy, R * 0.82, cx, cy, R);
+  rim.addColorStop(0, `rgba(${atmo},0)`); rim.addColorStop(1, `rgba(${atmo},0.45)`);
+  ctx.fillStyle = rim; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R);
+  ctx.restore();
+}
+
+// Realistic-ish Moon with noise-shaded maria and terminator.
+const _moonTex = makeCanvas(260, 260);
+const _CRATERS = (() => { const r = rng(808), out = [];
+  for (let i = 0; i < 46; i++) { const u = r() * 2 - 1, a = r() * 6.283, q = Math.sqrt(1 - u * u);
+    out.push([q * Math.cos(a), q * Math.sin(a), Math.abs(u) * (r() > 0.25 ? 1 : -1), 0.03 + Math.pow(r(), 3) * 0.16]); }
+  return out; })();
+function moonFx(ctx, cx, cy, R, o = {}) {
+  const { sun = [-0.5, -0.3, 0.8], crack = 0 } = o;
+  const N = _moonTex.width, tc = _moonTex.getContext('2d'), img = tc.createImageData(N, N), d = img.data;
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const x = (i + 0.5) / N * 2 - 1, y = (j + 0.5) / N * 2 - 1, rr = x * x + y * y, k = (j * N + i) * 4;
+    if (rr > 1) { d[k + 3] = 0; continue; }
+    const z = Math.sqrt(1 - rr);
+    const mar = fbm(x * 1.4 + 7, y * 1.4, z * 1.4, 4), fine = fbm(x * 8, y * 8, z * 8, 2);
+    let v = 200 - Math.max(0, mar + 0.05) * 190 + fine * 26;
+    for (const [qx, qy, qz, qr] of _CRATERS) {
+      const dd = Math.acos(Math.max(-1, Math.min(1, x * qx + y * qy + z * qz))) / qr;
+      if (dd < 1.25) v += dd < 0.85 ? -28 * (1 - dd * dd * 0.6) : dd < 1.0 ? 34 : 34 * (1.25 - dd) * 4;
+    }
+    const lit = Math.max(0.05, x * sun[0] + y * sun[1] + z * sun[2]);
+    v *= Math.min(1, lit * 1.25);
+    if (crack > 0) { const c = Math.abs(noise3(x * 5, y * 5, 3.3)); if (c < 0.03 * crack) { d[k] = 255; d[k + 1] = 120; d[k + 2] = 40; d[k + 3] = 255; continue; } }
+    d[k] = v; d[k + 1] = v * 0.99; d[k + 2] = v * 0.96; d[k + 3] = 255;
+  }
+  tc.putImageData(img, 0, 0);
+  ctx.save(); ctx.imageSmoothingQuality = 'high'; ctx.drawImage(_moonTex, cx - R, cy - R, 2 * R, 2 * R); ctx.restore();
+}
+
+// ---------------------------------------------------------------- smoke / dust / ash
+// A billowing plume made of shaded puffs driven by noise. base (x,y), height growth 0..1.
+function plume(ctx, t, x, y, o = {}) {
+  const { height = 900, width = 260, grow = 1, seed = 1, col = [70, 66, 72], light = [200, 190, 180], count = 160, alpha = 0.5, drift = 0.2, blur = 5 } = o;
+  const b = fxBuf('plume'), c = b.getContext('2d');
+  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, W, H);
+  const r = rng(seed);
+  for (let i = 0; i < count; i++) {
+    const s = r(), life = (s + t * 0.05) % 1;
+    const h = life * height * grow;
+    const nx = fbm(i * 0.21, t * 0.15, seed, 3) * width * 1.1 + drift * h;
+    const px = x + nx + (r() - 0.5) * width * (0.25 + life * 1.1), py = y - h;
+    const pr = (70 + r() * 80) * (0.45 + life * 1.8) * (width / 260);
+    const g = c.createRadialGradient(px - pr * 0.3, py - pr * 0.4, pr * 0.05, px, py, pr);
+    g.addColorStop(0, `rgba(${light[0]},${light[1]},${light[2]},${alpha})`);
+    g.addColorStop(0.5, `rgba(${col[0]},${col[1]},${col[2]},${alpha * 0.8})`);
+    g.addColorStop(1, `rgba(${col[0]},${col[1]},${col[2]},0)`);
+    c.fillStyle = g; c.beginPath(); c.arc(px, py, pr, 0, 6.283); c.fill();
+  }
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.filter = `blur(${blur}px)`; ctx.drawImage(b, 0, 0); ctx.filter = 'none'; ctx.restore();
+}
+// One-shot dust burst (e.g. building collapse) starting at `at`.
+function dustBurst(ctx, t, x, y, at, o = {}) {
+  const { size = 1, seed = 2, col = [150, 140, 128], dur = 3.5 } = o;
+  const k = prog(t, at, at + dur); if (k <= 0 || k >= 1) return;
+  const r = rng(seed);
+  for (let i = 0; i < 26; i++) {
+    const a = r() * Math.PI - Math.PI, sp = 200 + r() * 500;
+    const px = x + Math.cos(a) * sp * easeOut(k) * size, py = y + Math.sin(a) * sp * 0.35 * easeOut(k) * size - k * 80 * size;
+    const pr = (60 + r() * 90) * size * (0.5 + k);
+    const al = 0.85 * (1 - k);
+    const g = ctx.createRadialGradient(px, py - pr * 0.3, pr * 0.1, px, py, pr);
+    g.addColorStop(0, `rgba(${col[0] + 40},${col[1] + 40},${col[2] + 40},${al})`); g.addColorStop(1, `rgba(${col[0]},${col[1]},${col[2]},0)`);
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(px, py, pr, 0, 6.283); ctx.fill();
+  }
+}
+
+// ---------------------------------------------------------------- particles
+// Ballistic debris: chunks launched from (x,y) at `at`, tumbling under gravity.
+function debrisBurst(ctx, t, x, y, at, o = {}) {
+  const { n = 40, speed = 900, g = 1600, spread = Math.PI, dir = -Math.PI / 2, seed = 5, col = '#3a3340', size = 14, dur = 3 } = o;
+  const dt = t - at; if (dt < 0 || dt > dur) return;
+  const r = rng(seed);
+  for (let i = 0; i < n; i++) {
+    const a = dir + (r() - 0.5) * spread, v = speed * (0.4 + r() * 0.8), s = size * (0.4 + r());
+    const px = x + Math.cos(a) * v * dt, py = y + Math.sin(a) * v * dt + 0.5 * g * dt * dt;
+    ctx.save(); ctx.translate(px, py); ctx.rotate(dt * (r() - 0.5) * 14); ctx.globalAlpha = 1 - dt / dur;
+    ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(-s, -s * 0.6); ctx.lineTo(s * 0.8, -s); ctx.lineTo(s, s * 0.7); ctx.lineTo(-s * 0.7, s); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+}
+// Glowing embers / sparks (additive).
+function embers(ctx, t, x, y, o = {}) {
+  const { n = 60, w = 400, h = 900, seed = 9, col = '255,160,60' } = o;
+  const r = rng(seed);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < n; i++) {
+    const life = (r() + t * (0.15 + r() * 0.2)) % 1;
+    const px = x + (r() - 0.5) * w + Math.sin(t * 2 + i) * 30, py = y - life * h;
+    ctx.fillStyle = `rgba(${col},${(1 - life) * 0.9})`; ctx.beginPath(); ctx.arc(px, py, 2 + r() * 4, 0, 6.283); ctx.fill();
+  }
+  ctx.restore();
+}
+// Fireball streaking down through the sky with a glowing trail (additive).
+function fireball(ctx, t, x0, y0, x1, y1, at, dur = 1.6, size = 1) {
+  const k = prog(t, at, at + dur); if (k <= 0 || k >= 1) return;
+  const e = k * k;
+  const x = lerp(x0, x1, e), y = lerp(y0, y1, e);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 14; i++) { const q = Math.max(0, e - i * 0.018), tx = lerp(x0, x1, q), ty = lerp(y0, y1, q);
+    ctx.fillStyle = `rgba(255,${150 + i * 6},${60 + i * 8},${0.5 * (1 - i / 14)})`; ctx.beginPath(); ctx.arc(tx, ty, (26 - i * 1.5) * size, 0, 6.283); ctx.fill(); }
+  glow(ctx, x, y, 90 * size, '255,200,120', 0.9);
+  ctx.restore();
+}
+// Expanding shockwave ring.
+function shockwave(ctx, t, x, y, at, o = {}) {
+  const { maxR = 900, dur = 1.4, col = '255,255,255', flat = 0.35 } = o;
+  const k = prog(t, at, at + dur); if (k <= 0 || k >= 1) return;
+  ctx.save(); ctx.strokeStyle = `rgba(${col},${0.8 * (1 - k)})`; ctx.lineWidth = 30 * (1 - k) + 4;
+  ctx.beginPath(); ctx.ellipse(x, y, maxR * easeOut(k), maxR * easeOut(k) * flat, 0, 0, 6.283); ctx.stroke(); ctx.restore();
+}
+
+// ---------------------------------------------------------------- city & destruction
+// A building that can topple: fall = 0..1 (rotation about its base corner), crumble = 0..1.
+function tower(ctx, t, x, base, w, h, o = {}) {
+  const { col = '#5b6680', win = 'rgba(255,224,160,0.85)', fall = 0, dir = 1, crumble = 0, seed = 1 } = o;
+  const r = rng(seed);
+  ctx.save();
+  ctx.translate(x + (dir > 0 ? w : 0), base); ctx.rotate(dir * easeIn2(fall) * 1.35); ctx.translate(-(dir > 0 ? w : 0), 0);
+  const slices = 8;
+  for (let s = 0; s < slices; s++) {
+    const sy = -h * (s + 1) / slices, sh = h / slices;
+    const off = crumble * (s / slices) * (r() - 0.5) * 260, drop = crumble * crumble * (s / slices) * 380, rot = crumble * (r() - 0.5) * 0.8;
+    ctx.save(); ctx.translate(off, drop); ctx.rotate(rot);
+    const g = ctx.createLinearGradient(0, sy, w, sy); g.addColorStop(0, shadeHex(col, 0.12)); g.addColorStop(1, shadeHex(col, -0.25));
+    ctx.fillStyle = g; ctx.fillRect(0, sy, w, sh + 1);
+    for (let wy = sy + 14; wy < sy + sh - 18; wy += 34) for (let wx = 14; wx < w - 22; wx += 30) {
+      ctx.fillStyle = r() > 0.4 ? win : 'rgba(20,24,40,0.5)'; ctx.fillRect(wx, wy, 16, 20); }
+    ctx.restore();
+  }
+  ctx.restore();
+}
+function easeIn2(p) { return p * p; }
+function shadeHex(hex, k) {
+  const c = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).map(v => Math.round(Math.max(0, Math.min(255, v * (1 + k)))));
+  return '#' + c.map(v => v.toString(16).padStart(2, '0')).join('');
+}
+
+// Wall of water advancing from the left; front = x position of the face, height in px.
+function waterWall(ctx, t, front, ground, height, o = {}) {
+  const { seed = 4 } = o;
+  ctx.save();
+  const top = ground - height;
+  const body = ctx.createLinearGradient(0, top, 0, ground);
+  body.addColorStop(0, '#9fe3ff'); body.addColorStop(0.25, '#2a8fd0'); body.addColorStop(1, '#0b3e6e');
+  ctx.fillStyle = body; ctx.beginPath(); ctx.moveTo(-50, ground + 400);
+  ctx.lineTo(-50, top);
+  for (let x = -50; x <= front; x += 16) { const n = fbm(x * 0.004, t * 0.6, seed, 3); ctx.lineTo(x, top + n * 120 + Math.sin(x * 0.02 + t * 3) * 14); }
+  // curling face
+  ctx.quadraticCurveTo(front + height * 0.35, top - 40, front + height * 0.18, top + height * 0.35);
+  ctx.quadraticCurveTo(front + height * 0.05, ground - height * 0.2, front + 40, ground);
+  ctx.lineTo(front + 40, ground + 400); ctx.closePath(); ctx.fill();
+  // translucent face highlight
+  const face = ctx.createLinearGradient(front - 200, 0, front + 200, 0);
+  face.addColorStop(0, 'rgba(160,230,255,0)'); face.addColorStop(1, 'rgba(160,230,255,0.35)');
+  ctx.fillStyle = face; ctx.fillRect(front - 200, top, 400, height);
+  // foam + spray
+  const r = rng(seed);
+  for (let i = 0; i < 160; i++) {
+    const u = r(), px = lerp(-50, front + height * 0.25, u) + (r() - 0.5) * 60, py = top + fbm(px * 0.004, t * 0.6, seed, 3) * 120 - r() * 50 - (u > 0.85 ? (t * 400 * r()) % 220 : 0);
+    ctx.fillStyle = `rgba(255,255,255,${0.35 + r() * 0.6})`; ctx.beginPath(); ctx.arc(px, py, 4 + r() * 16, 0, 6.283); ctx.fill();
+  }
+  ctx.restore();
+}
+
+// A cargo ship silhouette (for being carried inland).
+function ship(ctx, x, y, s, rot) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
+  ctx.fillStyle = '#c0392b'; ctx.beginPath(); ctx.moveTo(-220, 0); ctx.lineTo(220, 0); ctx.lineTo(180, 60); ctx.lineTo(-200, 60); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#20232f'; ctx.fillRect(-220, -10, 440, 14);
+  const cols = ['#2e86de', '#f39c12', '#27ae60', '#8e44ad', '#e67e22'];
+  for (let i = 0; i < 10; i++) for (let j = 0; j < 2; j++) { ctx.fillStyle = cols[(i + j) % 5]; ctx.fillRect(-180 + i * 30, -50 - j * 36, 28, 34); }
+  ctx.fillStyle = '#ecf0f1'; ctx.fillRect(150, -110, 50, 100);
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- post-processing
+// Bloom + colour grade + soft vignette. Call once at the end of render().
+function post(ctx, o = {}) {
+  const { bloom = 0.45, contrast = 1.06, saturate = 1.12, vignette = 0.35 } = o;
+  const src = ctx.canvas;
+  const small = fxBuf('bloom', W / 4, H / 4), sc = small.getContext('2d');
+  sc.filter = 'brightness(0.75) contrast(2.6)'; sc.clearRect(0, 0, small.width, small.height); sc.drawImage(src, 0, 0, small.width, small.height); sc.filter = 'none';
+  const blurred = fxBuf('bloom2', W / 4, H / 4), bc = blurred.getContext('2d');
+  bc.filter = 'blur(10px)'; bc.clearRect(0, 0, blurred.width, blurred.height); bc.drawImage(small, 0, 0); bc.filter = 'none';
+  const copy = fxBuf('grade'), cc = copy.getContext('2d');
+  cc.filter = `contrast(${contrast}) saturate(${saturate})`; cc.clearRect(0, 0, W, H); cc.drawImage(src, 0, 0); cc.filter = 'none';
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.drawImage(copy, 0, 0);
+  ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = bloom; ctx.drawImage(blurred, 0, 0, W, H);
+  ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+  const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.78);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, `rgba(0,0,0,${vignette})`);
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+  ctx.restore();
+}
+
+// Draw something blurred (depth of field) via an offscreen buffer.
+function dof(ctx, px, fn) {
+  const b = fxBuf('dof'), bc = b.getContext('2d');
+  bc.setTransform(1, 0, 0, 1, 0, 0); bc.clearRect(0, 0, W, H); bc.save(); fn(bc); bc.restore();
+  ctx.save(); ctx.filter = `blur(${px}px)`; ctx.drawImage(b, 0, 0); ctx.filter = 'none'; ctx.restore();
+}

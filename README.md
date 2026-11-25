@@ -42,6 +42,18 @@ A small "WHAT IF, THOUGH?" watermark sits bottom-left.
 
 The retired experiments are kept for reference: `style2.js` (dark), `style4.js` (cartoon people and kinetic captions), and the shorts in `archive/`.
 
+## FX engine (v5)
+
+`engine/fx.js` and `engine/data/land.js` (Natural Earth 1:110m coastlines, public domain).
+
+- **`globe()`:** an orthographic Earth with the real continents clipped properly at the horizon, plus per-pixel biomes (forest, desert, ice), animated noise clouds, a day/night terminator, city lights on the night side, a specular ocean glint and an atmosphere halo.
+- **`moonFx()`:** a shaded Moon with maria, rimmed craters, and an optional `crack` glow for break-up.
+- **Destruction:** `waterWall()` (a wall of water with foam and spray), `tower()` (topple and crumble), `dustBurst()`, `plume()` (a billowing smoke or ash column), `debrisBurst()` (ballistic chunks), `embers()`, `fireball()`, `shockwave()` and `ship()`.
+- **Noise:** `noise3()` and `fbm()` (improved Perlin), for anything organic.
+- **Camera and post:** `dof(px, fn)` blurs background layers for depth of field. `post()` runs at the end of every frame and adds bloom, contrast and saturation grading, and a vignette.
+- **Renderer:** set `SHORT.fps = 60` and `SHORT.motionSamples = 2` for 60fps with motion blur. Frames render in parallel on several browser pages and are joined at the end. A 48-second short takes about 9 minutes on 4 cores.
+- **Test card:** `shorts/fx-test.js` exercises the whole kit.
+
 ## Plot-hole check (required before animating)
 
 Every script starts with a comment block listing the obvious objections ("wouldn't they just leave?", "wouldn't autopilot handle it?") and how the short deals with each. Where an objection is a common one, answer it on screen with a "What doesn't break" beat, which makes the short more credible. If an objection breaks the premise, change the premise. For example, the everyone-in-one-city short was pulled because the math says people could walk out of LA within hours.
