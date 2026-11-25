@@ -30,7 +30,7 @@ const _texCache = {};
 function texFor(name, R, cap = 820) { const n = Math.max(64, Math.min(cap, Math.round(2 * R))); const k = name + n;
   if (!_texCache[k]) _texCache[k] = makeCanvas(n, n); return _texCache[k]; }
 function globe(ctx, cx, cy, R, o = {}) {
-  const { lon0 = 0, lat0 = 15, sun = [-0.55, -0.35, 0.76], clouds = 0.55, t = 0, atmo = '120,180,255', lights = true, ice = true } = o;
+  const { lon0 = 0, lat0 = 15, sun = [-0.55, -0.35, 0.76], clouds = 0.55, t = 0, atmo = '120,180,255', lights = true, ice = true, toon = false, ink = true } = o;
   const l0 = lon0 * Math.PI / 180, p0 = lat0 * Math.PI / 180, sp0 = Math.sin(p0), cp0 = Math.cos(p0);
   // atmosphere halo
   const halo = ctx.createRadialGradient(cx, cy, R * 0.96, cx, cy, R * 1.22);
@@ -39,7 +39,8 @@ function globe(ctx, cx, cy, R, o = {}) {
   ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
   // ocean
   const oc = ctx.createRadialGradient(cx + sun[0] * R * 0.5, cy + sun[1] * R * 0.5, R * 0.1, cx, cy, R);
-  oc.addColorStop(0, '#2f7fd8'); oc.addColorStop(0.7, '#14508f'); oc.addColorStop(1, '#0b2f5c');
+  if (toon) { oc.addColorStop(0, '#3d9bf0'); oc.addColorStop(1, '#2878cf'); }
+  else { oc.addColorStop(0, '#2f7fd8'); oc.addColorStop(0.7, '#14508f'); oc.addColorStop(1, '#0b2f5c'); }
   ctx.fillStyle = oc; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R);
   // land
   const v3 = (lon, lat) => {                       // view-space unit vector
@@ -110,6 +111,20 @@ function globe(ctx, cx, cy, R, o = {}) {
     // city lights on the night side (noise-gated speckle)
     let city = 0;
     if (lights && onLand && night > 0.45) { const n = noise3(px * 60, py * 60, pz * 60); city = n > 0.5 ? (n - 0.5) * 5 : 0; }
+    if (toon) {                                   // flat illustrated palette + cel bands
+      if (onLand) { const al2 = Math.abs(lat) * 57.3, nn = fbm(px * 5, py * 5, pz * 5, 2);
+        const pol = ice && (lat * 57.3 < -60 || lat * 57.3 > 78 || (lat * 57.3 > 59 && (((lon * 57.3 + 180) % 360 + 360) % 360 - 180) > -75 && (((lon * 57.3 + 180) % 360 + 360) % 360 - 180) < -10));
+        const des = Math.abs(al2 - 24) < 9 && nn > -0.15;
+        [br, bg, bb] = pol ? [242, 247, 255] : des ? [232, 196, 122] : nn > 0.05 ? [52, 160, 78] : [74, 182, 92]; }
+      const band = light > 0.25 ? 1 : light > -0.05 ? 0.7 : 0.42;
+      const cl2 = cl > 0.55 ? 0.85 : 0;
+      let r0 = br, g0 = bg, b0 = bb, a0 = ba;
+      if (cl2) { r0 = 255; g0 = 255; b0 = 255; a0 = cl2; }
+      const sh = 1 - band;
+      if (sh > 0) { const k2 = sh; r0 = lerp(r0, 22, k2); g0 = lerp(g0, 30, k2); b0 = lerp(b0, 80, k2); a0 = Math.max(a0, sh); }
+      d[k] = r0; d[k + 1] = g0; d[k + 2] = b0; d[k + 3] = Math.min(255, a0 * 255);
+      continue;
+    }
     // composite: biome (lit) -> clouds -> night darkening -> city lights
     const lit = 0.35 + 0.65 * day;
     let r0 = br * lit, g0 = bg * lit, b0 = bb * lit, a0 = ba;
@@ -132,6 +147,7 @@ function globe(ctx, cx, cy, R, o = {}) {
   rim.addColorStop(0, `rgba(${atmo},0)`); rim.addColorStop(1, `rgba(${atmo},0.45)`);
   ctx.fillStyle = rim; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R);
   ctx.restore();
+  if (toon && ink) { ctx.lineWidth = Math.max(5, R * 0.022); ctx.strokeStyle = '#1b1640'; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.stroke(); }
 }
 
 // Equirectangular land coverage map (built once from LAND): 0..1 per cell.
@@ -488,5 +504,112 @@ function hand(ctx, x, y, s, col = '#0b1020') {
   roundRect(ctx, -170, -40, 340, 420, 120); ctx.fill();                                 // palm + wrist
   [[-150, -330, 70, 330], [-72, -400, 72, 400], [6, -380, 72, 380], [84, -320, 66, 320]].forEach(([fx, fy, fw, fh]) => { roundRect(ctx, fx, fy, fw, fh, 34); ctx.fill(); });
   ctx.save(); ctx.translate(150, 60); ctx.rotate(-0.75); roundRect(ctx, -40, -230, 78, 250, 38); ctx.fill(); ctx.restore();   // thumb
+  ctx.restore();
+}
+
+// ================================================================ v7: illustrated-3D kit (original style, with depth)
+const INK = '#1b1640';
+
+// Cel-shaded stylized Moon with ink outline.
+function moonToon(ctx, x, y, r, o = {}) {
+  const { sun = [-0.6, -0.35, 0.72], crack = 0, t = 0 } = o;
+  ctx.save();
+  ctx.fillStyle = '#e4e7ef'; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.clip();
+  const cr = rng(12);
+  for (let i = 0; i < 14; i++) { const a = cr() * 6.283, d = Math.sqrt(cr()) * r * 0.85, s2 = r * (0.06 + cr() * 0.14);
+    ctx.fillStyle = '#c3c8d4'; ctx.beginPath(); ctx.arc(x + Math.cos(a) * d, y + Math.sin(a) * d, s2, 0, 6.283); ctx.fill();
+    ctx.fillStyle = '#f4f6fa'; ctx.beginPath(); ctx.arc(x + Math.cos(a) * d - s2 * 0.2, y + Math.sin(a) * d - s2 * 0.2, s2 * 0.55, 0, 6.283); ctx.fill(); }
+  ctx.fillStyle = '#b8bfcc'; ctx.beginPath(); ctx.ellipse(x - r * 0.25, y + r * 0.1, r * 0.35, r * 0.25, 0.4, 0, 6.283); ctx.fill();
+  // cel shadow: the lit side faces the Sun
+  ctx.fillStyle = 'rgba(40,44,90,0.55)'; ctx.beginPath(); ctx.arc(x - sun[0] * r * 0.55, y - sun[1] * r * 0.55, r * 1.05, 0, 6.283); ctx.fill();
+  if (crack > 0) { ctx.strokeStyle = `rgba(255,120,40,${Math.min(1, crack)})`; ctx.lineWidth = r * 0.05; ctx.lineCap = 'round';
+    const rr = rng(4); for (let i = 0; i < 5; i++) { let px = x + (rr() - 0.5) * r, py = y - r; ctx.beginPath(); ctx.moveTo(px, py);
+      for (let k = 0; k < 6; k++) { px += (rr() - 0.5) * r * 0.5; py += r * 0.35; ctx.lineTo(px, py); } ctx.stroke(); } }
+  ctx.restore();
+  ctx.lineWidth = Math.max(4, r * 0.04); ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.stroke();
+  ctx.restore();
+}
+
+// A 3D building block: lit front, shaded side, roof, windows, ink edges. fall = topple angle 0..1,
+// crumble = break into drifting floors 0..1. depth gives the 3D side face.
+function block3d(ctx, t, x, base, w, h, o = {}) {
+  const { col = '#5c6fa6', depth = 60, fall = 0, dir = 1, crumble = 0, seed = 1, lit = 'rgba(255,230,160,0.95)', dark = 'rgba(30,36,70,0.85)' } = o;
+  const r = rng(seed), dx = depth * 0.7, dy = -depth * 0.45;
+  const front = col, side = shadeHex(col, -0.32), roof = shadeHex(col, 0.22);
+  ctx.save();
+  const pivotX = dir > 0 ? x + w + dx : x;
+  ctx.translate(pivotX, base); ctx.rotate(dir * fall * fall * 1.4); ctx.translate(-pivotX, -base);
+  const floors = Math.max(4, Math.round(h / 70)), fh = h / floors;
+  for (let f = 0; f < floors; f++) {
+    const y0 = base - fh * (f + 1);
+    const ox = crumble * (r() - 0.5) * 220 * (f / floors), oy = crumble * crumble * 300 * (f / floors), rot = crumble * (r() - 0.5) * 0.7 * (f / floors);
+    ctx.save(); ctx.translate(x + w / 2 + ox, y0 + fh / 2 + oy); ctx.rotate(rot); ctx.translate(-(x + w / 2), -(y0 + fh / 2));
+    ctx.fillStyle = front; ctx.fillRect(x, y0, w, fh + 0.5);
+    ctx.fillStyle = side; ctx.beginPath(); ctx.moveTo(x + w, y0); ctx.lineTo(x + w + dx, y0 + dy); ctx.lineTo(x + w + dx, y0 + fh + dy); ctx.lineTo(x + w, y0 + fh); ctx.closePath(); ctx.fill();
+    for (let wx = x + 14; wx < x + w - 24; wx += 30) { ctx.fillStyle = r() > 0.35 ? lit : dark; ctx.fillRect(wx, y0 + fh * 0.25, 16, fh * 0.45); }
+    ctx.fillStyle = 'rgba(255,230,160,0.55)';
+    for (let k = 0; k < 2; k++) { const sx = x + w + dx * (0.3 + k * 0.4); ctx.beginPath(); ctx.moveTo(sx, y0 + fh * 0.25 + dy * (0.3 + k * 0.4)); ctx.lineTo(sx + 10, y0 + fh * 0.25 + dy * (0.3 + k * 0.4) - 6); ctx.lineTo(sx + 10, y0 + fh * 0.7 + dy * (0.3 + k * 0.4) - 6); ctx.lineTo(sx, y0 + fh * 0.7 + dy * (0.3 + k * 0.4)); ctx.fill(); }
+    if (f === floors - 1) { ctx.fillStyle = roof; ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x + dx, y0 + dy); ctx.lineTo(x + w + dx, y0 + dy); ctx.lineTo(x + w, y0); ctx.closePath(); ctx.fill(); }
+    ctx.restore();
+  }
+  if (crumble < 0.05) { ctx.strokeStyle = INK; ctx.lineWidth = 3; ctx.beginPath();
+    ctx.moveTo(x, base); ctx.lineTo(x, base - h); ctx.lineTo(x + dx, base - h + dy); ctx.lineTo(x + w + dx, base - h + dy); ctx.lineTo(x + w + dx, base + dy); ctx.lineTo(x + w, base);
+    ctx.moveTo(x + w, base); ctx.lineTo(x + w, base - h); ctx.lineTo(x, base - h); ctx.moveTo(x + w, base - h); ctx.lineTo(x + w + dx, base - h + dy); ctx.stroke(); }
+  ctx.restore();
+}
+
+// Illustrated wall of water: flat bands, scalloped white foam crest, curl, ink edge.
+function toonWave(ctx, t, front, ground, height, seed = 4) {
+  const top = ground - height;
+  const crestY = x => top + Math.sin(x * 0.012 + t * 2.2) * 18 + fbm(x * 0.004, t * 0.5, seed, 2) * 60;
+  ctx.save();
+  ctx.beginPath(); ctx.moveTo(-80, ground + 600); ctx.lineTo(-80, crestY(-80));
+  for (let x = -80; x <= front; x += 14) ctx.lineTo(x, crestY(x));
+  ctx.quadraticCurveTo(front + height * 0.38, top - 50, front + height * 0.2, top + height * 0.32);
+  ctx.quadraticCurveTo(front + height * 0.04, ground - height * 0.2, front + 50, ground);
+  ctx.lineTo(front + 50, ground + 600); ctx.closePath();
+  const g = ctx.createLinearGradient(0, top, 0, ground); g.addColorStop(0, '#5ec2ff'); g.addColorStop(0.35, '#2f8ee0'); g.addColorStop(1, '#1d5fae');
+  ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+  ctx.clip();
+  ctx.strokeStyle = 'rgba(255,255,255,0.28)'; ctx.lineWidth = 10;                 // flow bands
+  for (let k = 1; k < 6; k++) { ctx.beginPath(); for (let x = -80; x <= front + 40; x += 20) { const y = crestY(x) + k * height * 0.15 + Math.sin(x * 0.02 - t * 3 + k) * 10; x === -80 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); }
+  ctx.restore();
+  ctx.fillStyle = '#ffffff'; ctx.strokeStyle = INK; ctx.lineWidth = 4;              // scalloped foam
+  const r = rng(seed);
+  for (let x = -60; x <= front + 30; x += 46) { const rr = 26 + r() * 22, y = crestY(x) - 6 + Math.sin(t * 6 + x) * 4;
+    ctx.beginPath(); ctx.arc(x, y, rr, Math.PI, 0); ctx.fill(); }
+  for (let i = 0; i < 26; i++) {                                                      // spray blobs off the curl
+    const ph = (t * 0.9 + r()) % 1, a = -1.3 + r() * 0.9, v = 500 + r() * 500;
+    const x = front + height * 0.2 + Math.cos(a) * v * ph, y = top + Math.sin(a) * v * ph + 900 * ph * ph;
+    ctx.globalAlpha = 1 - ph; ctx.beginPath(); ctx.arc(x, y, 8 + r() * 14, 0, 6.283); ctx.fill(); }
+  ctx.globalAlpha = 1;
+}
+
+// Illustrated eruption column: two-tone puffs with ink rim (stylized, not photographic).
+function toonPlume(ctx, t, x, y, o = {}) {
+  const { height = 900, width = 260, grow = 1, seed = 1, light = '#9a8f94', dark = '#5e5560' } = o;
+  const r = rng(seed), puffs = [];
+  for (let i = 0; i < 46; i++) { const life = (r() + t * 0.06) % 1, h = life * height * grow;
+    puffs.push([x + fbm(i * 0.3, t * 0.12, seed, 2) * width + (r() - 0.5) * width * (0.3 + life), y - h, (50 + r() * 50) * (0.5 + life * 1.5) * (width / 260)]); }
+  puffs.sort((a, b) => a[1] - b[1]);
+  ctx.save(); ctx.lineWidth = 4; ctx.strokeStyle = INK;
+  for (const [px, py, pr] of puffs) { ctx.fillStyle = dark; ctx.beginPath(); ctx.arc(px, py, pr, 0, 6.283); ctx.fill(); ctx.stroke(); }
+  for (const [px, py, pr] of puffs) { ctx.fillStyle = light; ctx.beginPath(); ctx.arc(px - pr * 0.18, py - pr * 0.22, pr * 0.72, 0, 6.283); ctx.fill(); }
+  ctx.restore();
+}
+
+// 3D-shaded volcano cone with glowing lava channels.
+function volcano3d(ctx, t, cx, base, w, h, heat = 1) {
+  ctx.save();
+  ctx.fillStyle = '#6b4a3c'; ctx.beginPath(); ctx.moveTo(cx - w / 2, base); ctx.lineTo(cx - w * 0.1, base - h); ctx.lineTo(cx + w * 0.1, base - h); ctx.lineTo(cx + w / 2, base); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#4a3129'; ctx.beginPath(); ctx.moveTo(cx + w * 0.02, base - h); ctx.lineTo(cx + w * 0.1, base - h); ctx.lineTo(cx + w / 2, base); ctx.lineTo(cx + w * 0.08, base); ctx.closePath(); ctx.fill();
+  ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.beginPath(); ctx.moveTo(cx - w / 2, base); ctx.lineTo(cx - w * 0.1, base - h); ctx.lineTo(cx + w * 0.1, base - h); ctx.lineTo(cx + w / 2, base); ctx.stroke();
+  if (heat > 0) {
+    ctx.strokeStyle = `rgba(255,${120 + Math.sin(t * 8) * 30},40,${heat})`; ctx.lineWidth = 14; ctx.lineCap = 'round';
+    for (const [dx2, k] of [[-0.06, -0.35], [0.03, 0.15], [0.07, 0.4]]) { ctx.beginPath(); ctx.moveTo(cx + w * dx2, base - h);
+      ctx.quadraticCurveTo(cx + w * (dx2 + k * 0.2), base - h * 0.5, cx + w * (dx2 + k * 0.45), base - h * 0.05 * heat); ctx.stroke(); }
+    glow(ctx, cx, base - h, w * 0.35, '255,130,40', 0.8 * heat);
+  }
   ctx.restore();
 }

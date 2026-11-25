@@ -64,6 +64,21 @@ The retired experiments are kept for reference: `style2.js` (dark), `style4.js` 
 
 **Hook formula:** open with the viewer's own experience ("Here's what your life would look like", "Hold out your hand"). Give one relatable fact before the planetary escalation (the ground under you already rises 30 cm a day), and keep a counter or a number on screen at every big beat.
 
+## v7: illustrated 3D (the current look) and cinematic sound
+
+**Visual:** the original illustrated style (clean shapes, bold colour, ink outlines, Blip in the opening) with real 3D depth, from `fx.js`:
+- `globe(..., { toon: true })`: a cel-shaded stylized Earth with the real continents and an ink outline.
+- `moonToon()`: a cel-shaded Moon.
+- `block3d()`: 3D buildings with a lit front, shaded side and roof, which topple and crumble.
+- `toonWave()`: an illustrated wall of water with a foam crest.
+- `toonPlume()` and `volcano3d()`: a stylized eruption column and a shaded volcano.
+
+Don't use lens flares, colour fringing, HUD counters, hand or "your life" gimmicks, or photoreal textures in the house style.
+
+**Sound:** no tonal blips (pop, boing, sparkle, ding, zap, tick, huh, riser). Use the cinematic palette in `audio.py`: `impact`, `quake`, `roar`, `crumble`, `drawback`, `swell`, `air`, plus `rumble` and `boom`. For music, use `mode: 'cinematic'`: slow string-like pads, low drones and sparse deep drums.
+
+**Story:** lead with the immediate, planet-wide destruction the premise causes, with human cost in sourced numbers.
+
 ## Plot-hole check (required before animating)
 
 Every script starts with a comment block listing the obvious objections ("wouldn't they just leave?", "wouldn't autopilot handle it?") and how the short deals with each. Where an objection is a common one, answer it on screen with a "What doesn't break" beat, which makes the short more credible. If an objection breaks the premise, change the premise. For example, the everyone-in-one-city short was pulled because the math says people could walk out of LA within hours.

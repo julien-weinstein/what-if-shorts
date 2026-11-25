@@ -1,322 +1,295 @@
-// What if the Moon were 10 times closer?   (v4: lived experience first, then the planetary arc)
+// What if the Moon were suddenly 10 times closer?   (v5: original illustrated style with 3D depth;
+// immediate planet-wide destruction; cinematic sound, no synth blips)
 //
-// ARC: your sky -> your hand -> your night -> the ground under you -> the first tide (death toll)
-//      -> it keeps coming -> volcanic winter (famine) -> TURN: the Moon is falling -> it's torn apart
-//      -> final image: rings, no Moon.
+// ARC: the Moon arrives -> its pull grabs the oceans -> the sea drains from the coast -> it returns as a
+//      tide hundreds of metres high (death toll) -> the crust tears, volcanoes erupt -> ash and famine
+//      -> the Moon is falling -> it's torn apart and bombards Earth -> rings, no Moon.
 //
 // NUMBERS (checked):
-//  - 10x closer = 38,440 km. Angular size ≈ 6.2° vs 0.52° today. At arm's length a pinky is ~1° wide
-//    (today's Moon hides behind the pinky nail) and three fingers ≈ 5-6°.
-//  - ~100x the disc area -> full-moon light ~100x brighter (~0.25 lux -> ~25 lux): enough to read by.
-//  - Solid-Earth tide today: the ground rises and falls ~20-40 cm, about twice a day (Earth tide
-//    literature). Tidal force ∝ 1/d³ -> 1,000x -> hundreds of metres (elastic scaling; real rock would
-//    fracture first). Hedged: "hundreds of meters", "rock can't bend that far".
-//  - Ocean tides of hundreds of metres. ~1.9 billion people live within 100 km of the coast and below
-//    100 m elevation (Kummu et al. 2016) -> "nearly 2 billion people live in its path; most could not escape".
-//  - Orbit ≈21 h < 24 h day -> inside synchronous orbit -> tidal drag spirals it inward (as for Phobos).
-//    Scaling today's 3.8 cm/yr recession (∝ a^-5.5) -> ~12 km/yr, accelerating -> roughly centuries.
-//  - At the fluid Roche limit (~18,000 km) tides ≈ (384,400/18,000)³ ≈ 9,700x today: kilometre-scale.
-//  - Volcanic winter precedent: Tambora 1815 -> 1816 "Year Without a Summer". Famine hedged as "could".
-// PLOT HOLES: the premise is the placement; "most could not escape" (not "all"); timescales hedged.
+//  - Tidal force ∝ 1/d³: 10x closer -> 1,000x. Lunar equilibrium tide today is a few tenths of a metre
+//    -> tides of hundreds of metres. Low tide is correspondingly deep: the sea retreats far offshore.
+//  - ~1.9 billion people live within 100 km of a coast and below 100 m elevation (Kummu et al. 2016).
+//  - Solid-Earth tide today ~20-40 cm twice daily -> x1,000: crust strained far past breaking ->
+//    quakes and eruptions worldwide (Io comparison). Hedged: "quakes rip through", "erupt worldwide".
+//  - Volcanic winter precedent: Tambora 1815 -> 1816. Famine hedged "could".
+//  - Orbit ≈21 h < 24 h day -> inside synchronous orbit -> tidal drag pulls it inward (like Phobos),
+//    tides growing as it falls; at the Roche limit it's torn apart into a ring; debris falls on Earth.
 const SHORT = {
-  title: 'What if the Moon were 10 times closer?',
-  duration: 56,
+  title: 'What if the Moon were suddenly 10 times closer?',
+  duration: 50,
   fps: 60,
   motionSamples: 1,
   sfx: [
-    [0.0, 'rumble:3'], [0.6, 'riser'], [0.7, 'boing'], [1.6, 'braam'], [2.6, 'sparkle'],
-    [5.0, 'whoosh'], [6.4, 'pop'], [8.0, 'braam'], [8.2, 'sparkle'],
-    [10.5, 'whoosh'], [11.4, 'sparkle'], [12.8, 'sparkle'],
-    [15.0, 'whoosh'], [15.6, 'tick:2.6'], [18.6, 'boom'], [18.7, 'rumble:2.4'], [19.4, 'crash'],
-    [21.0, 'whoosh'], [21.2, 'braam'], [21.4, 'bigwave'], [22.0, 'rumble:6.5'], [22.4, 'crash'], [23.6, 'crash'], [24.6, 'bigwave'], [25.4, 'crash'],
-    [28.5, 'whoosh'], [28.9, 'bigwave'], [30.4, 'bigwave'],
-    [32.0, 'whoosh'], [32.3, 'rumble:6'], [33.0, 'boom'], [33.6, 'crash'], [34.8, 'boom'], [36.4, 'dim'],
-    [39.0, 'whoosh'], [39.3, 'record'], [40.2, 'braam'], [41.6, 'tick:4'], [44.6, 'riser'],
-    [46.0, 'whoosh'], [46.2, 'rumble:3'], [46.6, 'boom'], [46.7, 'braam'], [48.4, 'dive'], [49.0, 'boom'], [49.8, 'boom'], [50.6, 'boom'],
-    [53.0, 'whoosh'], [53.6, 'sparkle'], [55.0, 'ding'],
+    [0.0, 'swell:2'], [1.8, 'impact'],
+    [5.0, 'air'], [5.4, 'quake:4.5'], [7.0, 'roar:3'],
+    [10.0, 'air'], [10.3, 'drawback:4.6'],
+    [15.0, 'air'], [15.3, 'impact'], [15.5, 'roar:7.5'], [17.6, 'crumble'], [19.2, 'crumble'], [21.0, 'crumble'],
+    [23.0, 'air'], [23.2, 'quake:6'], [24.6, 'impact'], [26.4, 'impact'], [27.0, 'crumble'],
+    [29.0, 'air'], [29.2, 'rumble:4'],
+    [33.0, 'air'], [33.4, 'swell:1.6'], [34.2, 'impact'],
+    [39.0, 'air'], [39.2, 'swell:2.4'], [41.6, 'impact'], [42.6, 'boom'], [43.4, 'impact'], [44.2, 'boom'],
+    [46.0, 'air'], [46.4, 'swell:3'],
   ],
-  music: { bpm: 92, mode: 'dark', until: 55.6, duckAt: [[39.2, 40.2], [46.4, 47.4]] },
+  music: { bpm: 70, mode: 'cinematic', until: 49.6, duckAt: [] },
 };
 
 const SUN = [-0.6, -0.35, 0.72];
-const HITS = [1.6, 8.0, 18.6, 21.2, 22.4, 24.6, 33.0, 46.6];
 
 function render(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  sequence(ctx, t, [[0, sHook], [5, sHand], [10.5, sNight], [15, sGround], [21, sFlood], [28.5, sAgain], [32, sAsh], [39, sFalling], [46, sBreak], [53, sRings]]);
+  sequence(ctx, t, [[0, sArrive], [5, sPull], [10, sDrain], [15, sWave], [23, sQuake], [29, sAsh], [33, sFalling], [39, sBreak], [46, sRings]]);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850);
-  post(ctx, { chromaPx: 7 * hitAmount(t, HITS, 14) });
+  post(ctx, { bloom: 0.15 });
 }
 
-// ---------------------------------------------------------------- shared set pieces
-function bayCity(ctx, t, o = {}) {
-  const { moonR = 360, moonY = 700, sky = ['#16264f', '#3c5a99', '#7d97cf'], flare = 0.6 } = o;
-  ctx.fillStyle = grad(ctx, sky); ctx.fillRect(0, 0, W, H);
-  stars(ctx, t, 0.25);
-  godRays(ctx, t, W / 2, moonY, { alpha: 0.06, len: 1600 });
-  glow(ctx, W / 2, moonY, moonR * 2.0, '205,220,255', 0.32);
-  moonFx(ctx, W / 2, moonY, moonR, { sun: [0.05, -0.08, 0.99] });
-  dof(ctx, 4, c => { for (let i = 0; i < 10; i++) tower(c, t, -30 + i * 115, 1330, 95, 260 + (i * 61 % 190), { col: '#3a4d7c', win: 'rgba(255,226,170,0.75)', seed: 70 + i }); });
-  [[60, 150, 520], [240, 170, 700], [440, 140, 460], [600, 190, 820], [820, 160, 600]].forEach(([x, w, h], i) =>
-    tower(ctx, t, x, 1420, w, h, { col: ['#2e3d66', '#34406e', '#2b3a60', '#3a4672', '#2f3c68'][i], win: 'rgba(255,226,170,0.9)', seed: 80 + i }));
-  lensFlare(ctx, W / 2 + moonR * 0.55, moonY - moonR * 0.55, flare);
-}
-function bay(ctx, t, level = 1420) {
-  const g = ctx.createLinearGradient(0, level, 0, H); g.addColorStop(0, '#2c4a86'); g.addColorStop(1, '#0f1d3d');
-  ctx.fillStyle = g; ctx.fillRect(-60, level, W + 120, H);
-  const col = ctx.createLinearGradient(W / 2 - 180, 0, W / 2 + 180, 0);
-  col.addColorStop(0, 'rgba(210,225,255,0)'); col.addColorStop(0.5, 'rgba(210,225,255,0.35)'); col.addColorStop(1, 'rgba(210,225,255,0)');
-  ctx.fillStyle = col; ctx.fillRect(W / 2 - 180, level, 360, H - level);
-  const r = rng(5);
-  for (let i = 0; i < 90; i++) { const y = level + 10 + r() * (H - level), spread = 40 + (y - level) * 0.35, x = W / 2 + (r() - 0.5) * spread * 2;
-    const w = 6 + r() * 26, a = 0.25 + 0.6 * Math.abs(Math.sin(t * (1 + r() * 2) + i));
-    ctx.fillStyle = `rgba(235,242,255,${a})`; ctx.beginPath(); ctx.ellipse(x, y, w, 1.6, 0, 0, 6.283); ctx.fill(); }
-}
+const toonGlobe = (ctx, x, y, R, t, extra = {}) => globe(ctx, x, y, R, { toon: true, t, sun: SUN, lights: false, clouds: 0.75, ...extra });
 
-// ---------------------------------------------------------------- 1. your sky
-function sHook(ctx, t) {
-  punch(ctx, t, [1.6], 0.06);
-  const rise = easeOut(prog(t, 0, 2.4));
-  drift(ctx, t, 0, 5, 1.0, 1.05, W / 2, 900);
-  bayCity(ctx, t, { moonY: lerp(1450, 720, rise), flare: rise });
-  bay(ctx, t);
+// ---------------------------------------------------------------- 1. the Moon arrives
+function sArrive(ctx, t) {
+  space(ctx, t);
+  drift(ctx, t, 0, 5, 1.0, 1.06, W / 2, 1200);
+  toonGlobe(ctx, W / 2 - 90, 1300, 340, t, { lon0: -30 + t * 4, lat0: 18 });
+  const k = easeInOut(prog(t, 0.4, 1.9));
+  moonToon(ctx, lerp(W - 40, W / 2 + 270, k), lerp(260, 800, k), lerp(22, 190, k), { sun: SUN });
+  shockwave(ctx, t, W / 2 + 270, 800, 1.8, { maxR: 520, dur: 1.0, col: '220,230,255', flat: 1 });
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  // Blip, the channel mascot, reacts to the moonrise (happy, then shocked when the giant Moon lands)
-  if (t < 4.9) {
-    const out = 1 - easeInOut(prog(t, 4.5, 4.9));
-    ctx.save(); ctx.globalAlpha = out;
-    glow(ctx, 880, 1650, 170, '255,210,63', 0.25);
-    shadowed(ctx, () => blip(ctx, t, 880, 1650, t > 1.6 ? 'shock' : 'happy', 0.8, 0.6), 30, 14, 'rgba(0,0,0,0.35)');
+  if (t < 4.9) { ctx.save(); ctx.globalAlpha = 1 - easeInOut(prog(t, 4.5, 4.9));
+    shadowed(ctx, () => blip(ctx, t, 890, 1700, t > 1.8 ? 'shock' : 'happy', 0.8, 0.5), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
+  say(ctx, t, ['What if the Moon were', 'suddenly 10× closer?'], 300, 0.3, { size: 88, out: 4.7, mark: { line: 1, from: 9, to: 20, color: '#ff6b5b' } });
+}
+
+// ---------------------------------------------------------------- 2. its pull grabs the oceans
+function sPull(ctx, t) {
+  space(ctx, t);
+  const [sx, sy] = shakeOffset(t, 5.4, 4.0, 10); ctx.translate(sx, sy);
+  drift(ctx, t, 5, 10, 1.0, 1.05, W / 2, 1050);
+  const cx = W / 2 - 40, cy = 1080, R = 340;
+  // the two tidal bulges: the oceans heave out past the planet's outline, toward and away from the Moon
+  const b = easeInOut(prog(t, 5.6, 8.6));
+  ctx.save(); ctx.translate(cx, cy);
+  const bg = ctx.createRadialGradient(0, 0, R * 0.9, 0, 0, R * (1 + 0.32 * b));
+  bg.addColorStop(0, 'rgba(70,160,245,0.95)'); bg.addColorStop(1, 'rgba(70,160,245,0.55)');
+  ctx.fillStyle = bg; ctx.beginPath(); ctx.ellipse(0, 0, R * (1 + 0.3 * b), R * (1 - 0.02 * b), 0, 0, 6.283); ctx.fill();
+  ctx.lineWidth = 6; ctx.strokeStyle = INK; ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 6; ctx.setLineDash([24, 16]); ctx.lineDashOffset = -t * 50;
+  ctx.beginPath(); ctx.ellipse(0, 0, R * (1 + 0.26 * b), R * (1 - 0.04 * b), 0, 0, 6.283); ctx.stroke(); ctx.setLineDash([]);
+  ctx.restore();
+  toonGlobe(ctx, cx, cy, R, t, { lon0: -20, lat0: 10 });
+  // seawater spilling over the continents on the Moon-facing edge
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
+  const sg = ctx.createLinearGradient(cx + R * 0.2, 0, cx + R, 0); sg.addColorStop(0, 'rgba(60,150,240,0)'); sg.addColorStop(1, `rgba(60,150,240,${0.7 * b})`);
+  ctx.fillStyle = sg; ctx.fillRect(cx, cy - R, R, 2 * R);
+  const sg2 = ctx.createLinearGradient(cx - R * 0.2, 0, cx - R, 0); sg2.addColorStop(0, 'rgba(60,150,240,0)'); sg2.addColorStop(1, `rgba(60,150,240,${0.6 * b})`);
+  ctx.fillStyle = sg2; ctx.fillRect(cx - R, cy - R, R, 2 * R);
+  ctx.restore();
+  ctx.lineWidth = 8; ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.stroke();
+  moonToon(ctx, cx + 370, cy - 480, 90, { sun: SUN });
+  // pull arrows
+  ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 8; ctx.lineCap = 'round';
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['Its pull on our oceans:', '1,000× stronger'], 300, 5.3, { size: 88, out: 9.6, mark: { line: 1, from: 0, to: 15, color: '#ff6b5b' } });
+  say(ctx, t, ['The seas heap up into a bulge', 'hundreds of meters high'], 1600, 7.0, { size: 56, weight: 800, out: 9.6 });
+}
+
+// a coastal city drawn as 3D blocks, reused by the drain and wave scenes
+function city3d(ctx, t, ground, o = {}) {
+  const { wave = -1e9 } = o;
+  const back = [[40, 120, 430], [190, 110, 520], [330, 130, 380], [500, 120, 600], [650, 140, 450], [820, 120, 540]];
+  dof(ctx, 3, c => back.forEach(([x, w, h], i) => block3d(c, t, x, ground - 120, w, h, { col: '#7f93c7', depth: 40, seed: 30 + i })));
+  const front = [[20, 170, 640, 1], [250, 190, 820, 1], [500, 160, 560, -1], [700, 200, 900, 1]];
+  front.forEach(([x, w, h, dir], i) => {
+    const hit = prog(wave, x - 60, x + 420);
+    block3d(ctx, t, x, ground, w, h, { col: ['#5468a8', '#6a5aa0', '#4d7aa6', '#6a6496'][i], depth: 70, fall: i % 2 ? 0 : hit, crumble: i % 2 ? hit : hit * 0.25, dir, seed: i + 1 });
+  });
+}
+
+// ---------------------------------------------------------------- 3. the sea drains away
+function sDrain(ctx, t) {
+  ctx.fillStyle = grad(ctx, ['#5aa8ff', '#9fd0ff', '#ffe2b8']); ctx.fillRect(0, 0, W, H);
+  drift(ctx, t, 10, 15, 1.0, 1.05, W / 2, 1300);
+  moonToon(ctx, 830, 380, 210, { sun: [0.3, -0.4, 0.86] });
+  const ground = 1180;
+  city3d(ctx, t, ground);
+  ctx.fillStyle = '#5b6b80'; ctx.fillRect(-60, ground, W + 120, 40);                  // seawall
+  ctx.lineWidth = 4; ctx.strokeStyle = INK; ctx.strokeRect(-60, ground, W + 120, 40);
+  // exposed seabed
+  ctx.fillStyle = grad(ctx, ['#d9b77f', '#b8925a'], 0, ground + 40, 0, H); ctx.fillRect(-60, ground + 40, W + 120, H);
+  const rr = rng(6); ctx.fillStyle = '#8f7350';
+  for (let i = 0; i < 26; i++) { ctx.beginPath(); ctx.ellipse(rr() * W, ground + 80 + rr() * 700, 18 + rr() * 30, 8 + rr() * 10, 0, 0, 6.283); ctx.fill(); }
+  // the water line retreating toward the horizon of the frame
+  const level = lerp(ground + 40, H + 60, easeInOut(prog(t, 10.4, 14.0)));
+  ctx.fillStyle = grad(ctx, ['#3d9bf0', '#2068bf'], 0, level, 0, H); ctx.fillRect(-60, level, W + 120, H);
+  ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 8; ctx.beginPath(); for (let x = -60; x <= W + 60; x += 20) ctx.lineTo(x, level + Math.sin(x * 0.03 + t * 3) * 8); ctx.stroke();
+  // stranded boats tilting onto the sand
+  const strand = easeOut(prog(t, 11.6, 13.2));
+  [[230, ground + 380, 0.55, -0.25], [700, ground + 520, 0.7, 0.3]].forEach(([x, y, s2, rot]) => {
+    ctx.save(); ctx.translate(x, Math.min(y, level - 20)); ctx.rotate(rot * strand); ship(ctx, 0, 0, s2, 0); ctx.restore(); });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['First, the sea', 'drains away.'], 300, 10.3, { size: 92, out: 14.6 });
+  say(ctx, t, ['Harbors empty. Ships are left', 'stranded on the seabed.'], 1620, 11.8, { size: 54, weight: 800, out: 14.6 });
+}
+
+// ---------------------------------------------------------------- 4. it comes back
+function sWave(ctx, t) {
+  const [sx, sy] = shakeOffset(t, 15.4, 7.0, 14); ctx.translate(sx, sy);
+  ctx.fillStyle = grad(ctx, ['#4a7fd1', '#8fbaf0', '#ffd6a8']); ctx.fillRect(0, 0, W, H);
+  drift(ctx, t, 15, 23, 1.0, 1.07, W / 2, 1300);
+  moonToon(ctx, 830, 360, 210, { sun: [0.3, -0.4, 0.86] });
+  const ground = 1520, front = lerp(-460, 1020, easeInOut(prog(t, 15.4, 22.8)));
+  city3d(ctx, t, ground, { wave: front });
+  ctx.fillStyle = '#4a5568'; ctx.fillRect(-60, ground, W + 120, H);
+  [[20, 640], [250, 820], [500, 560], [700, 900]].forEach(([x], i) => {
+    const at = 15.4 + 7.4 * ((x + 400) / 1480);
+    if (t > at) dustToon(ctx, t, x + 90, ground - 30, at, i);
+  });
+  toonWave(ctx, t, front, ground + 30, 520, 4);
+  if (front > 60) { ctx.save(); ctx.translate(front - 180, ground - 520 + Math.sin(t * 2) * 16); ctx.rotate(-0.2 + Math.sin(t * 1.4) * 0.08); ship(ctx, 0, 0, 0.85, 0); ctx.restore(); }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['Then it comes back.'], 300, 15.3, { size: 92, out: 18.8 });
+  say(ctx, t, ['Hundreds of', 'meters high.'], 420, 16.8, { size: 92, out: 18.8, mark: { line: 0, from: 0, to: 11, color: '#ff6b5b' } });
+  say(ctx, t, ['Nearly 2 billion people', 'live in its path.'], 300, 19.2, { size: 84, out: 22.7 });
+  say(ctx, t, ['Most could not escape.'], 520, 20.8, { size: 72, weight: 900, out: 22.7, mark: { line: 0, from: 0, to: 22, color: '#ff6b5b' } });
+}
+function dustToon(ctx, t, x, y, at, seed) {
+  const k = prog(t, at, at + 3.0); if (k <= 0 || k >= 1) return;
+  const r = rng(seed + 50);
+  ctx.save(); ctx.globalAlpha = 1 - k; ctx.lineWidth = 3; ctx.strokeStyle = INK;
+  for (let i = 0; i < 9; i++) { const a = -Math.PI + r() * Math.PI, d = easeOut(k) * (120 + r() * 160), rr = (40 + r() * 40) * (0.6 + k);
+    const px = x + Math.cos(a) * d, py = y + Math.sin(a) * d * 0.5 - k * 60;
+    ctx.fillStyle = '#b9b3ad'; ctx.beginPath(); ctx.arc(px, py, rr, 0, 6.283); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#d8d3cd'; ctx.beginPath(); ctx.arc(px - rr * 0.2, py - rr * 0.25, rr * 0.6, 0, 6.283); ctx.fill(); }
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- 5. the crust tears
+function sQuake(ctx, t) {
+  const [sx, sy] = shakeOffset(t, 23.2, 5.6, 22); ctx.translate(sx + Math.sin(t * 38) * 3, sy);
+  const erupt = prog(t, 26.2, 27.2);
+  ctx.fillStyle = grad(ctx, [mixHex('#5a8fe0', '#7a3a3a', erupt), mixHex('#a9cdf5', '#e0773a', erupt)]); ctx.fillRect(0, 0, W, H);
+  drift(ctx, t, 23, 29, 1.0, 1.05, W / 2, 1300);
+  if (erupt > 0) toonPlume(ctx, t, 560, 1000, { height: 1100, width: 300, grow: 0.25 + erupt * 0.75, seed: 6 });
+  volcano3d(ctx, t, 560, 1240, 760, 300, erupt);
+  if (erupt > 0) debrisPhys(ctx, t, 560, 950, 26.4, { n: 30, speed: 1100, seed: 21, col: '#ff7a2a', ground: 1240, size: 16 });
+  // town in the foreground with a fissure opening under it
+  const open = easeInOut(prog(t, 24.4, 25.6));
+  [[60, 150, 420, 24.8], [260, 170, 520, 25.2], [700, 160, 460, 24.6], [880, 140, 380, 25.4]].forEach(([x, w, h, at], i) => {
+    block3d(ctx, t, x, 1480, w, h, { col: ['#5468a8', '#6a5aa0', '#4d7aa6', '#6a6496'][i], depth: 60, crumble: easeInOut(prog(t, at, at + 1.6)), seed: 60 + i });
+    if (t > at) dustToon(ctx, t, x + w / 2, 1460, at, i + 20);
+  });
+  ctx.fillStyle = '#6d7f5a'; ctx.fillRect(-60, 1480, W + 120, H);
+  ctx.fillStyle = '#56653f'; ctx.fillRect(-60, 1480, W + 120, 22);
+  if (open > 0) {
+    const pts = []; for (let i = 0; i <= 30; i++) pts.push([lerp(-60, W + 60, i / 30), 1660 + Math.sin(i * 0.9) * 22 + noise3(i * 0.7, 3, 1) * 26]);
+    const wd = i => open * (30 + Math.abs(noise3(i * 0.8, 1, 2)) * 70);
+    ctx.save(); ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y - wd(i)) : ctx.moveTo(x, y - wd(i)));
+    for (let i = pts.length - 1; i >= 0; i--) ctx.lineTo(pts[i][0], pts[i][1] + wd(i)); ctx.closePath();
+    ctx.fillStyle = '#2a1a14'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke();
+    ctx.clip(); ctx.fillStyle = '#4a2e22'; ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y - wd(i)) : ctx.moveTo(x, y - wd(i)));
+    for (let i = pts.length - 1; i >= 0; i--) ctx.lineTo(pts[i][0], pts[i][1] - wd(i) + 40 * open); ctx.closePath(); ctx.fill();   // 3D wall face
+    glow(ctx, W / 2, 1700, 600, '255,110,30', 0.5 * open);
     ctx.restore();
   }
-  say(ctx, t, ['What if the Moon', 'were 10× closer?'], 300, 0.3, { size: 96, out: 4.7 });
-  say(ctx, t, ["Here's what your life", 'would look like.'], 1640, 2.4, { size: 64, weight: 800, out: 4.7, mark: { line: 0, from: 7, to: 16, color: '#3a86ff' } });
-}
-
-// ---------------------------------------------------------------- 2. your hand
-function sHand(ctx, t) {
-  punch(ctx, t, [8.0], 0.07, W / 2, 900);
-  ctx.fillStyle = grad(ctx, ['#0d1838', '#22386e', '#4b67a6']); ctx.fillRect(0, 0, W, H);
-  stars(ctx, t, 0.6);
-  const big = easeOut(prog(t, 7.8, 8.6));
-  const mx = W / 2 + 44, my = 1215;
-  if (big < 1) { glow(ctx, W / 2 - 128, 1192, 60, '205,220,255', 0.5); moonFx(ctx, W / 2 - 128, 1192, 15, { sun: [0.05, -0.08, 0.99] }); }   // today's Moon, peeking behind the pinky tip
-  if (big > 0) { ctx.save(); ctx.globalAlpha = big; godRays(ctx, t, mx, my, { alpha: 0.07 }); glow(ctx, mx, my, 520, '205,220,255', 0.35);
-    moonFx(ctx, mx, my, lerp(15, 150, big), { sun: [0.05, -0.08, 0.99] }); ctx.restore(); lensFlare(ctx, mx + 100, my - 130, big * 0.8); }
-  hand(ctx, W / 2, 1560, 1.12);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['Hold out your hand.'], 300, 5.3, { size: 92, out: 10.2 });
-  say(ctx, t, ['Today, your pinky nail', 'hides the Moon.'], 1640, 6.4, { size: 60, weight: 800, out: 7.9 });
-  say(ctx, t, ['Now it would cover', 'three fingers.'], 1640, 8.2, { size: 72, weight: 900, out: 10.2, mark: { line: 1, from: 0, to: 13, color: '#3a86ff' } });
+  say(ctx, t, ['The ground', 'stretches too.'], 300, 23.3, { size: 92, out: 26.0 });
+  say(ctx, t, ['Quakes rip through', 'every continent'], 520, 24.6, { size: 70, weight: 900, out: 26.0 });
+  say(ctx, t, ['Volcanoes erupt', 'worldwide.'], 300, 26.4, { size: 92, out: 28.7, mark: { line: 0, from: 0, to: 15, color: '#ff6b5b' } });
 }
 
-// ---------------------------------------------------------------- 3. your night
-function sNight(ctx, t) {
-  drift(ctx, t, 10.5, 15, 1.0, 1.06, W / 2, 1300);
-  ctx.fillStyle = grad(ctx, ['#1f3a7a', '#5b80c8', '#a9c0ea']); ctx.fillRect(0, 0, W, H);
-  stars(ctx, t, 0.15);
-  godRays(ctx, t, 780, 520, { alpha: 0.08 });
-  glow(ctx, 780, 520, 600, '215,228,255', 0.45);
-  moonFx(ctx, 780, 520, 300, { sun: [0.05, -0.08, 0.99] });
-  lensFlare(ctx, 940, 380, 0.7);
-  dof(ctx, 3, c => { for (let i = 0; i < 8; i++) { c.fillStyle = '#2c3f70'; c.fillRect(i * 140 - 20, 1180 - (i * 47 % 160), 120, 600); } });
-  // street, lamp-free, lit by the Moon; long moon shadows
-  ctx.fillStyle = grad(ctx, ['#3d5488', '#24345c'], 0, 1500, 0, H); ctx.fillRect(0, 1480, W, H);
-  ctx.fillStyle = 'rgba(10,18,40,0.35)'; ctx.beginPath(); ctx.ellipse(360, 1760, 260, 26, -0.08, 0, 6.283); ctx.fill();
-  silhouette(ctx, 470, 1760, 560, { pose: 'read' });
-  silhouette(ctx, 860, 1720, 420, { pose: 'point', col: '#14203f' });
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['Nights bright enough', 'to read by.'], 300, 10.8, { size: 92, out: 14.7 });
-  say(ctx, t, ['~100× brighter than a full moon today'], 520, 12.4, { size: 50, weight: 800, out: 14.7 });
-}
-
-// ---------------------------------------------------------------- 4. the ground under you
-function sGround(ctx, t) {
-  const [sx, sy] = shakeOffset(t, 18.6, 2.6, 34);
-  ctx.translate(sx, sy);
-  punch(ctx, t, [18.6], 0.08, W / 2, 1300);
-  ctx.fillStyle = grad(ctx, ['#2a3f7c', '#6f8fcf', '#d6c2a6']); ctx.fillRect(0, 0, W, H);
-  glow(ctx, 840, 420, 460, '215,228,255', 0.4); moonFx(ctx, 840, 420, 200, { sun: [0.05, -0.08, 0.99] });
-  const small = t < 18.6 ? Math.sin((t - 15) * 2.4) * 14 : 0;                       // the gentle 30 cm breathing
-  const heave = t >= 18.6 ? easeOut(prog(t, 18.6, 20.4)) : 0;
-  const lift = small - heave * 420;
-  // strata
-  const top = 1350 + lift;
-  [['#7a5a3a', 0], ['#5e4430', 120], ['#47331f', 300], ['#2f2215', 520]].forEach(([c, d]) => { ctx.fillStyle = c; ctx.fillRect(-60, top + d, W + 120, H); });
-  ctx.fillStyle = '#4f7d3a'; ctx.fillRect(-60, top - 14, W + 120, 18);
-  if (heave > 0) {                                                                      // fractures
-    ctx.strokeStyle = 'rgba(255,140,60,0.9)'; ctx.lineWidth = 6; const r = rng(17);
-    for (let i = 0; i < 7; i++) { let x = r() * W, y = top + 20; ctx.beginPath(); ctx.moveTo(x, y);
-      for (let k = 0; k < 6; k++) { x += (r() - 0.5) * 120; y += 60 + r() * 60; ctx.lineTo(x, y); } ctx.globalAlpha = heave; ctx.stroke(); ctx.globalAlpha = 1; }
-    dustBurst(ctx, t, 300, top, 18.6, { size: 1.6, seed: 4, col: [150, 120, 95] });
-    dustBurst(ctx, t, 800, top, 18.8, { size: 1.4, seed: 5, col: [150, 120, 95] });
-    debrisPhys(ctx, t, 540, top, 18.6, { n: 36, speed: 900, ground: top + 10, col: '#5e4430', seed: 9 });
-  }
-  silhouette(ctx, 540, top - 10, 330, { col: '#101830' });
-  // ruler showing the rise
-  ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(880, 1350); ctx.lineTo(880, top); ctx.stroke();
-  ctx.font = `800 34px ${FONT}`; ctx.fillStyle = '#fff'; ctx.textAlign = 'right';
-  ctx.fillText(t < 18.6 ? '≈30 cm' : 'hundreds of m', 860, (1350 + top) / 2 + 12);
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['Right now, the ground', 'under you rises ~30 cm,', 'twice a day.'], 300, 15.3, { size: 70, out: 18.4 });
-  say(ctx, t, ['You never feel it.'], 560, 16.8, { size: 70, out: 18.4, mark: { line: 0, from: 4, to: 17, color: '#3a86ff' } });
-  say(ctx, t, ['10× closer:', 'hundreds of meters.'], 300, 18.8, { size: 92, out: 20.8, mark: { line: 1, from: 0, to: 19, color: '#ff6b5b' } });
-  say(ctx, t, ['Rock can’t bend that far.'], 520, 19.6, { size: 60, weight: 800, out: 20.8 });
-}
-
-// ---------------------------------------------------------------- 5. the first tide
-function sFlood(ctx, t) {
-  const [sx, sy] = shakeOffset(t, 22.0, 6.5, 14);
-  ctx.translate(sx, sy);
-  punch(ctx, t, [21.2, 22.4, 24.6], 0.05, W / 2, 1300);
-  drift(ctx, t, 21, 28.5, 1.0, 1.06, W / 2, 1300);
-  ctx.fillStyle = grad(ctx, ['#1b2c58', '#40609e', '#8ba3d6']); ctx.fillRect(0, 0, W, H);
-  glow(ctx, 820, 420, 520, '205,220,255', 0.3); moonFx(ctx, 820, 420, 260, { sun: [0.05, -0.08, 0.99] });
-  const ground = 1560;
-  dof(ctx, 5, c => { for (let i = 0; i < 9; i++) tower(c, t, -40 + i * 130, 1300, 110, 380 + (i * 53 % 200), { col: '#4a5d8c', win: 'rgba(255,226,170,0.7)', seed: 40 + i }); });
-  const front = lerp(-420, 1180, easeInOut(prog(t, 21.4, 28.3)));
-  [[80, 170, 720, 1], [300, 190, 900, 1], [540, 160, 640, -1], [760, 200, 980, 1]].forEach(([x, w, h, dir], i) => {
-    const hit = prog(front, x - 100, x + 500);
-    tower(ctx, t, x, ground, w, h, { col: ['#34416e', '#3d3a66', '#2f4a66', '#433d5e'][i], win: 'rgba(255,226,170,0.9)', fall: i % 2 ? 0 : hit, crumble: i % 2 ? hit : hit * 0.3, dir, seed: i + 1 });
-    if (hit > 0.02) dustBurst(ctx, t, x + w / 2, ground - 40, 21.4 + 6.9 * ((x + 400) / 1600), { size: 1.2, seed: i + 7, col: [110, 118, 140] });
-  });
-  ctx.fillStyle = '#1e2640'; ctx.fillRect(-60, ground, W + 120, H);
-  waterWall(ctx, t, front, ground + 20, 640, { seed: 4 });
-  if (front > 0) spray(ctx, t, front + 80, ground - 560, { n: 70, dir: -1.0, seed: 3 });
-  if (front > 100) ship(ctx, front - 160, ground - 630 + Math.sin(t * 2) * 18, 0.9, -0.15 + Math.sin(t * 1.5) * 0.06);
-  debrisPhys(ctx, t, Math.max(140, front), ground - 300, 22.4, { n: 34, speed: 900, dir: -0.9, spread: 1.3, col: '#1f2638', seed: 12, ground });
-  debrisPhys(ctx, t, Math.max(140, front), ground - 300, 24.6, { n: 34, speed: 950, dir: -0.9, spread: 1.3, col: '#2a2f44', seed: 13, ground });
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['Then the oceans move.'], 300, 21.2, { size: 92, out: 23.6 });
-  say(ctx, t, ['A tide hundreds', 'of meters high'], 300, 23.8, { size: 92, out: 25.4 });
-  say(ctx, t, ['Nearly 2 billion people', 'live in its path'], 300, 25.6, { size: 80, out: 28.2 });
-  tally(ctx, t, 1900000000, W / 2, 1690, 25.8, { size: 104, out: 28.2, label: 'Most could not escape', color: '#ffb0a0' });
-}
-
-// ---------------------------------------------------------------- 6. it keeps coming
-function sAgain(ctx, t) {
-  space(ctx, t);
-  drift(ctx, t, 28.5, 32, 1.0, 1.04, W / 2, 1050);
-  const cx = W / 2, cy = 1050, r = 360, ang = (t - 28.5) * 0.9;
-  ctx.save(); ctx.translate(cx, cy); ctx.rotate(ang); ctx.scale(1.18, 0.88);
-  const g = ctx.createRadialGradient(0, 0, r * 0.92, 0, 0, r * 1.1);
-  g.addColorStop(0, 'rgba(80,170,255,0.7)'); g.addColorStop(1, 'rgba(80,170,255,0.05)');
-  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, r * 1.1, 0, 6.283); ctx.fill(); ctx.restore();
-  globe(ctx, cx, cy, r, { lon0: 100 + (t - 28.5) * 14, lat0: 12, t, sun: SUN });
-  const mx = cx + Math.cos(ang) * 600, my = cy + Math.sin(ang) * 210;
-  moonFx(ctx, mx, my, 70, { sun: SUN });
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['And it comes back.', 'Again. And again.'], 300, 28.8, { size: 88, out: 31.7 });
-  say(ctx, t, ['Every few days, for every coast on Earth'], 1640, 29.8, { size: 52, weight: 800, out: 31.7 });
-}
-
-// ---------------------------------------------------------------- 7. volcanic winter
+// ---------------------------------------------------------------- 6. ash and famine
 function sAsh(ctx, t) {
-  const [sx, sy] = shakeOffset(t, 32.3, 5.5, 20);
-  ctx.translate(sx, sy);
-  punch(ctx, t, [33.0], 0.07, W / 2, 1100);
-  drift(ctx, t, 32, 39, 1.0, 1.05, W / 2, 1300);
-  const dim = easeInOut(prog(t, 35.6, 38.0));
-  ctx.fillStyle = grad(ctx, [mixHex('#3a2232', '#2a2a2e', dim), mixHex('#a2442c', '#55504e', dim), mixHex('#f08a42', '#77706a', dim)]); ctx.fillRect(0, 0, W, H);
-  const erupt = prog(t, 32.6, 33.8);
-  for (const [vx, vy, sc, sd] of [[260, 1180, 0.7, 2], [820, 1120, 0.8, 3]]) plume(ctx, t, vx, vy, { height: 1200, width: 260 * sc, grow: 0.25 + erupt * 0.75, seed: sd, col: [62, 56, 60], light: [160, 146, 138] });
-  plume(ctx, t, 560, 1060, { height: 1400, width: 340, grow: 0.3 + erupt * 0.7, seed: 6, col: [58, 52, 56], light: [168, 150, 140] });
-  ctx.fillStyle = '#231417';
-  for (const [x0, x1, top] of [[60, 460, 1180], [300, 820, 1060], [620, 1040, 1120]]) { ctx.beginPath(); ctx.moveTo(x0, 1420); ctx.lineTo((x0 + x1) / 2 - 50, top); ctx.lineTo((x0 + x1) / 2 + 50, top); ctx.lineTo(x1, 1420); ctx.fill(); }
-  if (erupt > 0) for (const [x, y] of [[260, 1180], [560, 1060], [830, 1120]]) { glow(ctx, x, y, 200, '255,120,40', 0.85 * erupt); embers(ctx, t, x, y, { n: 50, w: 220, h: 600, seed: x }); }
-  debrisPhys(ctx, t, 560, 1060, 33.0, { col: '#ff7a2a', n: 36, speed: 1100, seed: 21, ground: 1420 });
-  ctx.fillStyle = grad(ctx, ['#2b2023', '#151012'], 0, 1420, 0, H); ctx.fillRect(-60, 1420, W + 120, H);
-  ctx.fillStyle = `rgba(200,195,190,${0.5 * dim})`; const r = rng(91);
-  for (let i = 0; i < 160; i++) ctx.fillRect((r() * W + t * 30) % W, (r() * H + t * (60 + r() * 60)) % H, 3, 3);
-  for (let i = 0; i < 18; i++) { const x = 30 + i * 60, col = mixHex('#7fbf4a', '#8a7a52', dim);
-    ctx.strokeStyle = col; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(x, 1860); ctx.quadraticCurveTo(x, 1760, x + dim * 60, 1700 + dim * 60); ctx.stroke(); }
+  space(ctx, t);
+  drift(ctx, t, 29, 33, 1.0, 1.05, W / 2, 1050);
+  const cx = W / 2, cy = 1060, R = 400;
+  toonGlobe(ctx, cx, cy, R, t, { lon0: 60 + t * 4, lat0: 15 });
+  const ash = easeInOut(prog(t, 29.4, 32.4));
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
+  const r = rng(33);
+  for (let i = 0; i < 40; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * R, rr = 60 + r() * 120;
+    ctx.fillStyle = `rgba(80,72,78,${0.85 * Math.min(1, ash * 1.6 - r() * 0.5)})`; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * d, cy + Math.sin(a) * d, rr * ash, 0, 6.283); ctx.fill(); }
+  for (let i = 0; i < 10; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * R * 0.85; glow(ctx, cx + Math.cos(a) * d, cy + Math.sin(a) * d, 40, '255,120,40', 0.9 * (0.5 + 0.5 * Math.sin(t * 6 + i))); }
+  ctx.restore();
+  ctx.lineWidth = 8; ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.stroke();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['The crust heaves.', 'Volcanoes erupt', 'everywhere.'], 300, 32.3, { size: 80, out: 35.6 });
-  say(ctx, t, ['Ash blots out the Sun.', 'Harvests fail.'], 300, 35.8, { size: 84, out: 38.7 });
-  say(ctx, t, ['Billions more could starve'], 1600, 36.8, { size: 66, weight: 900, out: 38.7, mark: { line: 0, from: 0, to: 13, color: '#ff6b5b' } });
+  say(ctx, t, ['Ash blots out the Sun.', 'Harvests fail.'], 300, 29.3, { size: 84, out: 32.7 });
+  say(ctx, t, ['Billions more could starve'], 1660, 30.8, { size: 64, weight: 900, out: 32.7, mark: { line: 0, from: 0, to: 13, color: '#ff6b5b' } });
 }
 
-// ---------------------------------------------------------------- 8. the turn: the Moon is falling
+// ---------------------------------------------------------------- 7. the Moon is falling
 function sFalling(ctx, t) {
   space(ctx, t);
-  punch(ctx, t, [40.2], 0.05, W / 2, 1100);
-  drift(ctx, t, 39, 46, 1.0, 1.05, W / 2, 1100);
+  drift(ctx, t, 33, 39, 1.0, 1.05, W / 2, 1100);
   const cx = W / 2, cy = 1120;
-  globe(ctx, cx, cy, 150, { lon0: 40 + t * 3, lat0: 12, t, sun: SUN });
-  ctx.strokeStyle = 'rgba(120,200,255,0.55)'; ctx.lineWidth = 4; ctx.setLineDash([14, 14]); ctx.beginPath(); ctx.arc(cx, cy, 440, 0, 6.283); ctx.stroke(); ctx.setLineDash([]);
-  ctx.strokeStyle = 'rgba(255,110,90,0.6)'; ctx.setLineDash([6, 12]); ctx.beginPath(); ctx.arc(cx, cy, 190, 0, 6.283); ctx.stroke(); ctx.setLineDash([]);
-  ctx.font = `800 30px ${FONT}`; ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(150,210,255,0.95)'; ctx.fillText('SAFE ORBIT', cx, cy - 462);
-  ctx.fillStyle = 'rgba(255,140,120,0.95)'; ctx.fillText('BREAKING POINT', cx, cy + 236);
-  const p = easeIn3(prog(t, 40.4, 45.8)), a = -0.6 + p * 9.5, rr = lerp(400, 215, p);
-  ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 3; ctx.beginPath();
-  for (let i = 0; i <= 120; i++) { const q = i / 120 * p, aa = -0.6 + q * 9.5, r2 = lerp(400, 215, q); const x = cx + Math.cos(aa) * r2, y = cy + Math.sin(aa) * r2; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+  toonGlobe(ctx, cx, cy, 170, t, { lon0: 40 + t * 3, lat0: 12 });
+  ctx.strokeStyle = 'rgba(255,110,90,0.7)'; ctx.lineWidth = 4; ctx.setLineDash([8, 12]); ctx.beginPath(); ctx.arc(cx, cy, 230, 0, 6.283); ctx.stroke(); ctx.setLineDash([]);
+  ctx.font = `800 30px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(255,150,130,0.95)'; ctx.fillText('BREAKING POINT', cx, cy + 280);
+  const p = easeIn3(prog(t, 34.2, 38.8)), a = -0.6 + p * 9.5, rr = lerp(470, 260, p);
+  ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 4; ctx.beginPath();
+  for (let i = 0; i <= 120; i++) { const q = i / 120 * p, aa = -0.6 + q * 9.5, r2 = lerp(470, 260, q); const x = cx + Math.cos(aa) * r2, y = cy + Math.sin(aa) * r2; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
   ctx.stroke();
-  moonFx(ctx, cx + Math.cos(a) * rr, cy + Math.sin(a) * rr, 46 + p * 14, { sun: SUN });
+  moonToon(ctx, cx + Math.cos(a) * rr, cy + Math.sin(a) * rr, 52 + p * 18, { sun: SUN });
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['But here’s the twist:'], 300, 39.3, { size: 70, out: 40.1 });
-  say(ctx, t, ['the Moon is falling.'], 300, 40.2, { size: 96, out: 45.8, mark: { line: 0, from: 4, to: 20, color: '#ff6b5b' } });
-  say(ctx, t, ['It orbits faster than Earth spins,', 'so the tides drag it inward'], 1560, 40.8, { size: 50, weight: 800, out: 43.2 });
-  tally(ctx, t, 10000, W / 2, 1700, 43.4, { size: 120, dur: 2.4, suffix: '×', out: 45.8, label: 'stronger tides by the end: kilometers high', labelSize: 38, color: '#ffb0a0' });
+  say(ctx, t, ['And it only gets worse:'], 300, 33.3, { size: 72, out: 38.7 });
+  say(ctx, t, ['the Moon is falling.'], 420, 34.2, { size: 96, out: 38.7, mark: { line: 0, from: 4, to: 20, color: '#ff6b5b' } });
+  say(ctx, t, ['Every year closer.', 'Every year, bigger tides.'], 1620, 35.8, { size: 58, weight: 800, out: 38.7 });
 }
 
-// ---------------------------------------------------------------- 9. the end: torn apart (slow motion)
+// ---------------------------------------------------------------- 8. torn apart, bombardment
 function sBreak(ctx, t) {
-  // time remap: slow motion (0.3x) for 1.2 s around the shatter
-  const S0 = 46.4, S1 = 47.6, K = 0.3;
-  const lt = t < S0 ? t : t < S1 ? S0 + (t - S0) * K : S0 + (S1 - S0) * K + (t - S1);
-  const shatter = 46.6 + (46.6 - S0) * 0;            // shatter happens at local 46.6
   space(ctx, t);
-  const [sx, sy] = shakeOffset(t, 46.6, 1.6, 24);
-  ctx.translate(sx, sy);
-  punch(ctx, t, [46.6], 0.1, W / 2, 1150);
-  drift(ctx, t, 46, 53, 1.0, 1.07, W / 2, 1150);
-  const cx = W / 2, cy = 1180;
-  const p = easeIn3(prog(lt, 46.0, shatter)), ang = -0.4 + 0.75 + p * 0.6, rad = lerp(470, 400, p);
-  const ringP = prog(lt, shatter, 51.5);
-  if (lt > shatter) drawRing(ctx, cx, cy, ringP, t, true);
-  globe(ctx, cx, cy, 300, { lon0: 70 + t * 3, lat0: 15, t, sun: SUN });
-  if (lt > shatter) drawRing(ctx, cx, cy, ringP, t, false);
-  const mx = cx + Math.cos(ang) * rad, my = cy - 300 + Math.sin(ang) * 40;
-  if (lt < shatter) {
-    const st = 1 + p * 0.5;
-    ctx.save(); ctx.translate(mx, my); ctx.rotate(Math.atan2(cy - my, cx - mx)); ctx.scale(st, 1 / st);
-    moonFx(ctx, 0, 0, 110, { sun: SUN, crack: 1 + p * 2.5 }); ctx.restore();
-  } else {
-    debrisPhys(ctx, lt, mx, my, shatter, { n: 80, speed: 420, g: 0, spread: 6.28, col: '#bdb8ae', size: 20, dur: 6, seed: 31 });
-    shockwave(ctx, lt, mx, my, shatter, { maxR: 600, dur: 1.3, col: '255,220,180', flat: 1 });
-    lensFlare(ctx, mx, my, Math.max(0, 1 - (lt - shatter) * 0.8), '255,220,180');
+  const [sx, sy] = shakeOffset(t, 41.6, 3.5, 22); ctx.translate(sx, sy);
+  drift(ctx, t, 39, 46, 1.0, 1.07, W / 2, 1200);
+  const cx = W / 2, cy = 1250, R = 360, shatter = 41.6;
+  const ringP = prog(t, shatter, 45.5);
+  if (t > shatter) drawRing(ctx, cx, cy, ringP, t, true);
+  toonGlobe(ctx, cx, cy, R, t, { lon0: 80 + t * 3, lat0: 15 });
+  // impact flashes on the globe from falling wreckage
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
+  for (const [at, ax, ay] of [[42.6, -120, -150], [43.4, 90, -60], [44.2, -30, 80], [44.8, 170, -170]]) {
+    const k = prog(t, at, at + 1.4); if (k <= 0) continue;
+    glow(ctx, cx + ax, cy + ay, 60 + 120 * k, '255,190,90', 0.95 * (1 - k * 0.6));
+    ctx.strokeStyle = `rgba(255,240,200,${1 - k})`; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(cx + ax, cy + ay, 30 + 160 * k, 0, 6.283); ctx.stroke();
+    ctx.fillStyle = `rgba(70,60,65,${0.7 * k})`; ctx.beginPath(); ctx.arc(cx + ax, cy + ay, 50 + 70 * k, 0, 6.283); ctx.fill();
   }
-  flash(ctx, t, 46.6, 0.3);
-  for (let i = 0; i < 12; i++) { const at = 48.4 + i * 0.22, x0 = 180 + (i * 97) % 700; fireball(ctx, t, x0 + 280, cy - 680, x0 + 40, cy - 230 + (i % 3) * 50, at, 1.0, 0.85); }
+  ctx.restore();
+  if (t > shatter) drawRing(ctx, cx, cy, ringP, t, false);
+  const p = easeIn3(prog(t, 39.2, shatter)), mx = cx + 200 - p * 40, my = cy - 520 + p * 40;
+  if (t < shatter) moonToon(ctx, mx, my, 120 * (1 + p * 0.15), { sun: SUN, crack: 0.3 + p * 1.5 });
+  else {
+    const T = t - shatter, rr = rng(41);
+    for (let i = 0; i < 26; i++) { const a = rr() * 6.283, v = 140 + rr() * 260, s2 = 14 + rr() * 30;
+      const px = mx + Math.cos(a) * v * T, py = my + Math.sin(a) * v * T + (i % 3 === 0 ? 220 * T * T : 0);
+      ctx.save(); ctx.translate(px, py); ctx.rotate(T * (rr() - 0.5) * 4); ctx.fillStyle = '#d5d9e3'; ctx.strokeStyle = INK; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(-s2, -s2 * 0.5); ctx.lineTo(s2 * 0.7, -s2); ctx.lineTo(s2, s2 * 0.6); ctx.lineTo(-s2 * 0.6, s2); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+    shockwave(ctx, t, mx, my, shatter, { maxR: 520, dur: 1.2, col: '255,225,190', flat: 1 });
+  }
+  flash(ctx, t, shatter, 0.3);
+  for (let i = 0; i < 8; i++) fireball(ctx, t, cx - 300 + i * 90, cy - 760, cx - 180 + i * 50, cy - R * 0.6, 42.2 + i * 0.32, 0.9, 0.8);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['Within centuries,', 'Earth’s gravity'], 300, 46.2, { size: 92, out: 49.4 });
-  say(ctx, t, ['tears it apart.'], 490, 46.7, { size: 110, out: 49.4, mark: { line: 0, from: 0, to: 15, color: '#ff6b5b' } });
-  say(ctx, t, ['Moon-sized wreckage rains', 'down on what’s left of us'], 300, 49.6, { size: 74, out: 52.6 });
+  say(ctx, t, ['Until Earth’s gravity', 'tears it apart.'], 300, 39.3, { size: 92, out: 45.6, mark: { line: 1, from: 0, to: 14, color: '#ff6b5b' } });
+  say(ctx, t, ['The wreckage bombards', 'the planet.'], 1600, 42.4, { size: 68, weight: 900, out: 45.6 });
 }
 
-// ---------------------------------------------------------------- 10. final image
+// ---------------------------------------------------------------- 9. final image
 function sRings(ctx, t) {
   space(ctx, t);
-  drift(ctx, t, 53, 56, 1.0, 1.04, W / 2, 1250);
+  drift(ctx, t, 46, 50, 1.0, 1.04, W / 2, 1250);
   drawRing(ctx, W / 2, 1250, 1, t, true);
-  globe(ctx, W / 2, 1250, 300, { lon0: 90 + t * 3, lat0: 15, t, sun: SUN });
+  toonGlobe(ctx, W / 2, 1250, 330, t, { lon0: 100 + t * 3, lat0: 15 });
   drawRing(ctx, W / 2, 1250, 1, t, false);
-  lensFlare(ctx, 120, 300, 0.5, '255,236,200');
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, t, ['Earth would end up', 'with rings…'], 300, 53.2, { size: 92 });
-  say(ctx, t, ['…and no Moon at all.'], 530, 54.2, { size: 92, mark: { line: 0, from: 7, to: 19, color: '#3a86ff' } });
+  say(ctx, t, ['Earth ends up', 'with rings…'], 300, 46.3, { size: 92 });
+  say(ctx, t, ['…and no Moon.'], 520, 47.4, { size: 92, mark: { line: 0, from: 7, to: 12, color: '#3a86ff' } });
 }
 
 function drawRing(ctx, cx, cy, p, t, back) {
   const r = rng(77), spread = Math.min(1, p * 1.3);
   for (let i = 0; i < 1800; i++) {
-    const a = r() * 6.283 + t * 0.12 * (0.8 + r() * 0.4), rr = 340 + r() * 300 * Math.min(1, p * 1.4);
+    const a = r() * 6.283 + t * 0.12 * (0.8 + r() * 0.4), rr = 420 + r() * 300 * Math.min(1, p * 1.4);
     if ((Math.sin(a) < 0) !== back) continue;
-    const x = cx + Math.cos(a) * rr * spread + (1 - spread) * 220, y = lerp(cy - 300, cy + Math.sin(a) * rr * 0.26, spread);
-    const v = 185 + r() * 65;
-    ctx.fillStyle = `rgba(${v},${v - 8},${v - 20},${0.5 + r() * 0.5})`;
+    const x = cx + Math.cos(a) * rr * spread + (1 - spread) * 200, y = lerp(cy - 500, cy + Math.sin(a) * rr * 0.26, spread);
+    const v = 200 + r() * 55;
+    ctx.fillStyle = `rgba(${v},${v - 6},${v - 16},${0.55 + r() * 0.45})`;
     ctx.fillRect(x, y, 2 + r() * 3, 2 + r() * 3);
   }
 }

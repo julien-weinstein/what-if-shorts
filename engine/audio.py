@@ -251,6 +251,38 @@ def sfx(name):
         tt = t(1.3); f = 150 - 40 * tt
         x = sum(np.sin(2 * np.pi * h * np.cumsum(f) / SR) / h for h in range(1, 7))
         return norm(lp(x, 0.2) * np.sin(np.pi * tt / 1.3), 0.35)
+    # ---- cinematic palette (no tonal bleeps): impacts, rumbles, roars, crumbles, soft air
+    if base == "impact":   # deep cinematic hit: sub drop + body thump + air
+        tt = t(3.0)
+        sub = np.sin(2 * np.pi * np.cumsum(np.geomspace(70, 28, len(tt))) / SR) * env(len(tt), 0.004, 1.1)
+        body = lp(noise(3.0), 0.03) * env(len(tt), 0.002, 0.35) * 2.5
+        air = lp(noise(3.0), 0.25) * env(len(tt), 0.01, 0.6) * 0.25
+        return norm(room(sub + body + air, 0.35), 0.95)
+    if base == "quake":    # long low earth rumble with grinding texture
+        tt = t(sec); x = lp(lp(noise(sec), 0.008), 0.02) * 3 + lp(noise(sec), 0.06) * (0.4 + 0.6 * np.abs(np.sin(2 * np.pi * 0.7 * tt)))
+        fade = np.minimum(1, np.minimum(tt / 0.8, (sec - tt) / 1.5))
+        return norm(x * fade, 0.85)
+    if base == "roar":     # rushing water roar
+        tt = t(sec); x = lp(noise(sec), 0.09) + lp(noise(sec), 0.02) * 1.5
+        swell = 0.6 + 0.4 * np.sin(2 * np.pi * 0.25 * tt)
+        fade = np.minimum(1, np.minimum(tt / 1.2, (sec - tt) / 1.5))
+        return norm(room(x * swell * fade, 0.3), 0.75)
+    if base == "crumble":  # masonry collapse: low thud + many small rock hits
+        out = lp(noise(2.5), 0.02) * env(int(SR * 2.5), 0.01, 0.8) * 2
+        for _ in range(60):
+            st = int(rng.uniform(0, 2.0) * SR); n = int(SR * rng.uniform(0.02, 0.08))
+            chunk = lp(rng.standard_normal(n), rng.uniform(0.1, 0.4)) * env(n, 0.001, 0.02) * rng.uniform(0.2, 0.8)
+            out[st:st + n] += chunk[: len(out[st:st + n])]
+        return norm(room(out, 0.3), 0.7)
+    if base == "air":      # soft cinematic whoosh (noise only)
+        n = noise(1.2); e = np.sin(np.linspace(0, np.pi, len(n))) ** 3
+        return norm(lp(n, 0.04) * e, 0.3)
+    if base == "drawback": # sea pulling away: hiss + suck
+        tt = t(sec); x = lp(noise(sec), 0.12) * np.linspace(1, 0.3, len(tt)) + lp(noise(sec), 0.02) * 0.8
+        return norm(x * np.minimum(1, tt / 0.6), 0.45)
+    if base == "swell":    # low tension swell (noise + sub, no pitch sweep)
+        tt = t(sec); x = (lp(noise(sec), 0.02) * 2 + np.sin(2 * np.pi * 38 * tt) * 0.5) * (tt / sec) ** 2
+        return norm(x, 0.6)
     raise ValueError(f"unknown sound {name}")
 
 
@@ -315,6 +347,36 @@ def music_dark(dur, bpm):
     return lp(x, 0.35)                                # take the fizz off the top
 
 
+def music_cinematic(dur, bpm):
+    """Original slow, dark orchestral-style bed: string-like pads, low drones, sparse deep drums.
+    No arpeggios, bells or synth leads."""
+    beat = 60 / bpm
+    out = np.zeros(int(SR * (dur + 4)))
+    def put(x, at, gain):
+        st = int(at * SR)
+        if st >= len(out): return
+        out[st:st + len(x)] += x[: len(out) - st] * gain
+    def strings(freqs, sec):
+        tt = t(sec); x = np.zeros(len(tt))
+        for f in freqs:
+            for d in (-0.006, -0.002, 0.003, 0.007):                     # ensemble detune
+                vib = 1 + 0.003 * np.sin(2 * np.pi * (4.8 + d * 100) * tt)
+                ph = 2 * np.pi * f * (1 + d) * np.cumsum(vib) / SR
+                x += np.sin(ph) + 0.35 * np.sin(2 * ph) + 0.15 * np.sin(3 * ph)
+        swell = np.minimum(1, np.minimum(tt / (sec * 0.45), (sec - tt) / (sec * 0.35)))
+        return lp(x * swell, 0.12)
+    drum = lambda: lp(sweep(60, 34, 1.6) * env(int(SR * 1.6), 0.003, 0.45) + noise(1.6) * env(int(SR * 1.6), 0.001, 0.05) * 0.3, 0.15)
+    prog_ = [(45, (57, 60, 64)), (41, (53, 57, 60)), (43, (55, 59, 62)), (40, (52, 55, 59))]   # Am F G Em
+    bar = 8 * beat
+    for b in range(int(dur / bar) + 1):
+        root, ch = prog_[b % 4]; t0 = b * bar
+        put(strings([hz(n) for n in ch], bar * 1.15), t0, 0.10)
+        put(strings([hz(root - 12)], bar * 1.15), t0, 0.16)                 # low drone
+        if b >= 1:
+            put(drum(), t0, 0.55); put(drum(), t0 + 3 * beat, 0.35); put(drum(), t0 + 6 * beat, 0.45)
+    return lp(room(out[: int(SR * dur)], 0.4), 0.3)
+
+
 def music(dur, bpm):
     """Original upbeat loop: soft kick, light shaker, rounded bass, mellow keys riff."""
     beat = 60 / bpm
@@ -347,7 +409,7 @@ def main():
     mix = np.zeros(int(SR * (dur + 0.5)))
     m = cues.get("music", {})
     if m:
-        maker = music_dark if m.get("mode") == "dark" else music
+        maker = {"dark": music_dark, "cinematic": music_cinematic}.get(m.get("mode"), music)
         mu = maker(m.get("until", dur), m.get("bpm", 112))
         gain = np.full(len(mu), 0.34)  # music sits under the SFX
         for a, b in m.get("duckAt", []):  # drop the music out for a beat, for emphasis
