@@ -155,6 +155,33 @@ Based on the "paperclip maximizer" thought experiment (Nick Bostrom, 2003).
 
 ---
 
+## 6. What if Trump lost in 2016?
+
+**File:** `videos/trump-2016.mp4`
+
+**Title:** What If Trump Lost in 2016? 🇺🇸🔀 #shorts
+
+**Description:**
+
+```
+2016 came down to 77,744 votes in Wisconsin, Michigan and Pennsylvania: less than 0.06% of all votes cast.
+Flip them, and Hillary Clinton becomes the 45th president. History splits in two.
+
+The Supreme Court: 6–3 liberal instead of 6–3 conservative (if the Republican Senate confirmed her picks). Roe probably still stands.
+The U.S. stays in the Paris climate deal and the Iran nuclear deal. No Trump tax cut. No trade war with China. No Abraham Accords.
+2018: Republicans likely win big in the midterms, with investigations from day one.
+Trump? Probably his own TV network.
+2020: COVID hits both timelines. No President Biden. No January 6th. President Clinton vs… Trump again?
+
+Which timeline would you rather live in? 👇
+
+#whatif #alternatehistory #politics #election #shorts
+```
+
+**Pinned comment:** Keep it civil 🙏 Which change matters most to you: the Supreme Court, the climate deal, the trade war or the TV network?
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
