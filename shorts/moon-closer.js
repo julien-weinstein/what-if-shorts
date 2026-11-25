@@ -1,4 +1,11 @@
-// What if the Moon were suddenly 10 times closer?   (v6: 3D drone flyover of the surge + societal toll)
+// What if the Moon were suddenly 10 times closer?   (v7: punchier cut, 3D surge + 3D quake, death-toll timeline)
+// DEATH-TOLL TIMELINE (our estimates, labelled "est." on screen):
+//  - First 24 h: 1+ billion. ~1.9 billion live in the surge's path (Kummu et al. 2016); few could outrun
+//    tides of hundreds of metres arriving within hours.
+//  - First week: tens of millions more under collapsing cities. Scale: the 2023 Turkey-Syria earthquake
+//    alone killed more than 50,000; here every fault on Earth is strained at once.
+//  - First year: ~half of humanity (~4 billion) could be gone: fisheries feeding 3.3 billion collapse
+//    (FAO), volcanic winter wrecks harvests (Tambora/1816 precedent).
 // v6 adds: a real 3D (WebGL) drone shot of the surge destroying a city; infrastructure, famine and
 // species-level consequences with sourced numbers:
 //  - ~80% of world trade by volume moves by sea (UNCTAD).
@@ -21,36 +28,54 @@
 //  - Volcanic winter precedent: Tambora 1815 -> 1816. Famine hedged "could".
 //  - Orbit ≈21 h < 24 h day -> inside synchronous orbit -> tidal drag pulls it inward (like Phobos),
 //    tides growing as it falls; at the Roche limit it's torn apart into a ring; debris falls on Earth.
+// segment map: old scenes are re-timed (compressed) into new slots; their sound cues move with them
+const SEG = [
+  // [newStart, newEnd, origStart, origEnd, sceneName]
+  [0, 3.6, 0, 5, 'sArrive'], [3.6, 7.2, 5, 10, 'sPull'], [7.2, 10.4, 10, 14.5, 'sDrain'],
+  [39.8, 44.4, 44, 51, 'sSpecies'], [44.4, 48, 33, 39, 'sFalling'], [48, 53, 39, 46, 'sBreak'], [53, 56, 46, 50, 'sRings'],
+];
+const ORIG_SFX = [
+  [0.0, 'swell:2'], [1.8, 'impact'], [5.0, 'air'], [5.4, 'quake:4.5'], [7.0, 'roar:3'], [10.0, 'air'], [10.3, 'drawback:4.2'],
+  [33.0, 'air'], [33.4, 'swell:1.6'], [34.2, 'impact'],
+  [39.0, 'air'], [39.2, 'swell:2.4'], [41.6, 'impact'], [42.6, 'boom'], [43.4, 'impact'], [44.2, 'boom'],
+  [44.0, 'air'], [44.3, 'swell:3'], [46.0, 'boom'], [48.0, 'boom'], [46.0, 'air'], [46.4, 'swell:3'],
+];
+const remapSfx = () => {
+  const out = [];
+  for (const [n0, n1, o0, o1, name] of SEG) {
+    const k = (n1 - n0) / (o1 - o0);
+    const owned = name === 'sSpecies' ? ORIG_SFX.slice(16, 20) : name === 'sRings' ? ORIG_SFX.slice(20) : name === 'sBreak' ? ORIG_SFX.slice(10, 16)
+      : ORIG_SFX.filter(([t0]) => t0 >= o0 && t0 < o1 && !(name === 'sFalling' && t0 >= 39));
+    for (const [t0, snd] of owned) { const [b, d] = snd.split(':'); out.push([+(n0 + (t0 - o0) * k).toFixed(2), d ? `${b}:${(+d * k).toFixed(2)}` : b]); }
+  }
+  return out;
+};
 const SHORT = {
   title: 'What if the Moon were suddenly 10 times closer?',
-  duration: 68,
+  duration: 56,
   fps: 60,
   motionSamples: 1,
   sfx: [
-    [0.0, 'swell:2'], [1.8, 'impact'],
-    [5.0, 'air'], [5.4, 'quake:4.5'], [7.0, 'roar:3'],
-    [10.0, 'air'], [10.3, 'drawback:4.2'],
-    [14.5, 'air'], [14.6, 'quake:10'], [14.8, 'roar:10'], [15.2, 'impact'], [17.4, 'crumble'], [18.6, 'crumble'], [19.8, 'impact'], [20.6, 'crumble'], [22.0, 'crumble'], [23.2, 'crumble'],
-    [25.0, 'air'], [25.4, 'impact'], [26.8, 'boom'], [28.2, 'boom'], [29.6, 'boom'],
-    [32.0, 'air'], [32.2, 'quake:6'], [33.6, 'impact'], [35.4, 'impact'], [36.0, 'crumble'],
-    [38.0, 'air'], [38.2, 'rumble:5.5'], [39.6, 'boom'], [41.2, 'boom'],
-    [44.0, 'air'], [44.3, 'swell:3'], [46.0, 'boom'], [48.0, 'boom'],
-    [51.0, 'air'], [51.4, 'swell:1.6'], [52.2, 'impact'],
-    [57.0, 'air'], [57.2, 'swell:2.4'], [59.6, 'impact'], [60.6, 'boom'], [61.4, 'impact'], [62.2, 'boom'],
-    [64.0, 'air'], [64.4, 'swell:3'],
-  ],
-  music: { bpm: 70, mode: 'cinematic', until: 67.6, duckAt: [] },
+    ...remapSfx(),
+    [10.4, 'air'], [10.5, 'quake:8'], [10.6, 'roar:8'], [11.0, 'impact'], [12.8, 'crumble'], [13.8, 'crumble'], [14.8, 'impact'], [15.4, 'crumble'], [16.6, 'crumble'],
+    [18.4, 'air'], [18.6, 'impact'], [19.8, 'boom'], [21.0, 'boom'],
+    [23.2, 'air'], [23.4, 'quake:7.4'], [24.0, 'impact'], [25.0, 'crumble'], [25.8, 'impact'], [26.4, 'crumble'], [27.2, 'boom'], [28.0, 'crumble'],
+    [30.8, 'air'], [31.0, 'impact'], [32.3, 'boom'],
+    [34.6, 'air'], [34.8, 'rumble:5'], [36.2, 'boom'], [37.6, 'impact'],
+  ].sort((a, b) => a[0] - b[0]),
+  music: { bpm: 70, mode: 'cinematic', until: 55.6, duckAt: [] },
 };
 
 const SUN = [-0.6, -0.35, 0.72];
-
-// run an existing scene (written for its own absolute times) at a new start time
 const shifted = (fn, origStart, newStart) => (ctx, t) => fn(ctx, t - newStart + origStart);
+const scaled = (fn, n0, n1, o0, o1) => (ctx, t) => fn(ctx, o0 + (t - n0) * (o1 - o0) / (n1 - n0));
+const SCENES = { sArrive: () => sArrive, sPull: () => sPull, sDrain: () => sDrain, sSpecies: () => sSpecies, sFalling: () => sFalling, sBreak: () => sBreak, sRings: () => sRings };
+const seg = name => { const [n0, n1, o0, o1] = SEG.find(x => x[4] === name); return [n0, scaled(SCENES[name](), n0, n1, o0, o1)]; };
 
 function render(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  sequence(ctx, t, [[0, sArrive], [5, sPull], [10, sDrain], [14.5, sDrone], [25, sToll], [32, shifted(sQuake, 23, 32)],
-                    [38, sFamine], [44, sSpecies], [51, shifted(sFalling, 33, 51)], [57, shifted(sBreak, 39, 57)], [64, shifted(sRings, 46, 64)]]);
+  sequence(ctx, t, [seg('sArrive'), seg('sPull'), seg('sDrain'), [10.4, sDrone], [18.4, sToll1], [23.2, sQuake3], [30.8, sToll2], [34.6, sFamine2],
+                    seg('sSpecies'), seg('sFalling'), seg('sBreak'), seg('sRings')], 0.3);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850);
   post(ctx, { bloom: 0.15 });
@@ -313,28 +338,29 @@ function mixHex(a, b, p) {
 }
 
 // ---------------------------------------------------------------- v6: the 3D drone flyover
-const DRONE = { height: 320, z0: 1500, z1: -1800, dur: 10.5,
-  path: [[0, [500, 650, -2100], [0, 160, 900]], [3.4, [1300, 450, -1250], [-100, 170, 200]], [6.8, [1400, 700, -2500], [-300, 150, -700]], [10.5, [650, 1500, -3400], [0, 20, -1300]]],
-  shake: lt => 4 * Math.exp(-Math.abs(lt - 3) * 0.4) };
+const DRONE = { height: 320, z0: 1500, z1: -1800, dur: 8,
+  path: [[0, [500, 650, -2100], [0, 160, 900]], [2.6, [1300, 450, -1250], [-100, 170, 200]], [5.2, [1400, 700, -2500], [-300, 150, -700]], [8, [650, 1500, -3400], [0, 20, -1300]]],
+  shake: lt => 5 * Math.exp(-Math.abs(lt - 2.3) * 0.5) };
 function sDrone(ctx, t) {
-  const lt = t - 14.5;
+  const lt = t - 10.4;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = grad(ctx, ['#4f86da', '#a2c6f2', '#ffd9b0']); ctx.fillRect(0, 0, W, H);
   moonToon(ctx, 760, 400, 240, { sun: [0.3, -0.4, 0.86] });
   City3D.draw(ctx, lt, DRONE);
-  say(ctx, t, ['Then it comes back.'], 300, 14.8, { size: 92, out: 17.5 });
-  say(ctx, t, ['A surge hundreds', 'of meters high'], 300, 17.7, { size: 92, out: 20.5, mark: { line: 0, from: 8, to: 16, color: '#ff6b5b' } });
-  say(ctx, t, ['Tokyo. Shanghai. Mumbai.', 'New York. Lagos.'], 300, 20.7, { size: 80, out: 24.7 });
+  say(ctx, t, ['Then it comes back.'], 300, 10.6, { size: 92, out: 12.5 });
+  say(ctx, t, ['Hundreds of', 'meters high.'], 300, 12.7, { size: 96, out: 14.7, mark: { line: 0, from: 0, to: 11, color: '#ff6b5b' } });
+  say(ctx, t, ['Tokyo. Shanghai.', 'Mumbai. New York.'], 300, 14.9, { size: 86, out: 18.1 });
+  say(ctx, t, ['Nowhere to run.'], 1680, 15.8, { size: 76, weight: 900, out: 18.1, mark: { line: 0, from: 0, to: 15, color: '#ff6b5b' } });
 }
 
 // a stat row in the original bold style: big outlined number + a line of context underneath
 function statRow(ctx, t, y, at, big, text, o = {}) {
-  const { out = 1e9, color = C.yellow } = o;
+  const { out = 1e9, color = C.yellow, size = 108 } = o;
   if (t < at || t > out + 0.4) return;
   const p = easeOut(prog(t, at, at + 0.5)), e = 1 - prog(t, out, out + 0.35);
   ctx.save(); ctx.globalAlpha = e * Math.min(1, p * 1.5); ctx.translate((1 - p) * -60, 0);
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.lineJoin = 'round';
-  ctx.font = `900 108px ${FONT}`; ctx.lineWidth = 20; ctx.strokeStyle = INK; ctx.strokeText(big, 84, y); ctx.fillStyle = color; ctx.fillText(big, 84, y);
+  ctx.font = `900 ${size}px ${FONT}`; ctx.lineWidth = size * 0.19; ctx.strokeStyle = INK; ctx.strokeText(big, 84, y); ctx.fillStyle = color; ctx.fillText(big, 84, y);
   ctx.font = `800 40px ${FONT}`; ctx.lineWidth = 9; const lines = wrap(ctx, text, 900);
   lines.forEach((ln, i) => { ctx.strokeText(ln, 88, y + 62 + i * 48); ctx.fillStyle = '#ffffff'; ctx.fillText(ln, 88, y + 62 + i * 48); });
   ctx.restore();
@@ -393,11 +419,69 @@ function sSpecies(ctx, t) {
     ctx.save(); ctx.globalAlpha = a;
     glow(ctx, x, y, 70 + Math.sin(t * 3) * 8, '255,214,90', 0.9);
     ctx.fillStyle = C.yellow; ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, y, 14, 0, 6.283); ctx.fill(); ctx.stroke();
-    ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'left'; ctx.lineJoin = 'round'; ctx.lineWidth = 10; ctx.strokeText(name, x + 26, y + 14); ctx.fillStyle = '#fff'; ctx.fillText(name, x + 26, y + 14);
+    ctx.font = `900 40px ${FONT}`; ctx.lineJoin = 'round'; ctx.lineWidth = 10;
+    const right = x + 26 + ctx.measureText(name).width < W - 40; ctx.textAlign = right ? 'left' : 'right'; const lx = right ? x + 26 : x - 26;
+    ctx.strokeText(name, lx, y + 14); ctx.fillStyle = '#fff'; ctx.fillText(name, lx, y + 14);
     ctx.restore();
   }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   say(ctx, t, ['Survivors retreat', 'to the highlands'], 300, 44.3, { size: 92, out: 47.4 });
   say(ctx, t, ['Civilization could be', 'set back centuries'], 300, 47.6, { size: 88, out: 50.7, mark: { line: 1, from: 0, to: 18, color: '#ff6b5b' } });
   say(ctx, t, ['And the Moon isn’t finished.'], 1700, 49.0, { size: 60, weight: 900, out: 50.7 });
+}
+
+// ---------------------------------------------------------------- v7: death-toll cards and the 3D quake
+function tollBackdrop(ctx, t, t0, t1) {
+  ctx.fillStyle = grad(ctx, ['#1b2a5c', '#2d4f93', '#3f74c4']); ctx.fillRect(0, 0, W, H);
+  drift(ctx, t, t0, t1, 1.0, 1.04, W / 2, 1700);
+  toonGlobe(ctx, W / 2, 2150, 760, t, { lon0: 120 + t * 2, lat0: 30 });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+function sToll1(ctx, t) {
+  tollBackdrop(ctx, t, 18.4, 23.2);
+  say(ctx, t, ['FIRST 24 HOURS (est.)'], 300, 18.5, { size: 76, out: 23.0 });
+  statRow(ctx, t, 520, 18.7, '1+ BILLION', 'dead: drowned, crushed, swept out to sea', { out: 23.0, color: '#ffb0a0' });
+  statRow(ctx, t, 790, 19.9, '80%', 'of world trade sinks with the ports', { out: 23.0 });
+  statRow(ctx, t, 1060, 21.1, '99%', 'of internet traffic between continents: cut', { out: 23.0 });
+}
+
+const QUAKE = { splitAt: 0.8, splitDur: 3.2, gap: 700, eruptAt: 3.6,
+  path: [[0, [1500, 380, 260], [-400, 20, 0]], [3, [1500, 700, 900], [-200, -120, 0]], [7.6, [700, 1600, 2300], [-300, 0, -1500]]],
+  shake: lt => 6 + 12 * Math.exp(-Math.abs(lt - 1.5)) };
+function sQuake3(ctx, t) {
+  const lt = t - 23.2;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = grad(ctx, ['#4a2a3a', '#b0503a', '#f0a070']); ctx.fillRect(0, 0, W, H);
+  Quake3D.draw(ctx, lt, QUAKE);
+  say(ctx, t, ['The ground', 'tears open.'], 300, 23.4, { size: 96, out: 25.6 });
+  say(ctx, t, ['Whole cities fall', 'into the earth.'], 300, 25.8, { size: 92, out: 28.1, mark: { line: 1, from: 0, to: 15, color: '#ff6b5b' } });
+  say(ctx, t, ['Volcanoes erupt', 'worldwide.'], 300, 28.3, { size: 92, out: 30.6 });
+  say(ctx, t, ['Millions trapped as', 'towers come down'], 1620, 26.6, { size: 66, weight: 900, out: 30.6 });
+}
+
+function sToll2(ctx, t) {
+  tollBackdrop(ctx, t, 30.8, 34.6);
+  say(ctx, t, ['FIRST WEEK (est.)'], 300, 30.9, { size: 76, out: 34.4 });
+  statRow(ctx, t, 520, 31.0, 'TENS OF MILLIONS', 'more, buried as cities collapse', { out: 34.4, color: '#ffb0a0', size: 90 });
+  statRow(ctx, t, 790, 32.3, '50,000+', 'died in ONE quake in Turkey in 2023. This is every fault on Earth at once.', { out: 34.4 });
+}
+
+function sFamine2(ctx, t) {
+  space(ctx, t);
+  drift(ctx, t, 34.6, 39.8, 1.0, 1.05, W / 2, 1450);
+  const cx = W / 2, cy = 1480, R = 400;
+  toonGlobe(ctx, cx, cy, R, t, { lon0: 60 + t * 4, lat0: 15 });
+  const ash = easeInOut(prog(t, 34.8, 37.0));
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
+  const r = rng(33);
+  for (let i = 0; i < 40; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * R, rr = 60 + r() * 120;
+    ctx.fillStyle = `rgba(80,72,78,${0.85 * Math.min(1, ash * 1.6 - r() * 0.5)})`; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * d, cy + Math.sin(a) * d, rr * ash, 0, 6.283); ctx.fill(); }
+  for (let i = 0; i < 10; i++) { const a = r() * 6.283, d = Math.sqrt(r()) * R * 0.85; glow(ctx, cx + Math.cos(a) * d, cy + Math.sin(a) * d, 40, '255,120,40', 0.9 * (0.5 + 0.5 * Math.sin(t * 6 + i))); }
+  ctx.restore();
+  ctx.lineWidth = 8; ctx.strokeStyle = INK; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.stroke();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, t, ['Ash blots out the Sun.', 'Harvests fail.'], 300, 34.8, { size: 84, out: 37.3 });
+  statRow(ctx, t, 640, 35.8, '3.3 BILLION', 'rely on fish for protein. Fisheries collapse.', { out: 37.3 });
+  say(ctx, t, ['FIRST YEAR (est.)'], 300, 37.5, { size: 76, out: 39.6 });
+  statRow(ctx, t, 560, 37.7, 'HALF OF HUMANITY', 'could be gone: around 4 billion people', { out: 39.6, color: '#ffb0a0', size: 88 });
 }

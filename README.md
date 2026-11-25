@@ -90,6 +90,12 @@ Don't use lens flares, colour fringing, HUD counters, hand or "your life" gimmic
 
 Three.js is bundled once into `engine/vendor/three.iife.js`. To rebuild it: `npm install`, then `npx esbuild node_modules/three/build/three.module.js --bundle --format=iife --global-name=THREE --minify --outfile=engine/vendor/three.iife.js`. The renderer launches Chromium with SwiftShader WebGL, which works headless with no GPU.
 
+**3D quake (`Quake3D.draw`):** a city on two ground slabs that tear apart along a fault. The slabs pull apart, tilt and sink, towers near the fault topple into a magma-lit rift, other towers shake and crumble, dust boils up, and a volcano erupts on the horizon with an ash column and lava bombs.
+
+**Pacing:** `scaled(sceneFn, newStart, newEnd, origStart, origEnd)` compresses an existing scene into a tighter slot. Its sound cues are re-timed with it (see `SEG` and `remapSfx` in `moon-closer.js`). Aim for a new beat every 2 to 3 seconds and keep shorts under 60 seconds.
+
+**Death tolls:** give a timeline (first 24 hours, first week, first year) labelled "(est.)" on screen, and put the reasoning and sources in the script header.
+
 **Long shorts:** reuse scenes at new times with `shifted(sceneFn, originalStart, newStart)`. Show societal tolls with `statRow()`: a big outlined number with one line of sourced context.
 
 ## Videos are not stored in git
