@@ -11,10 +11,12 @@
 //    broken water main flooded the same street.
 //  - Kobe 1995: port quay walls slid and liquefied; container cranes were knocked out. The ports of LA/Long Beach sit on
 //    similar fill (hedged: "the port's ground can turn to liquid").
+//  - The fault is ~1,200 km long (about the length of Great Britain, ~1,000 km). The southern section last broke in 1857.
 //  - UCERF3: >99% chance of an M6.7+ in California in the next 30 years.
 
 const SCENES = [
   ['hook', 3.5, [[0, 'swell:2.6']]],
+  ['map', 5.0, [[0.2, 'rumble:4.6']]],
   ['alert', 3.5, [[0.2, 'heart:3.2']]],
   ['wave', 4.5, [[0.2, 'rumble:4.2'], [0.6, 'boom'], [1.6, 'boom']]],
   ['overpass', 5.5, [[0.2, 'rumble:5'], [1.2, 'impact'], [1.25, 'boom'], [2.9, 'impact'], [2.95, 'boom']]],
@@ -23,7 +25,7 @@ const SCENES = [
   ['fire', 5.0, [[0.5, 'impact'], [0.55, 'boom'], [0.6, 'roar:4.2']]],
   ['port', 4.5, [[0.2, 'rumble:4'], [1.6, 'boom'], [2.6, 'roar:1.8'], [2.7, 'boom']]],
   ['heli', 5.0, [[0.1, 'heart:4.8'], [0.7, 'impact'], [1.7, 'impact'], [2.7, 'impact']]],
-  ['sign', 5.5, [[0.2, 'swell:5']]],
+  ['sign', 6.0, [[0.2, 'swell:5.6']]],
   ['end', 3.0, [[0.2, 'swell:2.5']]],
 ];
 const START = {}; let _acc = 0; const _sfx = [];
@@ -39,7 +41,7 @@ const SHORT = {
   music: { bpm: 84, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHook, alert: vAlert2, wave: vWave, overpass: vOverpass, tower: vTower, crack: vCrack, fire: vFireWater, port: vPort,
+const FNS = { hook: vHook, map: vMapFault, alert: vAlert2, wave: vWave, overpass: vOverpass, tower: vTower, crack: vCrack, fire: vFireWater, port: vPort,
               heli: vHeli, sign: vSign, end: vEnd };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 function render(ctx, t) {
@@ -48,6 +50,35 @@ function render(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (t < START.end) { ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850); }
   post(ctx, { bloom: 0.26, contrast: 1.1, saturate: 1.18, vignette: 0.38 });
+}
+
+// ================================================================ stylised California map (Natural Earth coast + fault trace)
+const FAULT = [[-115.7, 33.35], [-116.2, 33.7], [-116.8, 33.95], [-117.3, 34.2], [-117.45, 34.3], [-118.1, 34.55], [-118.95, 34.8], [-119.8, 35.2], [-120.43, 35.9],
+  [-121.4, 36.85], [-122.45, 37.6], [-122.8, 38.0], [-123.7, 38.95], [-124.1, 40.1]];
+const CA_BORDER = [[-124.2, 42.0], [-120.0, 42.0], [-120.0, 39.0], [-114.63, 35.0], [-114.45, 34.3], [-114.72, 33.0], [-114.72, 32.72], [-117.12, 32.53]];
+const CAC = [['Los Angeles', -118.24, 34.05, 1], ['San Francisco', -122.42, 37.77, 1], ['San Diego', -117.16, 32.72, 0], ['San Bernardino', -117.29, 34.11, 0], ['Palm Springs', -116.55, 33.83, 0], ['Bakersfield', -119.0, 35.37, 0], ['Sacramento', -121.49, 38.58, 0]];
+function caMap(ctx, o) {
+  const { lon0 = -119, lat0 = 36, k = 150, cx = W / 2, cy = 1150, t = 0, rupture = 0, rupFrom = 0, rupTo = 6 } = o, cl = Math.cos(lat0 * Math.PI / 180);
+  const P = (lo, la) => [cx + (lo - lon0) * k * cl, cy - (la - lat0) * k];
+  bgSky(ctx, ['#2a6aaa', '#3a86c8', '#5aa6e0']);
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 2; for (let i = 0; i < 30; i++) { ctx.beginPath(); ctx.moveTo(0, i * 70 + (t * 10) % 70); ctx.lineTo(W, i * 70 + (t * 10) % 70); ctx.stroke(); }
+  for (const poly of LAND) { const [lo, la] = poly[0]; if (poly.length < 30 && !(lo > -140 && lo < -60 && la > 10 && la < 70)) continue;
+    let near = false; for (const [a, b] of poly) if (a > -135 && a < -100 && b > 25 && b < 50) { near = true; break; } if (!near) continue;
+    ctx.fillStyle = '#e6d6a8'; ctx.beginPath(); poly.forEach(([a, b], i) => { const [x, y] = P(a, b); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#c8b480'; ctx.lineWidth = 4; ctx.stroke(); }
+  ctx.strokeStyle = 'rgba(120,100,70,0.6)'; ctx.lineWidth = 4; ctx.setLineDash([14, 10]); ctx.beginPath(); CA_BORDER.forEach(([a, b], i) => { const [x, y] = P(a, b); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); ctx.setLineDash([]);
+  // the fault
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#b02a3a'; ctx.lineWidth = 8; ctx.beginPath(); FAULT.forEach(([a, b], i) => { const [x, y] = P(a, b); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke();
+  if (rupture > 0) { const seg = FAULT.slice(rupFrom, rupTo + 1), L = []; let tot = 0; for (let i = 1; i < seg.length; i++) { const d = Math.hypot(...P(...seg[i]).map((v, j) => v - P(...seg[i - 1])[j])); L.push(d); tot += d; }
+    let rem = tot * rupture, end = P(...seg[0]); ctx.strokeStyle = '#ffd25a'; ctx.lineWidth = 16; ctx.beginPath(); ctx.moveTo(...end);
+    for (let i = 1; i < seg.length && rem > 0; i++) { const q = Math.min(1, rem / L[i - 1]), a = P(...seg[i - 1]), b = P(...seg[i]); end = [lerp(a[0], b[0], q), lerp(a[1], b[1], q)]; ctx.lineTo(...end); rem -= L[i - 1]; }
+    ctx.stroke(); glow(ctx, end[0], end[1], 90, '255,220,120', 0.9); return { P, tip: end }; }
+  return { P };
+}
+function cityDots(ctx, P, which, size = 40) {
+  for (const [name, lo, la, big] of CAC) { if (which && !which.includes(name)) continue; const [x, y] = P(lo, la);
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(x, y, big ? 14 : 10, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#1b1b2e'; ctx.lineWidth = 4; ctx.stroke();
+    ctx.font = `900 ${size}px ${FONT}`; ctx.textAlign = 'left'; ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 10; ctx.fillStyle = '#ffffff'; ctx.fillText(name, x + 22, y + 12); ctx.shadowBlur = 0; }
 }
 
 // ================================================================ action kit
@@ -89,6 +120,23 @@ function vHook(ctx, u) {
   if (u < 3.4) { ctx.save(); ctx.globalAlpha = 1 - easeInOut(prog(u, 3.0, 3.4));
     shadowed(ctx, () => blip(ctx, u, 890, 1720, u > 1.4 ? 'shock' : 'happy', 0.8, 0.3), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
   say(ctx, u, ['What if the', 'San Andreas', 'finally snapped?'], 300, 0.15, { size: 100, out: OUT('hook'), mark: { line: 1, from: 0, to: 11, color: '#e63946' } });
+}
+
+// ================================================================ 1b. the fault from above
+function vMapFault(ctx, u) {
+  const zoom = lerp(96, 118, easeInOut(prog(u, 0, 5)));
+  const { P } = caMap(ctx, { lon0: -119.4, lat0: 36.3, k: zoom, cy: 1220, t: u, rupture: easeInOut(prog(u, 0.3, 2.2)), rupFrom: 0, rupTo: FAULT.length - 1 });
+  // plates grinding past each other
+  const sh = Math.sin(u * 2.2) * 14, arrow = (x, y, ang) => { ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.fillRect(-80, -16, 120, 32); ctx.beginPath(); ctx.moveTo(40, -40); ctx.lineTo(96, 0); ctx.lineTo(40, 40); ctx.fill(); ctx.restore(); };
+  if (u > 1.6) { ctx.save(); ctx.globalAlpha = R2((u - 1.6) / 0.4); arrow(230 + sh, 1330 + sh, -2.2); arrow(820 - sh, 1080 - sh, 0.95);
+    ctx.font = `900 34px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 10;
+    ctx.fillText('PACIFIC PLATE', 230, 1470); ctx.fillText('NORTH AMERICAN', 830, 930); ctx.fillText('PLATE', 830, 970); ctx.shadowBlur = 0; ctx.restore(); }
+  cityDots(ctx, P, ['Los Angeles', 'San Francisco'], 40);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 600, 0.6);
+  say(ctx, u, ['The San Andreas:', '1,200 km of cracked crust'], 230, 0.15, { size: 78, out: 2.4 });
+  say(ctx, u, ['Two plates grinding past', 'each other. The south has', 'been stuck since 1857.'], 230, 2.5, { size: 68, out: OUT('map') });
+  scrimB(ctx, 1600, 0.55); say(ctx, u, ['about as long as Great Britain'], 1780, 0.9, { size: 46, weight: 800, x: W / 2, align: 'center', out: OUT('map') });
 }
 
 // ================================================================ 2. the alert, from the driver's seat
@@ -287,28 +335,24 @@ function vHeli(ctx, u) {
   say(ctx, u, ['The toll (USGS est.)'], 330, 0.15, { size: 84, out: OUT('heli') });
 }
 
-// ================================================================ 10. ending: the road-sign gag (15 million years)
+// ================================================================ 10. ending: LA rides the Pacific Plate north to San Francisco
 function vSign(ctx, u) {
-  const k = easeInOut(prog(u, 1.6, 4.8)), days = u > 1.6 && u < 4.8;
-  const ph = days ? (u * 6) % 1 : 0.3, sunUp = Math.sin(ph * Math.PI * 2) > -0.1;
-  bgSky(ctx, sunUp ? ['#4a9ae0', '#9ad0f0', '#ffe0b0'] : ['#05060e', '#141a38', '#2a2a50']);
-  if (!sunUp) stars(ctx, u, 1);
-  const sxp = lerp(-100, W + 100, ph), syp = 900 - Math.sin(ph * Math.PI * 2) * 600; if (sunUp) { glow(ctx, sxp, syp, 160, '255,230,160', 0.8); ctx.fillStyle = '#fff0c0'; ctx.beginPath(); ctx.arc(sxp, syp, 60, 0, 6.283); ctx.fill(); }
-  mountainsS(ctx, 1150, 8, sunUp ? '#b08a7a' : '#2a2438', 200);
-  ctx.fillStyle = sunUp ? '#e0b880' : '#3a3040'; ctx.fillRect(0, 1150, W, H);
-  ctx.fillStyle = sunUp ? '#5a5058' : '#2a2430'; ctx.beginPath(); ctx.moveTo(W / 2 - 30, 1150); ctx.lineTo(W / 2 + 30, 1150); ctx.lineTo(W + 400, H); ctx.lineTo(-400, H); ctx.fill();
-  // the sign
-  ctx.fillStyle = '#8a8a90'; ctx.fillRect(250, 900, 22, 700); ctx.fillRect(810, 900, 22, 700);
-  ctx.fillStyle = '#0a6a3a'; roundRect(ctx, 180, 700, 720, 300, 24); ctx.fill(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 8; roundRect(ctx, 196, 716, 688, 268, 16); ctx.stroke();
-  const km = Math.round(560 * (1 - k)); ctx.font = `900 64px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = '#ffffff'; ctx.fillText('San Francisco', 240, 830);
-  ctx.textAlign = 'right'; ctx.font = `900 96px ${FONT}`; ctx.fillText(`${km}`, 840, 940); ctx.font = `800 40px ${FONT}`; ctx.fillText('km', 840, 975);
-  if (u > 1.6 && u < 4.9) { ctx.font = `900 54px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffd25a'; ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 12;
-    ctx.fillText(`${(k * 15).toFixed(1)} million years later`, W / 2, 1260); ctx.shadowBlur = 0; }
+  const k = easeInOut(prog(u, 1.4, 4.8)), { P } = caMap(ctx, { lon0: -120.2, lat0: 36.1, k: 150, cy: 1220, t: u });
+  const path = FAULT.slice(3, 11).map(([a, b]) => [a - 0.35, b - 0.05]);   // just west of the fault, on the Pacific side
+  const L = []; let tot = 0; for (let i = 1; i < path.length; i++) { const d = Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]); L.push(d); tot += d; }
+  let rem = tot * k, pos = path[0]; for (let i = 1; i < path.length && rem > 0; i++) { const q = Math.min(1, rem / L[i - 1]); pos = [lerp(path[i - 1][0], path[i][0], q), lerp(path[i - 1][1], path[i][1], q)]; rem -= L[i - 1]; }
+  const [ox, oy] = P(-118.24, 34.05), [x, y] = P(...pos), [fx, fy] = P(-122.42, 37.77);
+  ctx.strokeStyle = 'rgba(255,210,90,0.7)'; ctx.lineWidth = 6; ctx.setLineDash([14, 10]); ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(x, y); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.beginPath(); ctx.arc(ox, oy, 12, 0, 6.283); ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(fx, fy, 14, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#1b1b2e'; ctx.lineWidth = 4; ctx.stroke();
+  ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'left'; ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 10; ctx.fillStyle = '#ffffff'; ctx.fillText('San Francisco', fx + 24, fy - 16);
+  glow(ctx, x, y, 70, '255,210,90', 0.85); ctx.fillStyle = '#ffd25a'; ctx.beginPath(); ctx.arc(x, y, 18, 0, 6.283); ctx.fill(); ctx.fillStyle = '#ffd25a'; ctx.fillText('Los Angeles', x + 28, y + 14); ctx.shadowBlur = 0;
+  if (u > 1.4) bigNum(ctx, u, `${(k * 15).toFixed(1)} million years`, 1560, 1.4, { size: 74, color: '#ffffff', out: OUT('sign') });
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 560, 0.55);
   say(ctx, u, ['California won’t fall', 'into the ocean.'], 230, 0.15, { size: 84, out: 1.6 });
-  say(ctx, u, ['It slides north', '~4 cm a year…'], 230, 1.7, { size: 88, out: OUT('sign') });
-  if (u > 4.4) { scrimB(ctx, 1500, 0.65); say(ctx, u, ['Next big quake? Over 99% chance of', 'an M6.7+ in the next 30 years.'], 1680, 4.4, { size: 46, weight: 800, out: OUT('sign') }); }
+  say(ctx, u, ['LA rides north ~4 cm a year,', 'until it meets San Francisco'], 230, 1.7, { size: 68, out: OUT('sign') });
+  if (u > 4.6) { scrimB(ctx, 1640, 0.65); say(ctx, u, ['Over 99% chance of an M6.7+', 'in the next 30 years.'], 1740, 4.6, { size: 44, weight: 800, out: OUT('sign') }); }
 }
 
 function vEnd(ctx, u) {
