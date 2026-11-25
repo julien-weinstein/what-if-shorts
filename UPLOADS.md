@@ -212,6 +212,33 @@ In our timeline, the Allies stopped it. It cost 70–85 million lives.
 
 ---
 
+## 8. What if Yellowstone erupted?
+
+**File:** `videos/yellowstone.mp4`
+
+**Title:** What If Yellowstone Erupted? 🌋🇺🇸 #shorts
+
+**Description:**
+
+```
+First: earthquake swarms. The ground bulges. Geysers go wild.
+Then the ground splits in a ring 80 km wide, and an ash column climbs 40 km into the sky.
+Avalanches of ash and gas race out at hundreds of km/h, up to 100 km from the caldera.
+Ash falls on most of the United States: a meter near the volcano, centimeters in the Midwest.
+10 cm of wet ash can collapse a roof. Ash kills jet engines: every flight is grounded.
+The U.S. grows about a third of the world's corn. This year's harvest: buried.
+Years of volcanic winter. Snow in summer.
+Killed outright: tens of thousands (est.). Worldwide famine: millions (est.).
+
+Relax: it's not "overdue." Odds of a supereruption: 1 in 730,000 a year (USGS).
+
+#whatif #yellowstone #volcano #science #shorts
+```
+
+**Pinned comment:** The last Yellowstone supereruption (631,000 years ago) was about 6x bigger than Tambora in 1815, which caused "the Year Without a Summer." 🌋
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
