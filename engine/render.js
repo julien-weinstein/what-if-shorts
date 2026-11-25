@@ -62,9 +62,9 @@ async function openPage(browser, lib, scene) {
     const page = await openPage(browser, lib, scene);
     const part = `${outBase}.part${w}.mp4`;
     const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg',
-      '-i', '-', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-preset', 'medium', '-crf', '17', part], { stdio: ['pipe', 'inherit', 'inherit'] });
+      '-i', '-', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-preset', 'slow', '-crf', '14', part], { stdio: ['pipe', 'inherit', 'inherit'] });
     for (let i = w * per; i < Math.min(frames, (w + 1) * per); i++) {
-      const b64 = await page.evaluate(([t, n, dt]) => { window.renderMB(t, n, dt); return document.getElementById('c').toDataURL('image/jpeg', 0.94).slice(23); }, [i / FPS, MB, 0.5 / FPS]);
+      const b64 = await page.evaluate(([t, n, dt]) => { window.renderMB(t, n, dt); return document.getElementById('c').toDataURL('image/jpeg', 0.985).slice(23); }, [i / FPS, MB, 0.5 / FPS]);
       if (!ff.stdin.write(Buffer.from(b64, 'base64'))) await new Promise(r => ff.stdin.once('drain', r));
       if (++done % 300 === 0) process.stderr.write(`  ${done}/${frames} frames\n`);
     }

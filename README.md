@@ -38,7 +38,7 @@ Shorts run 30 to 45 seconds. Every claim has to be real science or real history,
 
 A small "WHAT IF, THOUGH?" watermark sits bottom-left.
 
-**Story:** broad strokes at planetary scale. Each beat is a system-level change (oceans, crust, sky, climate, orbits, civilisation) with one jaw-dropping true number. Physics and biology must check out (show the working in the script header), and the ending is a true twist that escalates the premise.
+**Story:** every short is an arc with a direction and an endpoint, not a list of facts. It starts with a hook or a calm before the storm, then escalates through human consequences, turns ("but here's the thing…"), and ends on a final image. Give consequences as human cost (deaths, famine, cities lost) with a sourced, hedged number, never neutral demographics like "40% live near coasts". Keep broad strokes at planetary scale. Each beat is a system-level change (oceans, crust, sky, climate, orbits, civilisation) with one jaw-dropping true number. Physics and biology must check out (show the working in the script header), and the ending is a true twist that escalates the premise.
 
 The retired experiments are kept for reference: `style2.js` (dark), `style4.js` (cartoon people and kinetic captions), and the shorts in `archive/`.
 

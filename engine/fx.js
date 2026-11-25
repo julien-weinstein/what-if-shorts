@@ -26,7 +26,9 @@ function fxBuf(name, w = W, h = H) { const k = name + w + 'x' + h; if (!_fxBufs[
 // ---------------------------------------------------------------- globe
 // opts: lon0/lat0 view centre (degrees), sun (unit vector in view space, z toward viewer),
 // clouds (0..1), t (for cloud drift), tint for land, night lights.
-const _globeTex = makeCanvas(420, 420), _globeMask = makeCanvas(420, 420);
+const _texCache = {};
+function texFor(name, R, cap = 820) { const n = Math.max(64, Math.min(cap, Math.round(2 * R))); const k = name + n;
+  if (!_texCache[k]) _texCache[k] = makeCanvas(n, n); return _texCache[k]; }
 function globe(ctx, cx, cy, R, o = {}) {
   const { lon0 = 0, lat0 = 15, sun = [-0.55, -0.35, 0.76], clouds = 0.55, t = 0, atmo = '120,180,255', lights = true, ice = true } = o;
   const l0 = lon0 * Math.PI / 180, p0 = lat0 * Math.PI / 180, sp0 = Math.sin(p0), cp0 = Math.cos(p0);
@@ -75,6 +77,7 @@ function globe(ctx, cx, cy, R, o = {}) {
     ctx.fill();
   }
   // land mask at texture resolution (same projection), used for biome colour and city lights
+  const _globeTex = texFor('g', R), _globeMask = texFor('gm', R);
   const N = _globeTex.width, mc = _globeMask.getContext('2d');
   mc.setTransform(1, 0, 0, 1, 0, 0); mc.clearRect(0, 0, N, N); mc.fillStyle = '#fff';
   for (const poly of LAND) { mc.beginPath(); if (trace(mc, poly, N / 2, N / 2, N / 2)) mc.fill(); }
@@ -133,13 +136,14 @@ function globe(ctx, cx, cy, R, o = {}) {
 }
 
 // Realistic-ish Moon with noise-shaded maria and terminator.
-const _moonTex = makeCanvas(260, 260);
+// (moon texture is allocated per size by texFor)
 const _CRATERS = (() => { const r = rng(808), out = [];
   for (let i = 0; i < 46; i++) { const u = r() * 2 - 1, a = r() * 6.283, q = Math.sqrt(1 - u * u);
     out.push([q * Math.cos(a), q * Math.sin(a), Math.abs(u) * (r() > 0.25 ? 1 : -1), 0.03 + Math.pow(r(), 3) * 0.16]); }
   return out; })();
 function moonFx(ctx, cx, cy, R, o = {}) {
   const { sun = [-0.5, -0.3, 0.8], crack = 0 } = o;
+  const _moonTex = texFor('m', R, 760);
   const N = _moonTex.width, tc = _moonTex.getContext('2d'), img = tc.createImageData(N, N), d = img.data;
   for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
     const x = (i + 0.5) / N * 2 - 1, y = (j + 0.5) / N * 2 - 1, rr = x * x + y * y, k = (j * N + i) * 4;
@@ -287,10 +291,13 @@ function waterWall(ctx, t, front, ground, height, o = {}) {
   face.addColorStop(0, 'rgba(160,230,255,0)'); face.addColorStop(1, 'rgba(160,230,255,0.35)');
   ctx.fillStyle = face; ctx.fillRect(front - 200, top, 400, height);
   // foam + spray
+  ctx.strokeStyle = 'rgba(235,250,255,0.9)'; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.beginPath();
+  for (let x = -50; x <= front; x += 16) { const n = fbm(x * 0.004, t * 0.6, seed, 3); const y = top + n * 120 + Math.sin(x * 0.02 + t * 3) * 14; x === -50 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+  ctx.stroke();
   const r = rng(seed);
-  for (let i = 0; i < 160; i++) {
-    const u = r(), px = lerp(-50, front + height * 0.25, u) + (r() - 0.5) * 60, py = top + fbm(px * 0.004, t * 0.6, seed, 3) * 120 - r() * 50 - (u > 0.85 ? (t * 400 * r()) % 220 : 0);
-    ctx.fillStyle = `rgba(255,255,255,${0.35 + r() * 0.6})`; ctx.beginPath(); ctx.arc(px, py, 4 + r() * 16, 0, 6.283); ctx.fill();
+  for (let i = 0; i < 70; i++) {
+    const u = 0.7 + r() * 0.3, px = lerp(-50, front + height * 0.25, u) + (r() - 0.5) * 40, py = top + fbm(px * 0.004, t * 0.6, seed, 3) * 120 - r() * 40 - ((t * 300 * (0.5 + r())) % 180);
+    ctx.fillStyle = `rgba(245,252,255,${0.5 + r() * 0.4})`; ctx.beginPath(); ctx.arc(px, py, 3 + r() * 8, 0, 6.283); ctx.fill();
   }
   ctx.restore();
 }
@@ -309,12 +316,12 @@ function ship(ctx, x, y, s, rot) {
 // ---------------------------------------------------------------- post-processing
 // Bloom + colour grade + soft vignette. Call once at the end of render().
 function post(ctx, o = {}) {
-  const { bloom = 0.45, contrast = 1.06, saturate = 1.12, vignette = 0.35 } = o;
+  const { bloom = 0.22, contrast = 1.05, saturate = 1.08, vignette = 0.28 } = o;
   const src = ctx.canvas;
   const small = fxBuf('bloom', W / 4, H / 4), sc = small.getContext('2d');
-  sc.filter = 'brightness(0.75) contrast(2.6)'; sc.clearRect(0, 0, small.width, small.height); sc.drawImage(src, 0, 0, small.width, small.height); sc.filter = 'none';
+  sc.filter = 'brightness(0.62) contrast(3.4)'; sc.clearRect(0, 0, small.width, small.height); sc.drawImage(src, 0, 0, small.width, small.height); sc.filter = 'none';
   const blurred = fxBuf('bloom2', W / 4, H / 4), bc = blurred.getContext('2d');
-  bc.filter = 'blur(10px)'; bc.clearRect(0, 0, blurred.width, blurred.height); bc.drawImage(small, 0, 0); bc.filter = 'none';
+  bc.filter = 'blur(7px)'; bc.clearRect(0, 0, blurred.width, blurred.height); bc.drawImage(small, 0, 0); bc.filter = 'none';
   const copy = fxBuf('grade'), cc = copy.getContext('2d');
   cc.filter = `contrast(${contrast}) saturate(${saturate})`; cc.clearRect(0, 0, W, H); cc.drawImage(src, 0, 0); cc.filter = 'none';
   ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -332,4 +339,18 @@ function dof(ctx, px, fn) {
   const b = fxBuf('dof'), bc = b.getContext('2d');
   bc.setTransform(1, 0, 0, 1, 0, 0); bc.clearRect(0, 0, W, H); bc.save(); fn(bc); bc.restore();
   ctx.save(); ctx.filter = `blur(${px}px)`; ctx.drawImage(b, 0, 0); ctx.filter = 'none'; ctx.restore();
+}
+
+// Count-up number in clean type (e.g. a death toll). Formats with commas; optional prefix/suffix.
+function tally(ctx, t, value, x, y, at, o = {}) {
+  const { size = 120, color = '#ffffff', dur = 2.2, prefix = '', suffix = '', out = 1e9, label = '', labelSize = 40, align = 'center' } = o;
+  if (t < at || t > out + 0.4) return;
+  const v = Math.round(value * easeOut(prog(t, at, at + dur)));
+  ctx.save(); ctx.globalAlpha = Math.min(1, prog(t, at, at + 0.3)) * (1 - prog(t, out, out + 0.35));
+  ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
+  ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = 6;
+  ctx.font = `900 ${size}px ${FONT}`; if (ctx.letterSpacing !== undefined) ctx.letterSpacing = `${-size * 0.03}px`;
+  ctx.fillStyle = color; ctx.fillText(prefix + v.toLocaleString('en-US') + suffix, x, y);
+  if (label) { if (ctx.letterSpacing !== undefined) ctx.letterSpacing = '0px'; ctx.font = `800 ${labelSize}px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fillText(label, x, y + labelSize * 1.5); }
+  ctx.restore();
 }

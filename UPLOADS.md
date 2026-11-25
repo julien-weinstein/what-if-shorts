@@ -49,25 +49,24 @@ Which part would get you first? 👇
 
 **File:** `videos/moon-closer.mp4`
 
-**Title:** What If the Moon Were 10 Times Closer? 🌕 #shorts
+**Title:** What If the Moon Were 10 Times Closer? 🌕🌊 #shorts
 
 **Description:**
 
 ```
-Bring the Moon 10x closer and the whole planet changes.
+It would be the most beautiful thing you've ever seen... for about a day.
 
-🌕 Over 10x wider in the sky, and full-moon nights ~100x brighter
-🌀 It orbits faster than Earth spins, so it rises in the WEST
-🌊 Tidal pull 1,000x stronger: tides hundreds of meters high
-🌋 The crust flexes too: constant quakes and eruptions, like Io
-🌑 Total solar eclipses become routine
+Then the tides arrive: hundreds of meters high, with nearly 2 billion people in their path.
+They come back every few days. The crust heaves, volcanoes erupt everywhere, and ash blots out the Sun.
 
-And it's doomed: too close to keep pace with Earth, it spirals inward until it's torn into a ring.
+And the Moon is falling. Every year it gets closer and the tides get worse, until Earth's gravity tears it apart.
+
+Earth would end up with rings... and no Moon at all.
 
 #whatif #moon #space #physics #shorts
 ```
 
-**Pinned comment:** Tidal force grows with the CUBE of distance. 10x closer = 1,000x the pull. 🌊
+**Pinned comment:** The math: tidal force grows with the CUBE of distance. 10x closer = 1,000x the tides. At the breaking point it's nearly 10,000x. 🌊
 
 ---
 
