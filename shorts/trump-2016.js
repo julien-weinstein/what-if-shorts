@@ -1,35 +1,37 @@
-// What if Trump lost in 2016?
+// What if Trump lost in 2016?   (v2: leans liberal by request; every factual claim documented)
 //
-// TONE: even-handed counterfactual. Each beat is a widely discussed, well-grounded "likely" change, hedged on screen
-// ("probably", "likely", "anyone's guess"). No likenesses: faceless figures and text labels only.
+// EDITORIAL: the channel's take is that the other timeline would be better. To keep it credible, the hits are documented
+// events, and the counterfactuals are framed as likely, not certain. Little caricature figures (faceless) for Trump and
+// Clinton.
 //
 // FACTS (checked):
-//  - 2016 margins: Wisconsin 22,748; Michigan 10,704; Pennsylvania 44,292 -> 77,744 votes total, <0.06% of ~137M cast.
-//  - Pledged electoral votes 306-232. Flipping WI (10), MI (16), PA (20) = 46 -> 260-278 (270 to win).
-//  - Supreme Court: Trump appointed Gorsuch (2017, Scalia seat), Kavanaugh (2018, Kennedy seat), Barrett (2020, Ginsburg
-//    seat) -> 6-3 conservative; Dobbs (June 2022) overturned Roe v. Wade. Senate was Republican 2017-2021 (it blocked
-//    Garland in 2016), so a Clinton court is hedged "if the Senate confirmed her picks".
-//  - US exit from the Paris Agreement announced June 2017; exit from the Iran nuclear deal (JCPOA) May 2018;
-//    Tax Cuts and Jobs Act Dec 2017 (corporate rate 35% -> 21%); tariffs on ~$370B of Chinese goods by 2019;
-//    Abraham Accords Sept 2020; first-term federal judges appointed: 234.
-//  - The president's party almost always loses House seats in midterms. Rep. Jason Chaffetz (Oct 2016, Washington Post)
-//    on investigating a President Clinton: "we've got two years' worth of material already lined up."
-//  - Oct 2016: multiple outlets (e.g. Financial Times, Vanity Fair) reported Trump allies exploring a "Trump TV" network.
-//  - COVID-19 still arrives in 2020 regardless.
-//  - Our timeline: Biden wins 2020; January 6th, 2021; Trump wins 2024 and is inaugurated January 2025.
-// PLOT HOLES: Would Clinton's picks get confirmed? hedged on screen. Would Trump run again in 2020? framed as a question.
+//  - 2016 margins: WI 22,748; MI 10,704; PA 44,292 -> 77,744 votes, <0.06% of ~137M cast. Pledged EV 306-232 -> 260-278.
+//  - Supreme Court: Gorsuch (2017), Kavanaugh (2018), Barrett (2020) -> 6-3 conservative; Dobbs (June 2022) overturned Roe.
+//    Republican Senate 2017-2021 could have blocked Clinton's picks (footnote on screen).
+//  - Paris exit announced 2017 (and again in 2025); Iran deal (JCPOA) exit May 2018; TCJA Dec 2017 (~$1.9T added to
+//    deficits over 10 yrs, CBO); trade war tariffs 2018-19.
+//  - Our-timeline events: travel ban (Jan 2017); family separations at the border (2018, thousands of children);
+//    impeachments (Dec 2019, Jan 2021); January 6th (2021); pardons/commutations for ~1,500 Jan. 6 defendants (Jan 2025);
+//    $TRUMP meme coin (Jan 2025); acceptance of a ~$400M Boeing 747 from Qatar (May 2025).
+//  - COVID: ~1.2 million U.S. deaths. The White House NSC pandemic office was disbanded in 2018. Multiple studies
+//    (e.g. Lancet Commission 2021; comparisons with peer nations) estimate hundreds of thousands of U.S. deaths were avoidable.
+//  - 2025: sweeping tariffs on nearly every country; average effective rate highest since the 1930s (Yale Budget Lab);
+//    most were struck down by the Supreme Court in Feb 2026 (Learning Resources v. Trump).
+//  - 2026: a U.S.-Israeli war with Iran (began 2026; DoD cost estimate ~$48B by Nov 2026); unresolved as of Nov 2026.
+//  - Oct 2016 reports (FT, Vanity Fair) of Trump allies exploring a "Trump TV" network.
+//  - Today (Nov 2026): Trump is president (second term, inaugurated Jan 2025).
 
 const SCENES = [
   ['hook', 3.5, [[0, 'swell:2.6']]],
   ['margin', 5.0, [[0.2, 'rumble:4.6'], [2.6, 'impact']]],
   ['flip', 4.5, [[0.4, 'impact'], [0.7, 'impact'], [1.0, 'impact'], [1.9, 'swell:2.4']]],
   ['fork', 4.0, [[0.2, 'swell:3.6'], [1.2, 'boom']]],
-  ['court', 5.5, [[0.2, 'rumble:5'], [1.6, 'impact'], [3.2, 'impact']]],
+  ['court', 5.0, [[0.2, 'rumble:4.6'], [1.6, 'impact'], [3.2, 'impact']]],
   ['news', 6.0, [[0.3, 'air'], [1.4, 'air'], [2.5, 'air'], [3.6, 'air'], [4.7, 'air']]],
-  ['congress', 4.5, [[0.3, 'roar:3.8'], [1.0, 'boom']]],
-  ['tv', 5.0, [[0.2, 'swell:4.6']]],
-  ['covid', 4.5, [[0.1, 'rumble:4.2']]],
-  ['race', 5.0, [[0.2, 'heart:4.6'], [2.4, 'boom']]],
+  ['wall', 6.0, [[0.2, 'rumble:5.6'], [2.2, 'impact'], [3.6, 'impact'], [5.0, 'impact']]],
+  ['covid', 5.5, [[0.2, 'heart:5.2']]],
+  ['war', 5.5, [[0.2, 'rumble:5.2'], [2.8, 'boom'], [3.2, 'impact']]],
+  ['tv', 4.0, [[0.2, 'swell:3.6']]],
   ['final', 5.5, [[0.2, 'swell:5']]],
   ['end', 3.0, [[0.2, 'swell:2.5']]],
 ];
@@ -46,8 +48,8 @@ const SHORT = {
   music: { bpm: 76, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHook, margin: vMargin, flip: vFlip, fork: vFork, court: vCourt, news: vNews, congress: vCongress, tv: vTV,
-              covid: vCovid, race: vRace, final: vFinal, end: vEnd };
+const FNS = { hook: vHook, margin: vMargin, flip: vFlip, fork: vFork, court: vCourt, news: vNews, wall: vWall, covid: vCovid2, war: vWar,
+              tv: vTV, final: vFinal, end: vEnd };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 const RED = '#e63946', BLUE = '#3a86ff', GOLD = '#ffbe0b', TEAL = '#4cc9f0', VIR = '#8a4fff', SPK = '#c6ff4a';
 function render(ctx, t) {
@@ -73,6 +75,98 @@ function vMini(ctx, x, y, r, rot = 0, col = VIR) {
   ctx.strokeStyle = SPK; ctx.lineWidth = Math.max(1, r * 0.22); ctx.beginPath();
   for (let i = 0; i < 8; i++) { const a = rot + i * Math.PI / 4; ctx.moveTo(x + Math.cos(a) * r * 0.8, y + Math.sin(a) * r * 0.8); ctx.lineTo(x + Math.cos(a) * r * 1.45, y + Math.sin(a) * r * 1.45); }
   ctx.stroke(); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill();
+}
+
+// ================================================================ little caricature figures (faceless)
+function pol(ctx, x, y, s, who, o = {}) {
+  const { pose = 'stand', t = 0, dir = 1, slump = 0 } = o;
+  const P = who === 'trump' ? { suit: '#1c2541', leg: '#141a30', skin: '#f4a462', hair: '#f2c14e' } : { suit: '#2f6fd6', leg: '#2558b0', skin: '#ffd9c0', hair: '#f5d78e' };
+  ctx.save(); ctx.translate(x, y); ctx.scale(dir, 1);
+  ctx.fillStyle = 'rgba(20,20,60,0.2)'; ctx.beginPath(); ctx.ellipse(0, 0, s * 0.3, s * 0.05, 0, 0, 6.283); ctx.fill();
+  ctx.rotate(slump * 0.12);
+  ctx.fillStyle = P.leg; roundRect(ctx, -s * 0.16, -s * 0.34, s * 0.13, s * 0.34, s * 0.05); ctx.fill(); roundRect(ctx, s * 0.03, -s * 0.34, s * 0.13, s * 0.34, s * 0.05); ctx.fill();
+  const w = Math.sin(t * 9) * 0.3, A = { stand: [0.15, 0.15], wave: [0.15, 2.6 + w], cheer: [2.7 + w, 2.7 - w], point: [0.15, 1.5 + w * 0.3], sad: [0.04, 0.04] }[pose] || [0.15, 0.15];
+  for (const side of [-1, 1]) { const a = side < 0 ? A[0] : A[1], sx = side * s * 0.2, sy = -s * 0.62, ex = sx + side * Math.sin(a) * s * 0.3, ey = sy + Math.cos(a) * s * 0.3;
+    ctx.lineCap = 'round'; ctx.strokeStyle = P.suit; ctx.lineWidth = s * 0.1; ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(ex, ey); ctx.stroke();
+    ctx.fillStyle = P.skin; ctx.beginPath(); ctx.arc(ex, ey, s * 0.05, 0, 6.283); ctx.fill(); }
+  ctx.fillStyle = P.suit; roundRect(ctx, -s * 0.23, -s * 0.7, s * 0.46, s * 0.42, s * 0.12); ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(-s * 0.07, -s * 0.7); ctx.lineTo(s * 0.07, -s * 0.7); ctx.lineTo(0, -s * 0.58); ctx.fill();
+  if (who === 'trump') { ctx.fillStyle = '#e63946'; ctx.beginPath(); ctx.moveTo(-s * 0.025, -s * 0.66); ctx.lineTo(s * 0.025, -s * 0.66); ctx.lineTo(s * 0.035, -s * 0.24); ctx.lineTo(0, -s * 0.2); ctx.lineTo(-s * 0.035, -s * 0.24); ctx.fill(); }
+  else { ctx.fillStyle = '#ffffff'; for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.arc(i * s * 0.03, -s * 0.66 + Math.abs(i) * -s * 0.008, s * 0.012, 0, 6.283); ctx.fill(); } }
+  ctx.fillStyle = P.skin; ctx.beginPath(); ctx.arc(0, -s * 0.85, s * 0.155, 0, 6.283); ctx.fill();
+  ctx.fillStyle = P.hair;
+  if (who === 'trump') { ctx.beginPath(); ctx.ellipse(-s * 0.01, -s * 0.96, s * 0.17, s * 0.075, -0.12, 0, 6.283); ctx.fill(); ctx.beginPath(); ctx.ellipse(s * 0.12, -s * 0.94, s * 0.09, s * 0.05, 0.3, 0, 6.283); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-s * 0.13, -s * 0.88, s * 0.05, s * 0.07, 0, 0, 6.283); ctx.fill(); }
+  else { ctx.beginPath(); ctx.ellipse(0, -s * 0.93, s * 0.18, s * 0.11, 0, Math.PI, 0); ctx.fill(); ctx.fillRect(-s * 0.18, -s * 0.94, s * 0.07, s * 0.15); ctx.fillRect(s * 0.11, -s * 0.94, s * 0.07, s * 0.15); }
+  ctx.restore();
+}
+function tag(ctx, x, y, txt, col) { ctx.font = `900 30px ${FONT}`; ctx.textAlign = 'center'; const w = ctx.measureText(txt).width + 30;
+  ctx.fillStyle = col; roundRect(ctx, x - w / 2, y - 26, w, 44, 22); ctx.fill(); ctx.fillStyle = '#ffffff'; ctx.fillText(txt, x, y + 6); }
+
+// ================================================================ the "never happens" wall
+const NEVER = [['2017', 'Muslim travel ban'], ['2018', 'Kids separated from parents at the border'], ['2019', 'First impeachment'], ['2021', 'January 6th attack on the Capitol'],
+  ['2021', 'Second impeachment'], ['2025', 'Pardons for ~1,500 Jan. 6 defendants'], ['2025', 'A $TRUMP meme coin'], ['2025', 'A $400M jet gift from Qatar']];
+function vWall(ctx, u) {
+  bgSky(ctx, ['#2a1f6a', '#3a2f8a', '#4a3faa']);
+  NEVER.forEach(([yr, txt], i) => { const c = i % 2, r = Math.floor(i / 2), x = 60 + c * 490, y = 560 + r * 250, at = 0.2 + i * 0.18, k = easeBack(R2((u - at) / 0.35)); if (k <= 0) return;
+    ctx.save(); ctx.translate(x + 230, y + 100); ctx.scale(k, k); ctx.rotate((i % 3 - 1) * 0.02);
+    ctx.fillStyle = '#ffffff'; roundRect(ctx, -230, -100, 460, 200, 24); ctx.fill(); ctx.fillStyle = GOLD; roundRect(ctx, -230, -100, 460, 22, 11); ctx.fill();
+    ctx.font = `900 30px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = '#9a8a40'; ctx.fillText(yr, -200, -46);
+    ctx.font = `800 36px ${FONT}`; ctx.fillStyle = '#1b1b2e'; const words = txt.split(' '); let line = '', ly = 4; for (const wd of words) { if (ctx.measureText(line + wd).width > 400) { ctx.fillText(line, -200, ly); line = ''; ly += 42; } line += wd + ' '; } ctx.fillText(line, -200, ly);
+    const st = 2.0 + i * 0.42, sk = R2((u - st) / 0.18);
+    if (sk > 0) { ctx.strokeStyle = 'rgba(230,57,70,0.85)'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(-205, -8); ctx.lineTo(-205 + 410 * R2(sk * 1.5), -8); ctx.stroke();
+      ctx.save(); ctx.translate(95, 62); ctx.rotate(-0.12); const sc = lerp(1.6, 0.55, easeOut(sk)); ctx.scale(sc, sc); ctx.globalAlpha = R2(sk * 1.5);
+      ctx.strokeStyle = '#e63946'; ctx.lineWidth = 8; roundRect(ctx, -190, -44, 380, 88, 14); ctx.stroke(); ctx.font = `900 50px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#e63946'; ctx.fillText('NEVER HAPPENS', 0, 18); ctx.restore(); }
+    ctx.restore();
+    if (u > st && u < st + 0.5) for (let q = 0; q < 5; q++) sparkle(ctx, x + 230 + Math.cos(q * 1.26) * 200, y + 100 + Math.sin(q * 1.26) * 110, 14, 1 - (u - st) / 0.5); });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, u, ['In the other timeline,', 'none of this happens:'], 230, 0.15, { size: 80, out: OUT('wall') });
+}
+
+// ================================================================ COVID, side by side
+function vCovid2(ctx, u) {
+  bgSky(ctx, ['#ece6ff', '#dcd2ff', '#c9bcff']);
+  ctx.fillStyle = 'rgba(255,190,11,0.16)'; ctx.fillRect(0, 600, W, 560); ctx.fillStyle = 'rgba(76,201,240,0.18)'; ctx.fillRect(0, 1160, W, 600); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 1156, W, 8);
+  ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = '#b07a00'; ctx.fillText('OUR TIMELINE', 70, 660); ctx.fillStyle = '#1478a0'; ctx.fillText('THE OTHER ONE', 70, 1220);
+  for (let i = 0; i < 9; i++) { const x = 110 + i * 108;
+    const f1 = R2((u - 0.8 - i * 0.12) / 0.5); person2(ctx, x, 1010, 150, { seed: i + 3, sick: 0.7, fall: f1, grey: f1, t: u, dir: i % 2 ? 1 : -1 });
+    const dies = i % 3 === 0, f2 = dies ? R2((u - 2.2 - i * 0.1) / 0.5) : 0; person2(ctx, x, 1570, 150, { seed: i + 3, sick: dies ? 0.7 : 0, fall: f2, grey: f2, t: u, dir: i % 2 ? 1 : -1 });
+    if (!dies && u > 2.8 && u < 4.4) sparkle(ctx, x + 40, 1400 + Math.sin(u * 4 + i) * 20, 14, 0.8); }
+  const lab = (txt, y, at, col, sz = 42) => { if (u < at) return; ctx.save(); ctx.globalAlpha = R2((u - at) / 0.3); ctx.font = `900 ${sz}px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = col; ctx.fillText(txt, 70, y); ctx.restore(); };
+  lab('~1.2 million Americans died', 1110, 1.4, '#2b2d42');
+  lab('Pandemic team still in place.', 1660, 2.4, '#2b2d42'); lab('Experts: hundreds of thousands', 1712, 3.0, BLUE, 38); lab('of those deaths were avoidable', 1756, 3.0, BLUE, 38);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 560, 0.7);
+  say(ctx, u, ['2020: COVID hits.', 'Trump had disbanded', 'the pandemic office.'], 230, 0.15, { size: 72, out: OUT('covid') });
+}
+
+// ================================================================ tariffs and the Iran war, side by side
+function vWar(ctx, u) {
+  bgSky(ctx, ['#ece6ff', '#dcd2ff', '#c9bcff']);
+  // top: our timeline (smoky, jets, containers stamped with tariffs)
+  ctx.fillStyle = '#e8c9a8'; ctx.fillRect(0, 600, W, 556);
+  const r = rng(13);
+  for (let i = 0; i < 4; i++) { const ex = 640 + r() * 380, ey = 760 + r() * 300, at = 1.6 + i * 0.5, dt = u - at; if (dt < 0) continue;
+    glow(ctx, ex, ey, 60 + 160 * R2(dt), '255,140,40', 0.9 * Math.exp(-dt)); for (let k = 0; k < 5; k++) { ctx.fillStyle = `rgba(80,60,60,${0.35 - k * 0.06})`; ctx.beginPath(); ctx.arc(ex + k * 10, ey - k * 40 * R2(dt), 30 + k * 12, 0, 6.283); ctx.fill(); } }
+  for (let i = 0; i < 3; i++) { const jx = ((u * 500 + i * 380) % 1500) - 200, jy = 700 + i * 70; ctx.fillStyle = '#4a4f63'; ctx.beginPath(); ctx.moveTo(jx + 60, jy); ctx.lineTo(jx - 30, jy - 18); ctx.lineTo(jx - 30, jy + 18); ctx.fill(); ctx.fillRect(jx - 50, jy - 4, 40, 8); }
+  const CC = ['#e63946', '#3a86ff', '#ffbe0b', '#2ec4b6', '#8338ec'];
+  for (let i = 0; i < 12; i++) { const c = i % 4, rr = Math.floor(i / 4), x = 70 + c * 125, y = 1110 - rr * 70; ctx.fillStyle = CC[i % 5]; ctx.fillRect(x, y - 60, 118, 62); ctx.fillStyle = 'rgba(0,0,0,0.15)'; for (let k = 0; k < 6; k++) ctx.fillRect(x + 8 + k * 18, y - 54, 6, 50); }
+  if (u > 0.6) { const k = easeBack(R2((u - 0.6) / 0.3)); ctx.save(); ctx.translate(320, 960); ctx.rotate(-0.15); ctx.scale(k, k); ctx.strokeStyle = '#e63946'; ctx.lineWidth = 8; roundRect(ctx, -170, -40, 340, 80, 12); ctx.stroke();
+    ctx.font = `900 50px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#e63946'; ctx.fillText('TARIFFS', 0, 18); ctx.restore(); }
+  // bottom: the other timeline (calm sea, ships sailing)
+  ctx.fillStyle = '#9fdcff'; ctx.fillRect(0, 1164, W, 600); ctx.fillStyle = '#3a9ad8'; ctx.fillRect(0, 1480, W, 300);
+  for (let i = 0; i < 3; i++) { const sx = ((u * 90 + i * 400) % 1400) - 200, sy = 1500 + i * 60, s = 0.7 + i * 0.15;
+    ctx.save(); ctx.translate(sx, sy); ctx.scale(s, s); ctx.fillStyle = '#263a6a'; ctx.beginPath(); ctx.moveTo(-160, -30); ctx.lineTo(170, -30); ctx.lineTo(140, 10); ctx.lineTo(-140, 10); ctx.fill();
+    for (let k = 0; k < 6; k++) { ctx.fillStyle = CC[(k + i) % 5]; ctx.fillRect(-130 + k * 44, -70, 40, 38); } ctx.restore(); }
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 1156, W, 8);
+  ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = '#7a4a00'; ctx.fillText('OUR TIMELINE', 70, 660); ctx.fillStyle = '#0a5a80'; ctx.fillText('THE OTHER ONE', 70, 1220);
+  const lab = (txt, x, y, at, col, al = 'left') => { if (u < at) return; ctx.save(); ctx.globalAlpha = R2((u - at) / 0.3); ctx.font = `900 40px ${FONT}`; ctx.textAlign = al; ctx.fillStyle = col; ctx.fillText(txt, x, y); ctx.restore(); };
+  lab('2025: biggest tariffs', 70, 730, 0.6, '#2b2d42'); lab('since the 1930s', 70, 776, 0.6, '#2b2d42');
+  lab('2026: war with Iran', 1010, 730, 1.6, '#c0202e', 'right');
+  lab('Iran deal holds. No war.', 70, 1300, 3.0, '#0a5a80'); lab('No tariff wall.', 70, 1350, 3.4, '#0a5a80');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 560, 0.7);
+  say(ctx, u, ['Then the second term:', 'tariffs and a war'], 230, 0.15, { size: 80, out: OUT('war') });
 }
 
 // ================================================================ the tile map (2016 results)
@@ -105,6 +199,7 @@ function vHook(ctx, u) {
   nightSky(ctx, u);
   drift(ctx, u, 0, 3.5, 1.0, 1.06, W / 2, 1150);
   tileMap(ctx, u, W / 2, 1150, 88, { appear: prog(u, 0, 1.2), flicker: u > 1.4 ? 1 : 0 });
+  pol(ctx, 150, 1760, 260, 'clinton', { pose: 'wave', t: u }); pol(ctx, 420, 1760, 260, 'trump', { pose: 'point', t: u, dir: -1 });
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (u < 3.4) { ctx.save(); ctx.globalAlpha = 1 - easeInOut(prog(u, 3.0, 3.4));
     shadowed(ctx, () => blip(ctx, u, 890, 1700, u > 1.3 ? 'shock' : 'happy', 0.8, 0.3), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
@@ -147,6 +242,8 @@ function vFlip(ctx, u) {
   ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; ctx.setLineDash([10, 8]); ctx.beginPath(); ctx.moveTo(bx + bw * 270 / 538, y - 20); ctx.lineTo(bx + bw * 270 / 538, y + 90); ctx.stroke(); ctx.setLineDash([]);
   ctx.font = `900 64px ${FONT}`; ctx.fillStyle = '#ffffff'; ctx.textAlign = 'left'; ctx.fillText(dEV, bx, y - 26); ctx.textAlign = 'right'; ctx.fillText(rEV, bx + bw, y - 26);
   ctx.font = `800 28px ${FONT}`; ctx.textAlign = 'center'; ctx.fillText('270 TO WIN', bx + bw * 270 / 538, y + 125);
+  pol(ctx, 300, 1880, 280, 'clinton', { pose: u > 1.55 ? 'cheer' : 'stand', t: u }); tag(ctx, 470, 1790, 'CLINTON', BLUE);
+  const off = easeIn2(R2((u - 2.2) / 1.6)); pol(ctx, 790 + off * 500, 1880, 280, 'trump', { pose: u > 1.55 ? 'sad' : 'stand', slump: u > 1.55 ? 1 : 0, t: u, dir: off > 0 ? 1 : -1 }); if (off < 0.4) tag(ctx, 620, 1790, 'TRUMP', RED);
   confetti(ctx, u, 1.55, W / 2, 1500, 320);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   say(ctx, u, ['Flip them, and', 'Hillary Clinton becomes', 'the 45th president'], 230, 0.15, { size: 76, out: OUT('flip') });
@@ -203,15 +300,15 @@ function vCourt(ctx, u) {
   const lab = (txt, y, at, col) => { if (u < at) return; ctx.save(); ctx.globalAlpha = R2((u - at) / 0.3); ctx.font = `900 46px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = col; ctx.fillText(txt, 70, y); ctx.restore(); };
   lab('6–3 conservative', 1040, 1.0, '#2b2d42'); lab('2022: Roe v. Wade overturned', 1100, 1.6, RED);
   lab('6–3 liberal*', 1600, 2.3, '#2b2d42'); lab('Roe probably still stands', 1660, 3.2, BLUE);
-  if (u > 3.6) { ctx.save(); ctx.globalAlpha = R2((u - 3.6) / 0.3); ctx.font = `700 30px ${FONT}`; ctx.fillStyle = '#4a4a66'; ctx.textAlign = 'left'; ctx.fillText('*if the Republican Senate confirmed her picks', 70, 1770); ctx.restore(); }
+  if (u > 3.6) { ctx.save(); ctx.globalAlpha = R2((u - 3.6) / 0.3); ctx.font = `700 30px ${FONT}`; ctx.fillStyle = '#4a4a66'; ctx.textAlign = 'left'; ctx.fillText('*assuming the Senate let her fill the seats', 70, 1770); ctx.restore(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 560, 0.7);
   say(ctx, u, ['First, the Supreme Court:', '3 seats change hands'], 230, 0.15, { size: 76, out: OUT('court') });
 }
 
 // ================================================================ 6. spinning headlines from the other timeline
-const HEADS = [['2017', 'U.S. STAYS IN PARIS CLIMATE DEAL'], ['2017', 'NO TRUMP TAX CUT'], ['2018', 'IRAN NUCLEAR DEAL SURVIVES'],
-  ['2018', 'NO TRADE WAR WITH CHINA'], ['2020', 'NO ABRAHAM ACCORDS']];
+const HEADS = [['2017', 'U.S. STAYS IN PARIS CLIMATE DEAL'], ['2017', 'NO $1.9 TRILLION TAX CUT'], ['2018', 'IRAN NUCLEAR DEAL HOLDS'],
+  ['2018', 'NO TRADE WAR WITH CHINA'], ['2020', 'PANDEMIC TEAM READY AS COVID ARRIVES']];
 function paper(ctx, year, head, seed) {
   const w = 820, h = 620; ctx.fillStyle = '#fbf6e9'; ctx.fillRect(-w / 2, -h / 2, w, h); ctx.fillStyle = 'rgba(0,0,0,0.08)'; ctx.fillRect(-w / 2, h / 2 - 8, w, 8);
   ctx.fillStyle = '#1b1b2e'; ctx.font = `900 54px Georgia, "Times New Roman", serif`; ctx.textAlign = 'center'; ctx.fillText('The Other Times', 0, -h / 2 + 80);
@@ -268,7 +365,8 @@ function vTV(ctx, u) {
     const x = 200 + c * 340, y = 700 + rr * 270; ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
     ctx.fillStyle = '#16161e'; roundRect(ctx, -150, -105, 300, 210, 22); ctx.fill();
     const g = ctx.createLinearGradient(0, -90, 0, 90); g.addColorStop(0, '#1b2a6b'); g.addColorStop(1, '#3a1f6a'); ctx.fillStyle = g; roundRect(ctx, -132, -88, 264, 176, 14); ctx.fill();
-    ctx.font = `900 44px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.fillText('TRUMP', 0, -6); ctx.fillStyle = GOLD; ctx.fillText('TV', 0, 40);
+    ctx.save(); roundRect(ctx, -132, -88, 264, 176, 14); ctx.clip(); pol(ctx, 0, 150, 220, 'trump', { pose: i % 2 ? 'point' : 'wave', t: u + i * 0.3 }); ctx.restore();
+    ctx.fillStyle = 'rgba(16,20,40,0.85)'; ctx.fillRect(-132, 52, 264, 36); ctx.font = `900 26px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = GOLD; ctx.fillText('TRUMP TV', 0, 79);
     ctx.fillStyle = RED; roundRect(ctx, -120, -78, 70, 28, 8); ctx.fill(); ctx.fillStyle = '#fff'; ctx.font = `900 18px ${FONT}`; ctx.fillText('LIVE', -85, -58);
     if (Math.sin(u * 7 + i) > 0.6) { ctx.fillStyle = 'rgba(255,255,255,0.08)'; roundRect(ctx, -132, -88, 264, 176, 14); ctx.fill(); }
     ctx.restore(); }
@@ -316,16 +414,17 @@ function vFinal(ctx, u) {
   nightSky(ctx, u, '#140f3a', '#3a2a8a');
   const pts = { ours: [[250, 1900], [250, 1000], [250, 700]], other: [[830, 1900], [830, 1000], [830, 700]] };
   track(ctx, pts.ours, GOLD, 30, easeOut(prog(u, 0.1, 1.4)), u); track(ctx, pts.other, TEAL, 30, easeOut(prog(u, 0.1, 1.4)), u);
-  if (u > 1.3) { node(ctx, 250, 700, '2025', GOLD, R2((u - 1.3) / 0.3), 1); node(ctx, 830, 700, '2025', TEAL, R2((u - 1.3) / 0.3), -1); }
+  if (u > 1.3) { node(ctx, 250, 700, '2026', GOLD, R2((u - 1.3) / 0.3), 1); node(ctx, 830, 700, '2026', TEAL, R2((u - 1.3) / 0.3), -1); }
   const card = (x, txt, col, at) => { if (u < at) return; const k = easeBack(R2((u - at) / 0.4)); ctx.save(); ctx.translate(x, 960); ctx.scale(k, k);
-    ctx.fillStyle = 'rgba(255,255,255,0.95)'; roundRect(ctx, -220, -110, 440, 220, 30); ctx.fill(); ctx.fillStyle = col; roundRect(ctx, -220, -110, 440, 26, 13); ctx.fill();
-    ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#1b1b2e'; txt.forEach((l, i) => ctx.fillText(l, 0, -20 + i * 52)); ctx.restore(); };
-  if (u > 1.3) { ctx.save(); ctx.globalAlpha = R2((u - 1.3) / 0.3); ctx.font = `900 36px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = GOLD; ctx.fillText('OUR TIMELINE', 250, 1220); ctx.fillStyle = TEAL; ctx.fillText('THE OTHER ONE', 830, 1220); ctx.restore(); }
-  card(250, ['Trump is', 'president again'], GOLD, 1.8);
-  card(830, ['???'], TEAL, 2.3);
+    ctx.fillStyle = 'rgba(255,255,255,0.95)'; roundRect(ctx, -220, -130, 440, 260, 30); ctx.fill(); ctx.fillStyle = col; roundRect(ctx, -220, -130, 440, 26, 13); ctx.fill();
+    ctx.font = `900 40px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#1b1b2e'; txt.forEach((l, i) => ctx.fillText(l, 0, -40 + i * 54)); ctx.restore(); };
+  if (u > 1.3) { ctx.save(); ctx.globalAlpha = R2((u - 1.3) / 0.3); ctx.font = `900 36px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = GOLD; ctx.fillText('OUR TIMELINE', 250, 1395); ctx.fillStyle = TEAL; ctx.fillText('THE OTHER ONE', 830, 1395); ctx.restore(); }
+  card(250, ['President Trump.', 'Tariffs.', 'War with Iran.'], GOLD, 1.8);
+  card(830, ['No war.', 'No tariff wall.', 'Roe stands.'], TEAL, 2.3);
+  if (u > 1.8) { pol(ctx, 250, 1330, 190, 'trump', { pose: 'point', t: u }); } if (u > 2.3) { pol(ctx, 830, 1330, 190, 'clinton', { pose: 'wave', t: u, dir: -1 }); }
   if (u > 2.3) for (let i = 0; i < 6; i++) sparkle(ctx, 830 + Math.cos(u * 2 + i) * 260, 960 + Math.sin(u * 2 + i) * 160, 16, 0.8);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['Which timeline', 'would you rather', 'live in?'], 1380, 2.9, { size: 88, out: OUT('final'), x: W / 2, align: 'center' });
+  say(ctx, u, ['Which timeline', 'would you rather', 'live in?'], 1540, 2.9, { size: 88, out: OUT('final'), x: W / 2, align: 'center' });
   say(ctx, u, ['Today…'], 230, 0.15, { size: 96, out: OUT('final') });
 }
 
