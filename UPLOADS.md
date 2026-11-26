@@ -324,6 +324,35 @@ The real Moon? Its dust smells like spent gunpowder. (Apollo astronauts said so.
 
 ---
 
+## 12. What if every bullet, bomb and missile exploded at once?
+
+**File:** `videos/all-ammo.mp4`
+
+**Title:** What If Every Bullet and Bomb on Earth Exploded at Once? 💥🌍 #shorts
+
+**Description:**
+
+```
+The world makes ~12 billion bullets a year (est.), plus millions of shells, bombs and missiles.
+Thousands of ammo depots go up in the same second. (In 2024, one depot blast registered as an earthquake.)
+Many sit right next to cities. Lagos, 2002: one armory blast killed over 1,000 people.
+Every warship's magazine detonates. HMS Hood, 1941: one magazine blast sank her in 3 minutes.
+Surprise: a loose bullet barely flies, it just pops. But every loaded gun fires once.
+Nukes don't go nuclear: they spray plutonium over their bases instead. (It really happened: Spain, 1966.)
+Old war zones erupt. Laos alone holds ~80 million unexploded bomblets.
+Killed in the first minute (est.): tens of thousands, probably far more.
+
+Then: silence. Every war on Earth stops mid-battle. Nobody has a single bullet.
+Ammo factories blew up too, and rearming takes years.
+Until then, the world's deadliest weapon is... a slingshot.
+
+#whatif #science #history #military #shorts
+```
+
+**Pinned comment:** Would the world rearm, or would this be the start of world peace? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
