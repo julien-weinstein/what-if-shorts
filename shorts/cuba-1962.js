@@ -26,6 +26,7 @@ const SCENES = [
   ['u2', 4.0, [[0.8, 'impact'], [1.6, 'boom']]],
   ['depth', 4.5, [[0.6, 'boom'], [1.4, 'boom'], [2.2, 'boom'], [3.0, 'boom']]],
   ['control', 5.0, [[0.2, 'heart:4.6']]],
+  ['split', 3.5, [[0.3, 'impact'], [1.6, 'boom']]],
   ['torpedo', 4.5, [[0.8, 'impact'], [0.85, 'boom'], [0.9, 'roar:3.4']]],
   ['invade', 4.5, [[0.4, 'boom'], [2.0, 'impact'], [2.05, 'boom']]],
   ['war', 5.0, [[0.4, 'rumble:4.4'], [1.6, 'boom'], [2.6, 'boom']]],
@@ -46,7 +47,7 @@ const SHORT = {
   music: { bpm: 72, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHook, bay: vBay, ship: vShip, photo: vU2Photo, blockade: vBlockade, u2: vShootdown, depth: vDepth, control: vControl,
+const FNS = { hook: vHook, bay: vBay, ship: vShip, photo: vU2Photo, blockade: vBlockade, u2: vShootdown, depth: vDepth, control: vControl, split: vSplit,
               torpedo: vTorpedo, invade: vInvade, war: vWar, siop: vSIOP, arkhipov: vArkhipov, end: vEnd };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 function render(ctx, t) {
@@ -54,7 +55,20 @@ function render(ctx, t) {
   sequence(ctx, t, SCENES.map(([n]) => [START[n], (c, tt) => FNS[n](c, Math.max(0, tt - START[n]))]), 0.26);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (t < START.end) { ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850); }
+  modeBadge(ctx, t);
   post(ctx, { bloom: 0.22, contrast: 1.08, saturate: 1.1, vignette: 0.34 });
+}
+const REAL_SCENES = ['bay', 'ship', 'photo', 'blockade', 'u2', 'depth', 'control', 'arkhipov'], WHATIF_SCENES = ['torpedo', 'invade', 'war', 'siop'];
+function sceneAt(t) { let cur = null; for (const [n] of SCENES) if (t >= START[n]) cur = n; return cur; }
+function modeBadge(ctx, t) {
+  const n = sceneAt(t), real = REAL_SCENES.includes(n), wif = WHATIF_SCENES.includes(n); if (!real && !wif) return;
+  const local = t - START[n], a = R2(local / 0.3);
+  ctx.save(); ctx.globalAlpha = a;
+  if (wif) { const pulse = 0.6 + 0.4 * Math.sin(t * 6); ctx.strokeStyle = `rgba(230,57,70,${0.85 * pulse})`; ctx.lineWidth = 18; ctx.strokeRect(9, 9, W - 18, H - 18); }
+  const txt = real ? '✓ REAL HISTORY' : '⚠ WHAT IF', col = real ? '#2a9d5a' : '#e63946';
+  ctx.font = `900 36px ${FONT}`; const w = ctx.measureText(txt).width + 44, x = W - 60 - w, y = 48;
+  ctx.fillStyle = col; roundRect(ctx, x, y, w, 60, 30); ctx.fill(); ctx.fillStyle = '#ffffff'; ctx.textAlign = 'left'; ctx.fillText(txt, x + 22, y + 43);
+  ctx.restore();
 }
 function dateTag(ctx, u, txt, at = 0.1) { if (u < at) return; const k = easeOut(R2((u - at) / 0.4)); ctx.save(); ctx.globalAlpha = k; ctx.font = `900 34px ${FONT}`; const w = ctx.measureText(txt).width + 40;
   ctx.fillStyle = 'rgba(255,255,255,0.92)'; roundRect(ctx, 70, 120, w, 56, 28); ctx.fill(); ctx.fillStyle = '#1b1b2e'; ctx.textAlign = 'left'; ctx.fillText(txt, 90, 160); ctx.restore(); }
@@ -220,7 +234,25 @@ function vControl(ctx, u) {
   hist(ctx, 860, 1700, 380, 'va', { t: u, pose: u > 3.0 ? 'arms' : 'stand', sweat: 1, dir: -1 }); nameTag(ctx, 860, 1760, u > 3.0 ? 'ARKHIPOV: ?' : 'ARKHIPOV');
   ctx.font = `900 54px ${FONT}`; ctx.textAlign = 'right'; ctx.fillStyle = '#ffd25a'; ctx.fillText('45°C+', W - 70, 820);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['The captain orders the', 'nuclear torpedo armed.', 'Three officers must agree.'], 230, 0.15, { size: 68, out: OUT('control') });
+  say(ctx, u, ['This really happened: the', 'captain ordered a nuclear', 'torpedo armed. Three', 'officers had to agree.'], 230, 0.15, { size: 64, out: OUT('control') });
+}
+
+// ================================================================ 8b. history splits here
+function vSplit(ctx, u) {
+  bgSky(ctx, ['#0e0e1a', '#14142a', '#1a1a3a']);
+  const cx = W / 2, y0 = 1700, yf = 1150, f = easeOut(prog(u, 0, 0.6)), b = easeInOut(prog(u, 0.6, 1.6)), pick = easeInOut(prog(u, 2.0, 3.2));
+  ctx.lineCap = 'round'; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 26; ctx.beginPath(); ctx.moveTo(cx, y0 + 300); ctx.lineTo(cx, lerp(y0 + 300, yf, f)); ctx.stroke();
+  if (b > 0) {
+    ctx.strokeStyle = mixHex('#2a9d5a', '#2a3a3a', pick); ctx.lineWidth = 26; ctx.beginPath(); ctx.moveTo(cx, yf); ctx.quadraticCurveTo(cx - 60, yf - 200, lerp(cx, 260, b), lerp(yf, 600, b)); ctx.stroke();
+    ctx.strokeStyle = '#e63946'; ctx.lineWidth = 26 + pick * 10; ctx.beginPath(); ctx.moveTo(cx, yf); ctx.quadraticCurveTo(cx + 60, yf - 200, lerp(cx, 820, b), lerp(yf, 600, b)); ctx.stroke();
+    ctx.globalAlpha = b; ctx.font = `900 50px ${FONT}`; ctx.textAlign = 'center';
+    ctx.fillStyle = mixHex('#2a9d5a', '#5a6a6a', pick); ctx.fillText('REAL:', 260, 500); ctx.fillText('he said no', 260, 558);
+    ctx.fillStyle = '#e63946'; ctx.fillText('WHAT IF:', 820, 500); ctx.fillText('he said yes', 820, 558); ctx.globalAlpha = 1;
+    glow(ctx, cx, yf, 120, '255,255,255', 0.7);
+  }
+  if (pick > 0) { const x = lerp(cx, 820, pick), y = lerp(yf, 600, pick); glow(ctx, x, y, 90, '230,57,70', 0.9); ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(x, y, 22, 0, 6.283); ctx.fill(); }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, u, ['History could have', 'split right here'], 230, 0.15, { size: 88, out: OUT('split') });
 }
 
 // ================================================================ 9. WHAT IF: the torpedo fires
@@ -235,8 +267,7 @@ function vTorpedo(ctx, u) {
   flash(ctx, u, boom, 0.4);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.55);
-  say(ctx, u, ['WHAT IF the third', 'officer said yes?'], 230, 0.15, { size: 84, out: 0.9, color: '#ffd25a' });
-  say(ctx, u, ['A U.S. naval group', 'is nuked at sea'], 230, 1.0, { size: 88, out: OUT('torpedo') });
+  say(ctx, u, ['The torpedo fires.', 'A U.S. naval group', 'is nuked at sea'], 230, 0.15, { size: 84, out: OUT('torpedo') });
 }
 
 // ================================================================ 10. the invasion meets nukes nobody knew about
@@ -290,7 +321,7 @@ function vArkhipov(ctx, u) {
   ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, 1212); ctx.clip(); sub(ctx, W / 2 + 40, lerp(1330, 1230, rise), 1.2); if (rise > 0.6) hist(ctx, W / 2 + 40, lerp(1330, 1230, rise) - 140, 200, 'va', { t: u, pose: 'stand' }); ctx.restore();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 640, 0.5);
-  say(ctx, u, ['In reality, one man', 'said no: Vasily Arkhipov'], 230, 0.15, { size: 76, out: OUT('arkhipov'), mark: { line: 1, from: 9, to: 24, color: '#2a9df4' } });
+  say(ctx, u, ['Back to reality: one man', 'said no. Vasily Arkhipov.'], 230, 0.15, { size: 76, out: OUT('arkhipov'), mark: { line: 1, from: 9, to: 24, color: '#2a9df4' } });
   say(ctx, u, ['The world didn’t learn', 'his name for 40 years.'], 470, 2.6, { size: 60, weight: 800, out: OUT('arkhipov') });
 }
 
