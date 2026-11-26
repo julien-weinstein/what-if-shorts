@@ -497,30 +497,30 @@ Shot towers really did make lead shot by dropping molten lead from a height.
 
 ---
 
-## 18. What if a magnitude 10 earthquake hit Japan? (`videos/m10-japan.mp4`)
+## 18. What if a magnitude 10 earthquake hit Los Angeles? (`videos/m10-la.mp4`)
 
-**Title:** What if a MAGNITUDE 10 earthquake hit Japan? 🌊 #shorts
+**Title:** What if a MAGNITUDE 10 earthquake hit Los Angeles? 🌎💥 #shorts
 
 **Description:**
 
 ```
-No M10 has ever been recorded. The biggest was M9.5 (Chile, 1960). Each magnitude step is ~32x the energy.
-But a Tohoku University seismologist showed one is possible: 3,000 km of the Japan + Kuril-Kamchatka trenches slipping ~60 m at once. Maybe once in 10,000 years.
-It would unzip for ~18 minutes and release ~15 gigatons of TNT (est.).
-Tokyo, ~250 km away: towers sway for minutes. Tokyo Bay's landfill turns to quicksand.
-1923: fires after a quake killed most of Tokyo's ~105,000 dead.
-20–30 minutes later the sea pulls back... then the wave. 2011's peaked at ~40 m.
-2011: a ~14 m wave caused three meltdowns at Fukushima.
-Midway, 2011: the tsunami killed ~110,000 albatross chicks (est.).
-Hours later: Hawaii, then California ports.
-Japan's worst case for a Nankai M9: 298,000 dead. An M10: hundreds of thousands (est.).
+Imagine a fault the whole West Coast long: 3,500 km from Baja to Canada, snapping at once.
+~15 gigatons of energy in 22 minutes (est.). Minutes of shaking, not seconds.
+Freeway bridges fall. High-rises give way. Across the LA basin, buildings fall by the thousands (est.).
+~15 minutes later: a wall of water up to ~30 m hits the beaches (est.).
+The ports of LA & Long Beach, ~1/3 of US imports, are wrecked.
+Gas lines burst: thousands of fires, and no water to fight them.
+The aqueducts snap. Millions without water for months (est.).
+The tsunami crosses the Pacific: Hawaii in ~6 h, Japan ~12 h, Australia ~17 h.
+California is the world's ~4th-biggest economy. Global recession (est.).
+~60 million people live along the rupture. Total toll: up to ~1 million (rough est.).
 
-Scenario: T. Matsuzawa, Tohoku University (2012). Toll anchor: Japan Cabinet Office (2025).
+Hypothetical: the San Andreas slides sideways and tops out near M8. No known fault here can make an M10.
 
-#whatif #earthquake #tsunami #japan #science #shorts
+#whatif #earthquake #losangeles #tsunami #science #shorts
 ```
 
-**Pinned comment:** Would you know where high ground is from your house? 👇
+**Pinned comment:** Where would you be when it hit? 👇
 
 ---
 
