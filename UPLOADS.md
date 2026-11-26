@@ -471,6 +471,32 @@ The U.S. stopped making pennies in 2025. Each cost ~3.7¢ to make. Minting all o
 
 ---
 
+## 17. What if all rain fell as lead? (`videos/lead-rain.mp4`)
+
+**Title:** What if all rain fell as LEAD? 🌧️🔩 #shorts
+
+**Description:**
+
+```
+Every raindrop becomes lead: shot pellets hitting at up to 117 km/h.
+A normal downpour drops ~110 kg of lead per square meter every hour. Roofs are built for ~100-250 kg/m². Most fail within hours.
+A monsoon day: over a tonne per square meter. Cities get buried.
+Rainforests are shredded, then buried meters deep every year.
+Birds swallow lead shot as grit. Lead poisoning wipes out whole species.
+No water falls from the sky. Rivers run dry. Farms (70% of our fresh water) die.
+The seas keep evaporating, but nothing comes back: 1.4 m lower every year. In ~2,600 years, the oceans are gone.
+Every year it rains ~1.3 billion years' worth of the world's lead mining.
+Billions die from thirst and famine (est.).
+
+Shot towers really did make lead shot by dropping molten lead from a height.
+
+#whatif #science #rain #lead #shorts
+```
+
+**Pinned comment:** Would your roof survive the first storm? Most are built for ~100-250 kg/m² 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
