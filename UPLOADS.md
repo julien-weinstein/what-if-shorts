@@ -297,6 +297,33 @@ The internet's first message, in 1969, was "LOGIN". It crashed after two letters
 
 ---
 
+## 11. What if the Moon was made of cheese?
+
+**File:** `videos/cheese-moon.mp4`
+
+**Title:** What If the Moon Was Made of Cheese? 🧀🌕 #shorts
+
+**Description:**
+
+```
+Cheese is 3x lighter than moon rock, so the Moon weighs a third as much (but stays in orbit).
+Tides shrink by about half.
+Cheese reflects way more light than grey rock: moonlight ~4x brighter. Night is never dark again.
+Its own gravity crushes the core under ~5,000 atmospheres.
+Two weeks of sun: it bubbles like fondue (+120°C). Two weeks of night: frozen rock-hard (−170°C).
+Meteor strikes splash molten cheese, and some reach Earth as flaming cheese meteors.
+Apollo's 382 kg haul: enough for ~4,000 pizzas.
+The whole Moon is a trillion years of Earth's cheese production: 3 billion tonnes for every person alive.
+
+The real Moon? Its dust smells like spent gunpowder. (Apollo astronauts said so.)
+
+#whatif #moon #cheese #science #shorts
+```
+
+**Pinned comment:** Which cheese is the Moon? Wrong answers only 🧀👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
