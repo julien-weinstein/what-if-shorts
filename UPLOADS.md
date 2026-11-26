@@ -411,6 +411,36 @@ Earth has survived freezing solid before. Humans never have.
 
 ---
 
+## 15. What if all the water on Earth turned into beer?
+
+**File:** `videos/beer-water.mp4`
+
+**Title:** What If All the Water on Earth Turned Into Beer? 🍺🌍 #shorts
+
+**Description:**
+
+```
+Every ocean, river, tap, raindrop and IV drip. And beer isn't just water: 5% alcohol, pH 4.2, sugary, fizzy, almost no salt.
+Hospital drips turn to beer. Without salt, blood cells swell and burst. 4 million dialysis patients lose their clean water.
+5% alcohol, 8,000x more acidic than seawater: most sea life dies in hours. Shells and coral reefs dissolve.
+Every lake and river. Frogs drink through their skin.
+A dairy cow drinks ~100 L a day: now 5 liters of pure alcohol. Livestock die by the billion.
+It rains beer. Fields and forests soak up alcohol and acid.
+No drinkable water. Babies can't drink it at all. Boiling water back out takes fuel most people don't have.
+Reactors must keep cooling, now with foaming, sugary beer.
+Bacteria feast on the sugar and use up the oxygen. The seas suffocate.
+Then the fizz: the oceans hold more CO2 than the whole atmosphere weighs. Within weeks, CO2 in the air climbs ~25x (est.).
+Over years, the planet heats ~14°C (est.) and the air turns toxic. Billions die (est.).
+
+It wouldn't be a party. It would end most life on Earth.
+
+#whatif #beer #science #earth #shorts
+```
+
+**Pinned comment:** The scariest part isn't the alcohol, it's the bubbles. 🫧
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
