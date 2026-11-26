@@ -353,6 +353,34 @@ Rearming takes years. Until then, the world's deadliest weapon is... a slingshot
 
 ---
 
+## 13. What if the Cuban Missile Crisis went wrong?
+
+**File:** `videos/cuba-1962.mp4`
+
+**Title:** What If the Cuban Missile Crisis Went Wrong? ☢️🇨🇺 #shorts
+
+**Description:**
+
+```
+April 1961: 1,400 CIA-trained exiles invade Cuba at the Bay of Pigs. In 3 days, it's over.
+Castro turns to Moscow. Khrushchev secretly ships nuclear missiles to Cuba.
+October 1962: a U-2 spy plane photographs the sites. They can hit Washington.
+Kennedy blockades Cuba. He puts the odds of war at "one in three, or even."
+October 27, "Black Saturday": a U-2 is shot down. Under the sea, U.S. ships drop depth charges on Soviet sub B-59.
+The captain orders the nuclear torpedo armed. Three officers must agree.
+
+What if the third said yes? A U.S. naval group is nuked at sea. The U.S. invades Cuba, and Cuba had ~100 battlefield nukes nobody knew about.
+Full nuclear war. America's own war plan (SIOP-62) estimated 285 million dead in the USSR and China alone.
+
+In reality, one man said no: Vasily Arkhipov. The world didn't learn his name for 40 years.
+
+#whatif #history #coldwar #cubanmissilecrisis #shorts
+```
+
+**Pinned comment:** Vasily Arkhipov might be the most important person you've never heard of. 🫡
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
