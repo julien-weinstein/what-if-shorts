@@ -1,37 +1,39 @@
-// What if the Sun became a strobe light?
+// What if the Sun became a strobe light?   (v2: more life-on-Earth upheaval; techno kick in time with the "strobe")
 //
-// VIEWER SAFETY: no real strobing in this video. The "flicker" is a soft pulse under 2 Hz with limited contrast
-// (well below the 3-flashes-per-second photosensitivity guideline), labelled "slowed down for safety".
+// VIEWER SAFETY: no real strobing. The on-screen pulse is 1.6 Hz (96 bpm, one per kick drum), dimming the frame by at
+// most ~28%: below the 3-flashes-per-second photosensitivity guideline.
 //
 // FACTS (checked):
-//  - Light made in the Sun's core takes tens of thousands of years (estimates ~10,000-170,000) to random-walk out,
-//    so the Sun can't physically "switch off"; premise: the surface flickers 10x a second, half the time dark.
-//  - Sunlight takes ~8 min 20 s to reach Earth.
-//  - Photosensitive epilepsy affects ~3% of the ~50 million people with epilepsy (~1.5 million); flicker in the 3-60 Hz
-//    range (esp. 15-25 Hz) is the risk band. Flicker causes headaches/migraine more widely.
-//  - Stroboscopic effect: periodic light freezes or reverses motion (water drops, wheels, fans).
-//  - Emerson & Arnold (1932): algae photosynthesise nearly as efficiently per flash in flashing light; but total light is halved.
-//  - Half the sunlight: equilibrium temperature scales with L^(1/4): 288 K × 0.5^0.25 ≈ 242 K (≈ −30°C) before ice
-//    feedback (est.). Earth froze over in "Snowball Earth" episodes ~720-635 million years ago.
-//  - Toll (est., hedged): crop failure in the cold could put billions at risk of famine.
-//  - Pulsars are real cosmic strobes; the fastest known (PSR J1748-2446ad) spins 716 times a second.
+//  - Light from the Sun's core takes tens of thousands of years to escape; sunlight takes ~8 min 20 s to reach Earth.
+//  - ~1.5 million people have photosensitive epilepsy (~3% of ~50 million with epilepsy); flicker also causes headaches,
+//    disorientation and impaired judgement of motion.
+//  - Light-dark cycles set animals' circadian clocks (birds, bees, bats).
+//  - Marine phytoplankton produce roughly half of Earth's oxygen and form the base of the ocean food web.
+//  - Half the sunlight: equilibrium temperature 288 K × 0.5^0.25 ≈ 242 K (≈ −30°C) before ice feedback (est.).
+//  - In the last ice age, sea level was ~120 m lower as water was locked into ice sheets (shown as "over centuries").
+//  - Snowball Earth episodes ~720-635 million years ago; complex animal life (Ediacaran, then the Cambrian explosion)
+//    appeared afterwards. Some scientists think the two are linked (hedged "soon after").
+//  - Tolls are estimates (hedged): famine could put billions at risk; tropical rainforests and reefs would collapse.
 
+const KICK_STEP = 60 / 96;
 const SCENES = [
-  ['hook', 3.5, [[0, 'swell:2.6']]],
-  ['impossible', 4.5, [[0.2, 'rumble:4.2']]],
-  ['warn', 4.5, [[0.2, 'heart:4.2']]],
-  ['street', 4.5, [[0.2, 'swell:4.2']]],
-  ['seizure', 4.5, [[0.2, 'heart:4.2']]],
-  ['frozen', 5.0, [[0.2, 'swell:4.6']]],
-  ['plants', 4.5, [[0.2, 'swell:4.2']]],
-  ['freeze', 5.0, [[0.2, 'rumble:4.6']]],
-  ['snowball', 5.0, [[0.2, 'swell:4.6']]],
-  ['toll', 4.0, [[0.2, 'heart:3.8']]],
-  ['pulsar', 5.5, [[0.2, 'swell:5']]],
+  ['hook', 3.5, [[0, 'swell:2.6'], [1.25, 'kick:2.2']]],
+  ['physics', 4.5, [[0.2, 'rumble:4.2']]],
+  ['rave', 4.5, [[0, 'kick:4.5']]],
+  ['roads', 4.5, [[0, 'kick:1.3'], [1.4, 'impact'], [1.45, 'boom'], [2.6, 'boom']]],
+  ['seizure', 4.0, [[0.2, 'heart:3.8']]],
+  ['animals', 4.5, [[0, 'kick:4.5']]],
+  ['frozen', 4.0, [[0, 'kick:4.0']]],
+  ['plankton', 4.5, [[0.2, 'rumble:4.2']]],
+  ['july', 4.5, [[0.2, 'swell:4.2']]],
+  ['seabed', 4.5, [[0.2, 'rumble:4.2']]],
+  ['migrate', 4.5, [[0.2, 'heart:4.2']]],
+  ['extinct', 4.0, [[0.2, 'rumble:3.8']]],
+  ['disco', 6.0, [[0, 'kick:6.0'], [3.0, 'swell:3']]],
   ['end', 3.0, [[0.2, 'swell:2.5']]],
 ];
 const START = {}; let _acc = 0; const _sfx = [];
-for (const [n, d, cues] of SCENES) { START[n] = _acc; if (_acc > 0) _sfx.push([_acc, 'air']); for (const [lt, s] of cues) _sfx.push([+(_acc + lt).toFixed(2), s]); _acc += d; }
+for (const [n, d, cues] of SCENES) { START[n] = _acc; if (_acc > 0 && !cues.some(c => c[0] === 0 && c[1].startsWith('kick'))) _sfx.push([_acc, 'air']); for (const [lt, s] of cues) _sfx.push([+(_acc + lt).toFixed(3), s]); _acc += d; }
 const TOTAL = _acc;
 
 const SHORT = {
@@ -40,182 +42,229 @@ const SHORT = {
   fps: 60,
   motionSamples: 1,
   sfx: _sfx,
-  music: { bpm: 76, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
+  music: { bpm: 96, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHook, impossible: vImpossible, warn: vWarn, street: vStreet, seizure: vSeizure, frozen: vFrozen, plants: vPlants,
-              freeze: vFreeze, snowball: vSnowball, toll: vToll, pulsar: vPulsar, end: vEnd };
+const FNS = { hook: vHook, physics: vPhysics, rave: vRave, roads: vRoads, seizure: vSeizure, animals: vAnimals, frozen: vFrozen, plankton: vPlankton,
+              july: vJuly, seabed: vSeabed, migrate: vMigrate, extinct: vExtinct, disco: vDisco, end: vEnd };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
-// gentle, photosensitivity-safe "flicker": 1.6 Hz, max 30% dimming
-const SAFE = u => 0.85 + 0.15 * Math.cos(u * 2 * Math.PI * 1.6);
+// beat-synced pulse: brightest on each kick, then eases dark; 1.6 Hz, max 28% dimming (photosensitivity-safe)
+const beat = (u, off = 0) => { const p = (((u - off) % KICK_STEP) + KICK_STEP) % KICK_STEP / KICK_STEP; return Math.exp(-p * 4.5); };
+function pulseDim(ctx, u, off = 0, max = 0.28) { ctx.fillStyle = `rgba(8,10,26,${max * (1 - beat(u, off))})`; ctx.fillRect(0, 0, W, H); }
 function render(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  sequence(ctx, t, SCENES.map(([n]) => [START[n], (c, tt) => FNS[n](c, Math.max(0, tt - START[n]))]), 0.26);
+  sequence(ctx, t, SCENES.map(([n]) => [START[n], (c, tt) => FNS[n](c, Math.max(0, tt - START[n]))]), 0.24);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (t < START.end) { ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850); }
-  post(ctx, { bloom: 0.24, saturate: 1.1 });
+  post(ctx, { bloom: 0.24, saturate: 1.12 });
 }
-function dimmer(ctx, u, max = 0.3) { ctx.fillStyle = `rgba(10,12,30,${max * (1 - SAFE(u)) / 0.3})`; ctx.fillRect(0, 0, W, H); }
 function safetyTag(ctx) { ctx.font = `800 28px ${FONT}`; const t = 'flicker slowed down for safety'; const w = ctx.measureText(t).width + 30; ctx.fillStyle = 'rgba(20,20,40,0.7)'; roundRect(ctx, W - 60 - w, 1790, w, 46, 23); ctx.fill(); ctx.fillStyle = '#ffffff'; ctx.textAlign = 'left'; ctx.fillText(t, W - 45 - w, 1822); }
-function sunDisk(ctx, x, y, r, u, on = 1) {
-  on = 0.8 + 0.2 * on;
-  glow(ctx, x, y, r * 3.2, '255,210,120', 0.55 * on);
-  const g = ctx.createRadialGradient(x - r * 0.2, y - r * 0.2, r * 0.1, x, y, r); g.addColorStop(0, mixHex('#5a4a40', '#fffbe0', on)); g.addColorStop(0.7, mixHex('#3a2a28', '#ffd24a', on)); g.addColorStop(1, mixHex('#2a1a18', '#ff9a2a', on));
+function sunDisk(ctx, x, y, r, u, b = 1) {
+  glow(ctx, x, y, r * (2.6 + 0.8 * b), '255,210,120', 0.35 + 0.35 * b);
+  const g = ctx.createRadialGradient(x - r * 0.2, y - r * 0.2, r * 0.1, x, y, r); g.addColorStop(0, '#fffbe0'); g.addColorStop(0.7, '#ffd24a'); g.addColorStop(1, '#ff9a2a');
   ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill();
-  if (on > 0.3) { ctx.strokeStyle = `rgba(255,220,140,${0.5 * on})`; ctx.lineWidth = r * 0.04; for (let i = 0; i < 16; i++) { const a = i / 16 * 6.283 + u * 0.2; ctx.beginPath(); ctx.moveTo(x + Math.cos(a) * r * 1.15, y + Math.sin(a) * r * 1.15); ctx.lineTo(x + Math.cos(a) * r * (1.35 + 0.1 * Math.sin(u * 3 + i)), y + Math.sin(a) * r * (1.35 + 0.1 * Math.sin(u * 3 + i))); ctx.stroke(); } }
+  ctx.strokeStyle = `rgba(255,220,140,${0.3 + 0.5 * b})`; ctx.lineWidth = r * 0.04; for (let i = 0; i < 16; i++) { const a = i / 16 * 6.283 + u * 0.2, L = 1.35 + 0.25 * b; ctx.beginPath(); ctx.moveTo(x + Math.cos(a) * r * 1.15, y + Math.sin(a) * r * 1.15); ctx.lineTo(x + Math.cos(a) * r * L, y + Math.sin(a) * r * L); ctx.stroke(); }
 }
 function snowfall(ctx, u, n, seed = 3, a = 0.9) { const r = rng(seed); ctx.fillStyle = `rgba(255,255,255,${a})`; for (let i = 0; i < n; i++) { const x = (r() * W + Math.sin(u + i) * 30) % W, y = (r() * H + u * (60 + r() * 100)) % H; ctx.beginPath(); ctx.arc(x, y, 2 + r() * 4, 0, 6.283); ctx.fill(); } }
+function puff(ctx, x, y, r, col, a = 1) { if (r <= 0) return; const g = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r); g.addColorStop(0, mixHex(col, '#ffffff', 0.2)); g.addColorStop(1, col);
+  ctx.globalAlpha = a; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; }
 
 // ================================================================ 1. hook
 function vHook(ctx, u) {
   space(ctx, u);
   drift(ctx, u, 0, 3.5, 1.0, 1.06, W / 2, 1100);
-  sunDisk(ctx, W / 2, 1100, 300, u, u < 1.0 ? 1 : SAFE(u) * 0.9 + 0.05);
+  const b = u < 1.25 ? 1 : beat(u, 1.25);
+  sunDisk(ctx, W / 2, 1100, 300, u, b);
+  if (u > 1.25) pulseDim(ctx, u, 1.25, 0.25);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (u < 3.4) { ctx.save(); ctx.globalAlpha = 1 - easeInOut(prog(u, 3.0, 3.4));
-    shadowed(ctx, () => blip(ctx, u, 890, 1700, u > 1.2 ? 'shock' : 'happy', 0.8, 0.3), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
+    shadowed(ctx, () => blip(ctx, u, 890, 1700 - (u > 1.25 ? 20 * beat(u, 1.25) : 0), u > 1.25 ? 'shock' : 'happy', 0.8, 0.3), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
   say(ctx, u, ['What if the Sun', 'became a', 'strobe light?'], 300, 0.15, { size: 100, out: OUT('hook'), mark: { line: 2, from: 0, to: 6, color: '#ffbe0b' } });
 }
 
-// ================================================================ 2. physics says no (then: say it happens anyway)
-function vImpossible(ctx, u) {
+// ================================================================ 2. physics, and 8 minutes of warning
+function vPhysics(ctx, u) {
   space(ctx, u);
-  const cx = W / 2, cy = 1150, R = 520;
-  sunDisk(ctx, cx, cy, R, u, 1);
-  ctx.save(); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, R + 2, -Math.PI / 2, 0); ctx.closePath(); ctx.fillStyle = '#05060e'; ctx.fill();
-  for (const [f, c] of [[1.0, '#ff9a2a'], [0.7, '#ffc24a'], [0.25, '#fff4c0']]) { ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, R * f, -Math.PI / 2, 0); ctx.closePath(); ctx.fill(); }
-  const r = rng(7); let x = cx + 20, y = cy - 20; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x, y);
-  const n = Math.floor(220 * prog(u, 0.4, 4.2)); for (let i = 0; i < n; i++) { const a = -Math.PI / 2 + r() * Math.PI / 2; x += Math.cos(a) * 26 * (r() - 0.2); y += Math.sin(a) * 26 * (r() - 0.2); ctx.lineTo(Math.max(cx, Math.min(cx + R, x)), Math.min(cy, Math.max(cy - R, y))); } ctx.stroke();
-  ctx.restore();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['Physics says no: light', 'takes tens of thousands of', 'years to escape the core'], 230, 0.15, { size: 66, out: 2.6 });
-  say(ctx, u, ['But say the surface', 'flickers 10× a second'], 230, 2.7, { size: 80, out: OUT('impossible'), mark: { line: 1, from: 0, to: 7, color: '#ffbe0b' } });
-}
-
-// ================================================================ 3. 8 minutes of warning
-function vWarn(ctx, u) {
-  space(ctx, u);
-  const sx = 200, sy = 700, ex = 860, ey = 1500;
-  sunDisk(ctx, sx, sy, 130, u, SAFE(u));
-  globe(ctx, ex, ey, 110, { lon0: u * 10, lat0: 15, t: u, ink: false, sun: [-0.6, -0.6, 0.5] });
-  for (let i = 0; i < 6; i++) { const f = ((u * 0.25 + i / 6) % 1), x = lerp(sx + 140, ex - 120, f), y = lerp(sy + 140, ey - 120, f); ctx.strokeStyle = `rgba(255,220,140,${0.7 * (1 - Math.abs(f - 0.5) * 1.6)})`; ctx.lineWidth = 6;
+  const sx = 260, sy = 760, ex = 840, ey = 1500;
+  sunDisk(ctx, sx, sy, 170, u, 1);
+  globe(ctx, ex, ey, 120, { lon0: u * 10, lat0: 15, t: u, ink: false, sun: [-0.6, -0.6, 0.5] });
+  for (let i = 0; i < 6; i++) { const f = ((u * 0.25 + i / 6) % 1), x = lerp(sx + 180, ex - 130, f), y = lerp(sy + 180, ey - 130, f); ctx.strokeStyle = `rgba(255,220,140,${0.7 * (1 - Math.abs(f - 0.5) * 1.6)})`; ctx.lineWidth = 6;
     ctx.beginPath(); ctx.arc(x, y, 40, Math.atan2(ey - sy, ex - sx) - 0.8, Math.atan2(ey - sy, ex - sx) + 0.8); ctx.stroke(); }
-  const secs = Math.max(0, Math.round(500 - u * 110)); bigNum(ctx, u, `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`, 1120, 0.4, { size: 120, color: '#ffd25a', out: OUT('warn') });
+  const secs = Math.max(0, Math.round(500 - u * 110)); if (u > 2.3) bigNum(ctx, u, `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`, 1150, 2.3, { size: 110, color: '#ffd25a', out: OUT('physics') });
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['Sunlight takes 8 minutes', 'to reach us. That’s', 'all the warning you get.'], 230, 0.15, { size: 70, out: OUT('warn') });
+  say(ctx, u, ['Impossible: light takes', 'millennia to escape the core.', 'But say it happens anyway.'], 230, 0.15, { size: 64, out: 1.95 });
+  say(ctx, u, ['You get 8 minutes', 'of warning'], 230, 2.3, { size: 88, out: OUT('physics') });
 }
 
-// ================================================================ 4. a city at noon, flickering
-function vStreet(ctx, u) {
-  bgSky(ctx, ['#4f9be0', '#8ccaf0', '#d0ecff']);
-  sunDisk(ctx, 820, 330, 90, u, SAFE(u));
-  cityLayer(ctx, u, { base: 1150, seed: 3, hMin: 160, hMax: 600, wMin: 60, wMax: 140, gap: 10, col: '#8aa0c8', win: 'rgba(255,255,255,0.6)', winP: 0.5, ws: 8 });
-  ctx.fillStyle = '#9a9aa6'; ctx.fillRect(0, 1150, W, H);
-  massCrowd(ctx, u, { n: 700, yFar: 1170, yNear: 2150, sFar: 14, sNear: 200, seed: 6, col: '#3a3a4a', arms: 0.35 });
-  dimmer(ctx, u, 0.3); safetyTag(ctx);
+// ================================================================ 3. for an hour, the world's biggest rave
+function vRave(ctx, u) {
+  bgSky(ctx, ['#3a1a6a', '#7a2a8a', '#ff7aa0']);
+  sunDisk(ctx, W / 2, 420, 120, u, beat(u));
+  cityLayer(ctx, u, { base: 1150, seed: 5, hMin: 160, hMax: 560, wMin: 60, wMax: 140, gap: 10, col: '#2a1440', win: 'rgba(255,120,220,0.6)', winP: 0.4, ws: 8 });
+  ctx.fillStyle = '#1a0a2a'; ctx.fillRect(0, 1150, W, H);
+  for (let i = 0; i < 5; i++) { const a = Math.sin(u * 1.2 + i * 1.3) * 0.6 - Math.PI / 2, x = 100 + i * 220; ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = ['rgba(255,80,200,0.18)', 'rgba(80,200,255,0.18)', 'rgba(255,220,80,0.18)'][i % 3]; ctx.beginPath(); ctx.moveTo(x, 1150); ctx.lineTo(x + Math.cos(a - 0.08) * 1400, 1150 + Math.sin(a - 0.08) * 1400); ctx.lineTo(x + Math.cos(a + 0.08) * 1400, 1150 + Math.sin(a + 0.08) * 1400); ctx.fill(); ctx.restore(); }
+  massCrowd(ctx, u, { n: 900, yFar: 1170, yNear: 1700, sFar: 14, sNear: 90, seed: 8, col: '#140a20', arms: 0.6, panic: 0.6 });
+  const bounce = Math.abs(Math.sin(Math.PI * (u % KICK_STEP) / KICK_STEP));
+  for (let i = 0; i < 5; i++) { const x = 120 + i * 210; person2(ctx, x, 1880 - bounce * 40 * (i % 2 ? 1 : 0.6), 360, { seed: i + 1, t: u });
+    ctx.strokeStyle = ['#ff5d8f', '#4cc9f0', '#ffbe0b'][i % 3]; ctx.lineWidth = 16; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x - 70, 1880 - 360 * 0.62 - bounce * 30); ctx.lineTo(x - 110, 1880 - 360 * 1.05 - bounce * 50); ctx.moveTo(x + 70, 1880 - 360 * 0.62 - bounce * 30); ctx.lineTo(x + 110, 1880 - 360 * 1.05 - bounce * 50); ctx.stroke(); }
+  pulseDim(ctx, u, 0, 0.28); safetyTag(ctx);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 560, 0.55);
-  say(ctx, u, ['Daylight now flickers', '10 times a second'], 230, 0.15, { size: 80, out: OUT('street') });
+  say(ctx, u, ['For about an hour, Earth is', 'the world’s biggest rave'], 230, 0.15, { size: 70, out: OUT('rave') });
 }
 
-// ================================================================ 5. seizures and headaches
+// ================================================================ 4. the fun stops: pileups
+function vRoads(ctx, u) {
+  const crash = 1.4, [sx, sy] = shakeOffset(u, crash, 2.6, 16);
+  bgSky(ctx, ['#4f9be0', '#8ccaf0', '#d0ecff']); ctx.translate(sx, sy);
+  const vy = 900; ctx.fillStyle = '#7a9a5a'; ctx.fillRect(0, vy, W, H);
+  ctx.fillStyle = '#4a4a54'; ctx.beginPath(); ctx.moveTo(W / 2 - 40, vy); ctx.lineTo(W / 2 + 40, vy); ctx.lineTo(W + 500, H); ctx.lineTo(-500, H); ctx.fill();
+  ctx.strokeStyle = '#ffd25a'; ctx.lineWidth = 8; ctx.setLineDash([40, 40]); ctx.beginPath(); ctx.moveTo(W / 2, vy); ctx.lineTo(W / 2, H); ctx.stroke(); ctx.setLineDash([]);
+  const cars = []; for (let lane = -1; lane <= 1; lane += 2) for (let z = 1.3; z < 14; z *= 1.35) cars.push([lane, z]);
+  cars.sort((a, b) => b[1] - a[1]);
+  const C = ['#e63946', '#3a86ff', '#ffbe0b', '#f1f1f1', '#2ec4b6', '#8338ec'];
+  cars.forEach(([lane, z], i) => { const s = 1 / z, x = W / 2 + lane * 200 * s, y = vy + 900 * s, hit = u > crash + (z - 1.3) * 0.08, rot = hit ? ((i * 37) % 7 - 3) * 0.12 * R2((u - crash) * 2) : 0, w = 230 * s, h = 120 * s;
+    ctx.save(); ctx.translate(x + (hit ? (i % 2 ? 1 : -1) * 40 * s * R2(u - crash) : 0), y); ctx.rotate(rot); ctx.fillStyle = C[i % 6]; roundRect(ctx, -w / 2, -h, w, h, 18 * s); ctx.fill();
+    ctx.fillStyle = 'rgba(20,24,40,0.6)'; roundRect(ctx, -w * 0.36, -h * 0.95, w * 0.72, h * 0.4, 10 * s); ctx.fill(); ctx.restore();
+    if (hit && s > 0.2) for (let k = 0; k < 4; k++) puff(ctx, x, y - h - (u - crash) * 120 * s - k * 40 * s, (30 + k * 12) * s * (1 + R2(u - crash)), '#8a8a90', 0.5 * R2(1 - (u - crash) / 3)); });
+  if (u < crash) pulseDim(ctx, u, 0, 0.28);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 600, 0.55);
+  say(ctx, u, ['Then the fun stops.'], 230, 0.15, { size: 92, out: 1.3 });
+  say(ctx, u, ['Drivers can’t judge speed', 'or distance. Pileups', 'everywhere.'], 230, 1.4, { size: 72, out: OUT('roads') });
+}
+
+// ================================================================ 5. seizures and hospitals
 function vSeizure(ctx, u) {
   bgSky(ctx, ['#ffe0c8', '#ffd0b0', '#ffc09a']);
-  for (let i = 0; i < 5; i++) { const x = 140 + i * 200; person2(ctx, x, 1700, 360, { seed: i + 2, t: u });
-    for (let k = 0; k < 3; k++) { ctx.strokeStyle = 'rgba(90,60,140,0.6)'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, 1700 - 360 * 1.1, 20 + k * 16, u * 3 + k, u * 3 + k + 4); ctx.stroke(); } }
-  for (let i = 0; i < 2; i++) { const x = 300 + i * 500; glow(ctx, x, 1100, 120, i ? '230,57,70' : '58,134,255', 0.4 + 0.2 * Math.sin(u * 3 + i)); }
-  dimmer(ctx, u, 0.25); safetyTag(ctx);
+  ctx.fillStyle = '#e8eef4'; ctx.fillRect(0, 1200, W, H);
+  for (let i = 0; i < 2; i++) { const x = 260 + i * 560; ctx.fillStyle = '#ffffff'; roundRect(ctx, x - 200, 1330, 400, 100, 20); ctx.fill(); ctx.fillStyle = '#c8d4e0'; ctx.fillRect(x - 200, 1430, 400, 20); }
+  for (let i = 0; i < 5; i++) { const x = 120 + i * 210; person2(ctx, x, 1780, 340, { seed: i + 2, t: u });
+    for (let k = 0; k < 3; k++) { ctx.strokeStyle = 'rgba(90,60,140,0.6)'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, 1780 - 340 * 1.1, 20 + k * 16, u * 3 + k, u * 3 + k + 4); ctx.stroke(); } }
+  for (let i = 0; i < 2; i++) glow(ctx, 300 + i * 500, 1000, 120, i ? '230,57,70' : '58,134,255', 0.35 + 0.15 * Math.sin(u * 3 + i));
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['~1.5 million people with', 'photosensitive epilepsy', 'are at risk of seizures'], 230, 0.15, { size: 68, out: 2.6 });
-  say(ctx, u, ['Billions more get', 'pounding headaches'], 230, 2.7, { size: 80, out: OUT('seizure') });
+  say(ctx, u, ['~1.5 million people with', 'photosensitive epilepsy', 'risk seizures. ERs overflow.'], 230, 0.15, { size: 66, out: OUT('seizure') });
 }
 
-// ================================================================ 6. the stroboscope effect: rain freezes midair
+// ================================================================ 6. animals lose day and night
+function vAnimals(ctx, u) {
+  bgSky(ctx, ['#4a7ab8', '#8ab8e0', '#d8ecf8']);
+  sunDisk(ctx, 860, 360, 90, u, beat(u));
+  ctx.fillStyle = '#4a7a3a'; ctx.beginPath(); ctx.moveTo(0, 1500); for (let x = 0; x <= W; x += 60) ctx.lineTo(x, 1480 - Math.abs(Math.sin(x * 0.012)) * 100); ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+  const r = rng(5);
+  for (let i = 0; i < 40; i++) { const a = u * (1 + r()) * (r() < 0.5 ? 1 : -1) + i, cx = 300 + r() * 500, cy = 700 + r() * 500, x = cx + Math.cos(a * 2) * 160, y = cy + Math.sin(a * 3) * 100, flap = Math.sin(u * 14 + i) * 10;
+    ctx.strokeStyle = '#1b1b2e'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(x - 20, y - flap); ctx.quadraticCurveTo(x - 10, y - 10, x, y); ctx.quadraticCurveTo(x + 10, y - 10, x + 20, y - flap); ctx.stroke(); }
+  for (let i = 0; i < 8; i++) { const x = 140 + i * 110 + Math.sin(u * 2 + i) * 40, y = 1050 + Math.cos(u * 3 + i) * 60; ctx.fillStyle = '#2a1a2a'; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 40, y - 20 + Math.sin(u * 16 + i) * 10); ctx.lineTo(x - 20, y + 6); ctx.lineTo(x, y + 2); ctx.lineTo(x + 20, y + 6); ctx.lineTo(x + 40, y - 20 + Math.sin(u * 16 + i) * 10); ctx.fill(); }
+  for (let i = 0; i < 14; i++) { const a = u * 3 + i, x = 600 + Math.cos(a) * (60 + i * 8), y = 1600 + Math.sin(a * 1.3) * (40 + i * 5); ctx.fillStyle = '#ffbe0b'; ctx.beginPath(); ctx.ellipse(x, y, 12, 9, 0, 0, 6.283); ctx.fill(); ctx.fillStyle = '#1b1b2e'; ctx.fillRect(x - 3, y - 9, 4, 18); }
+  pulseDim(ctx, u, 0, 0.26);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 600, 0.5);
+  say(ctx, u, ['Birds, bees and bats lose', 'track of day and night'], 230, 0.15, { size: 72, out: OUT('animals') });
+}
+
+// ================================================================ 7. the stroboscope effect: rain frozen midair
 function vFrozen(ctx, u) {
   bgSky(ctx, ['#5a6a8a', '#8a9ab8', '#b8c4d8']);
   ctx.fillStyle = '#4a5a4a'; ctx.fillRect(0, 1300, W, H);
-  const r = rng(4); ctx.fillStyle = 'rgba(200,230,255,0.85)';
-  for (let i = 0; i < 260; i++) { const x = r() * W, y = 300 + r() * 1300; ctx.beginPath(); ctx.ellipse(x, y + Math.sin(u * 0.6 + i) * 3, 3, 9, 0, 0, 6.283); ctx.fill(); }
-  // a car whose wheels appear to turn backwards
+  const r = rng(4); ctx.fillStyle = 'rgba(200,230,255,0.85)'; for (let i = 0; i < 260; i++) { const x = r() * W, y = 300 + r() * 1300; ctx.beginPath(); ctx.ellipse(x, y + Math.sin(u * 0.6 + i) * 3, 3, 9, 0, 0, 6.283); ctx.fill(); }
   const cx = 540, cy = 1520; ctx.fillStyle = '#e63946'; roundRect(ctx, cx - 240, cy - 120, 480, 110, 30); ctx.fill(); roundRect(ctx, cx - 140, cy - 200, 280, 90, 30); ctx.fill();
   ctx.fillStyle = '#bfe8ff'; roundRect(ctx, cx - 120, cy - 186, 110, 66, 12); ctx.fill(); roundRect(ctx, cx + 10, cy - 186, 110, 66, 12); ctx.fill();
-  for (const wx of [cx - 140, cx + 140]) { ctx.fillStyle = '#16161e'; ctx.beginPath(); ctx.arc(wx, cy, 64, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#c8ccd8'; ctx.lineWidth = 10; const a0 = -u * 1.4;
-    for (let k = 0; k < 5; k++) { const a = a0 + k * 1.2566; ctx.beginPath(); ctx.moveTo(wx, cy); ctx.lineTo(wx + Math.cos(a) * 50, cy + Math.sin(a) * 50); ctx.stroke(); }
-    ctx.save(); ctx.translate(wx, cy - 100); ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(0, 0, 40, -0.3, -2.5, true); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-34, -24); ctx.lineTo(-48, -6); ctx.lineTo(-26, -2); ctx.stroke(); ctx.restore(); }
-  for (let k = 0; k < 4; k++) { ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(cx + 260 + k * 30, cy - 120 + k * 30); ctx.lineTo(cx + 340 + k * 30, cy - 120 + k * 30); ctx.stroke(); }
+  for (const wx of [cx - 140, cx + 140]) { ctx.fillStyle = '#16161e'; ctx.beginPath(); ctx.arc(wx, cy, 64, 0, 6.283); ctx.fill(); ctx.strokeStyle = '#c8ccd8'; ctx.lineWidth = 10; for (let k = 0; k < 5; k++) { const a = -u * 1.4 + k * 1.2566; ctx.beginPath(); ctx.moveTo(wx, cy); ctx.lineTo(wx + Math.cos(a) * 50, cy + Math.sin(a) * 50); ctx.stroke(); } }
+  pulseDim(ctx, u, 0, 0.26);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 560, 0.55);
-  say(ctx, u, ['Rain looks frozen', 'in midair'], 230, 0.15, { size: 92, out: 2.5 });
-  say(ctx, u, ['Car wheels seem', 'to spin backwards'], 230, 2.6, { size: 88, out: OUT('frozen') });
+  say(ctx, u, ['Rain hangs frozen in midair.', 'Wheels spin backwards.'], 230, 0.15, { size: 70, out: OUT('frozen') });
 }
 
-// ================================================================ 7. plants barely mind
-function vPlants(ctx, u) {
-  bgSky(ctx, ['#7ab8e8', '#b8dcf0', '#f0e8c8']);
-  sunDisk(ctx, 860, 340, 80, u, SAFE(u));
-  ctx.fillStyle = '#4a7a2a'; ctx.fillRect(0, 1000, W, H);
-  for (let row = 0; row < 14; row++) { const q = row / 13, y = 1020 + q * q * 880, s = 0.25 + q * 1.5, n = Math.floor(26 - q * 14);
-    for (let i = 0; i < n; i++) { const x = (i + (row % 2) * 0.5) / n * W, h = 90 * s, sway = Math.sin(u * 1.5 + i + row) * 6 * s;
-      ctx.strokeStyle = '#5aa02a'; ctx.lineWidth = 5 * s; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + sway, y - h * 0.6, x + sway * 1.4, y - h); ctx.stroke();
-      ctx.fillStyle = '#7ac03a'; ctx.beginPath(); ctx.ellipse(x + sway * 1.4, y - h, 10 * s, 5 * s, 0.5, 0, 6.283); ctx.fill(); } }
-  dimmer(ctx, u, 0.2);
+// ================================================================ 8. the ocean's oxygen-makers starve
+function vPlankton(ctx, u) {
+  const k = easeInOut(prog(u, 0.6, 3.8));
+  bgSky(ctx, [mixHex('#1a7aa0', '#0a2a3a', k), mixHex('#0a4a6a', '#061820', k), mixHex('#042a40', '#020a10', k)]);
+  const r = rng(6); for (let i = 0; i < 320; i++) { if (r() < k * 0.8) { r(); r(); continue; } const x = (r() * W + u * 10 * r()) % W, y = 500 + r() * 1400; ctx.fillStyle = `rgba(120,255,160,${0.6 * (1 - k * 0.6)})`; ctx.beginPath(); ctx.arc(x, y, 3 + r() * 3, 0, 6.283); ctx.fill(); }
+  const n = Math.round(30 * (1 - k * 0.8)); for (let i = 0; i < n; i++) { const x = ((i * 97 + u * 120) % (W + 200)) - 100, y = 900 + (i % 6) * 120 + Math.sin(u + i) * 20; ctx.fillStyle = '#c8d8e0'; ctx.beginPath(); ctx.ellipse(x, y, 30, 12, 0, 0, 6.283); ctx.fill(); ctx.beginPath(); ctx.moveTo(x - 26, y); ctx.lineTo(x - 46, y - 12); ctx.lineTo(x - 46, y + 12); ctx.fill(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 600, 0.55);
-  say(ctx, u, ['Surprise: plants can use', 'flashing light just fine', '(a 1932 experiment)'], 230, 0.15, { size: 68, out: 2.6 });
-  say(ctx, u, ['But they only get', 'half the sunlight'], 230, 2.7, { size: 84, out: OUT('plants') });
+  say(ctx, u, ['Ocean plankton make about', 'half our oxygen. With half', 'the light, they starve.'], 230, 0.15, { size: 66, out: 2.6 });
+  say(ctx, u, ['So does everything', 'that eats them'], 230, 2.7, { size: 84, out: OUT('plankton') });
 }
 
-// ================================================================ 8. half the sunlight: the planet freezes
-function vFreeze(ctx, u) {
+// ================================================================ 9. no more summers
+function vJuly(ctx, u) {
+  bgSky(ctx, ['#8aa0b8', '#b8c8d8', '#e0e8f0']);
+  ctx.fillStyle = '#e8eef4'; ctx.fillRect(0, 1250, W, H);
+  ctx.fillStyle = '#c8b090'; for (let i = 0; i < 4; i++) { const x = 140 + i * 250; ctx.fillRect(x, 1150, 12, 160); ctx.fillStyle = ['#e63946', '#3a86ff', '#ffbe0b', '#2ec4b6'][i]; ctx.beginPath(); ctx.moveTo(x - 90, 1160); ctx.quadraticCurveTo(x + 6, 1060, x + 102, 1160); ctx.fill(); ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(x - 90, 1160); ctx.quadraticCurveTo(x + 6, 1130, x + 102, 1160); ctx.fill(); ctx.fillStyle = '#c8b090'; }
+  ctx.save(); ctx.translate(800, 760); ctx.rotate(0.06); ctx.fillStyle = '#ffffff'; roundRect(ctx, -150, -170, 300, 300, 20); ctx.fill(); ctx.fillStyle = '#e63946'; roundRect(ctx, -150, -170, 300, 90, 20); ctx.fill(); ctx.fillRect(-150, -110, 300, 30);
+  ctx.font = `900 54px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.fillText('JULY', 0, -108); ctx.font = `900 130px ${FONT}`; ctx.fillStyle = '#1b1b2e'; ctx.fillText('4', 0, 70); ctx.restore();
+  person2(ctx, 300, 1760, 380, { seed: 5, t: u }); ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.ellipse(300, 1760 - 380 * 0.97, 60, 22, 0, Math.PI, 0); ctx.fill();
+  snowfall(ctx, u, 220);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 560, 0.5);
+  say(ctx, u, ['Summer never comes.', 'Snow on the 4th of July.'], 230, 0.15, { size: 76, out: OUT('july') });
+  bigNum(ctx, u, '+15°C → −30°C', 1640, 1.4, { size: 80, color: '#9ad8ff', out: OUT('july') });
+  if (u > 1.6) say(ctx, u, ['global average (est.)'], 1740, 1.6, { size: 38, weight: 800, x: W / 2, align: 'center', out: OUT('july') });
+}
+
+// ================================================================ 10. the oceans lock into ice; ships stranded
+function vSeabed(ctx, u) {
+  const k = easeInOut(prog(u, 0.3, 3.6));
+  bgSky(ctx, ['#8aa0b8', '#b8c8d8', '#e0e8f0']);
+  const sea = lerp(1050, 1550, k);
+  ctx.fillStyle = '#8a7a5a'; ctx.fillRect(0, 1050, W, H); ctx.fillStyle = '#6a5a40'; for (let i = 0; i < 20; i++) { const r = rng(i); ctx.beginPath(); ctx.ellipse(r() * W, 1100 + r() * 800, 40 + r() * 60, 10, 0, 0, 6.283); ctx.fill(); }
+  ctx.fillStyle = '#4a7aa0'; ctx.fillRect(0, sea, W, H); ctx.fillStyle = 'rgba(240,248,255,0.7)'; ctx.fillRect(0, sea, W, 30);
+  ctx.fillStyle = '#5a4a3a'; ctx.fillRect(0, 980, 420, 40); for (let i = 0; i < 5; i++) ctx.fillRect(30 + i * 90, 1020, 18, 300);
+  [[640, 1320, 0.9, 0.18], [300, 1480, 0.7, -0.12]].forEach(([x, y, s, tilt]) => { const yy = Math.min(y, sea - 10); ctx.save(); ctx.translate(x, yy); ctx.rotate(tilt * k); ctx.scale(s, s); ctx.fillStyle = '#263a6a'; ctx.beginPath(); ctx.moveTo(-260, -40); ctx.lineTo(260, -40); ctx.lineTo(220, 20); ctx.lineTo(-220, 20); ctx.fill(); ctx.fillStyle = '#e8e8f0'; ctx.fillRect(-80, -120, 140, 80); ctx.restore(); });
+  snowfall(ctx, u, 80, 7, 0.7);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 620, 0.5);
+  say(ctx, u, ['Over centuries, oceans lock', 'into ice sheets. Seas drop.'], 230, 0.15, { size: 68, out: 2.6 });
+  say(ctx, u, ['Last ice age:', '120 meters lower'], 230, 2.7, { size: 88, out: OUT('seabed') });
+}
+
+// ================================================================ 11. the great migration south
+function vMigrate(ctx, u) {
+  bgSky(ctx, ['#c8d4e0', '#e0e4e8', '#ffe0b0']);
+  glow(ctx, W / 2, 1050, 400, '255,210,140', 0.6); ctx.fillStyle = '#ffd88a'; ctx.beginPath(); ctx.arc(W / 2, 1050, 70, 0, 6.283); ctx.fill();
+  ctx.fillStyle = '#eef2f6'; ctx.fillRect(0, 1080, W, H);
+  for (let i = 0; i < 6; i++) { const x = 200 + i * 140, y = 1100; ctx.fillStyle = ['#e63946', '#3a86ff', '#ffbe0b'][i % 3]; ctx.beginPath(); ctx.moveTo(x - 30, y + 20); ctx.lineTo(x, y - 10); ctx.lineTo(x + 30, y + 20); ctx.fill(); }
+  massCrowd(ctx, u, { n: 1400, yFar: 1100, yNear: 2150, sFar: 8, sNear: 160, seed: 9, x0: 140, x1: 940, col: '#3a3a4a', flow: 0 });
+  snowfall(ctx, u, 90, 5, 0.6);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 560, 0.5);
+  say(ctx, u, ['Billions head for the', 'equator. Crops fail.'], 230, 0.15, { size: 80, out: OUT('migrate') });
+  bigNum(ctx, u, 'Billions at risk of famine', 1640, 1.4, { size: 64, color: '#ffffff', out: OUT('migrate') });
+  if (u > 1.6) say(ctx, u, ['(est.)'], 1740, 1.6, { size: 40, weight: 800, x: W / 2, align: 'center', out: OUT('migrate') });
+}
+
+// ================================================================ 12. rainforests and reefs freeze
+function vExtinct(ctx, u) {
+  const k = easeInOut(prog(u, 0.2, 3.4));
+  bgSky(ctx, [mixHex('#4a8a6a', '#9aaab8', k), mixHex('#6aaa7a', '#c8d4e0', k), mixHex('#8ac08a', '#e8eef4', k)]);
+  ctx.fillStyle = mixHex('#2a5a2a', '#c8d0d8', k); ctx.fillRect(0, 1100, W, 300);
+  const r = rng(4); for (let i = 0; i < 24; i++) { const x = r() * W, h = 200 + r() * 300; ctx.fillStyle = mixHex('#2a6a2a', '#d8e0e8', k * (0.6 + r() * 0.4)); ctx.beginPath(); ctx.arc(x, 1100 - h * 0.6, h * 0.35, 0, 6.283); ctx.fill(); ctx.fillStyle = mixHex('#5a3a2a', '#9a9aa0', k); ctx.fillRect(x - 10, 1100 - h * 0.4, 20, h * 0.4); }
+  ctx.fillStyle = mixHex('#1a6aa0', '#8aa0b0', k); ctx.fillRect(0, 1400, W, H);
+  for (let i = 0; i < 9; i++) { const x = 80 + i * 120, y = 1700 + (i % 3) * 60; ctx.fillStyle = mixHex(['#ff7aa0', '#ffbe0b', '#7ae0ff'][i % 3], '#f0f0f4', k); for (let j = 0; j < 5; j++) { ctx.beginPath(); ctx.arc(x + (j - 2) * 16, y - j % 2 * 30 - 20, 14, 0, 6.283); ctx.fill(); } }
+  snowfall(ctx, u, Math.floor(140 * k), 6, 0.8);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 560, 0.5);
+  say(ctx, u, ['Rainforests and reefs', 'freeze. A mass extinction.'], 230, 0.15, { size: 76, out: OUT('extinct') });
+}
+
+// ================================================================ 13. the finale: Earth, a frozen disco ball (to the beat)
+function vDisco(ctx, u) {
   space(ctx, u);
-  const k = easeInOut(prog(u, 0.4, 4.4)), cx = W / 2, cy = 1150, R = 470;
-  globe(ctx, cx, cy, R, { lon0: u * 8, lat0: 20, t: u, ink: false });
-  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
-  for (const sgn of [-1, 1]) { const g = ctx.createLinearGradient(0, cy + sgn * R, 0, cy + sgn * R * (1 - 1.6 * k)); g.addColorStop(0, 'rgba(240,248,255,0.98)'); g.addColorStop(0.85, 'rgba(240,248,255,0.85)'); g.addColorStop(1, 'rgba(240,248,255,0)');
-    ctx.fillStyle = g; ctx.fillRect(cx - R, sgn < 0 ? cy - R : cy + R * (1 - 1.6 * k) - 1, 2 * R, R * 1.6 * k + 2); }
+  const b = beat(u), cx = W / 2, cy = 1180, R = 400;
+  sunDisk(ctx, 900, 1680, 90, u, b);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; for (let i = 0; i < 10; i++) { const a = u * 0.6 + i * 0.628; ctx.fillStyle = `rgba(${['255,120,220', '120,220,255', '255,230,120'][i % 3]},${0.08 + 0.12 * b})`; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a - 0.04) * 1400, cy + Math.sin(a - 0.04) * 1400); ctx.lineTo(cx + Math.cos(a + 0.04) * 1400, cy + Math.sin(a + 0.04) * 1400); ctx.fill(); } ctx.restore();
+  const g = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.1, cx, cy, R); g.addColorStop(0, '#ffffff'); g.addColorStop(0.7, '#cfe0f0'); g.addColorStop(1, '#7a90b0'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip(); const rot = u * 0.6;
+  for (let la = -80; la <= 80; la += 12) for (let lo = 0; lo < 360; lo += 12) { const L = lo * Math.PI / 180 + rot, P = la * Math.PI / 180, x = Math.cos(P) * Math.sin(L), y = -Math.sin(P), z = Math.cos(P) * Math.cos(L); if (z < 0) continue;
+    const sx = cx + x * R, sy = cy + y * R, s = 46 * z + 6, br = (((lo * 7 + la * 13) % 11) / 11 + u * 0.8) % 1, lit = 0.35 + 0.65 * Math.pow(br, 3) * (0.5 + 0.5 * b), tint = ['#ffffff', '#cfeaff', '#ffe6f6', '#fff4c8'][(lo / 12 + la / 12 + 40) % 4 | 0];
+    ctx.fillStyle = mixHex('#6a7c98', tint, lit); ctx.fillRect(sx - s * 0.46, sy - s * 0.46, s * 0.92, s * 0.92); if (lit > 0.85) glow(ctx, sx, sy, s * 1.2, '255,255,255', 0.5 * b); }
   ctx.restore();
-  const temp = lerp(15, -30, k);
-  bigNum(ctx, u, `${temp < 0 ? '−' : '+'}${Math.abs(temp).toFixed(0)}°C`, 1760, 0.4, { size: 120, color: temp < 0 ? '#9ad8ff' : '#ffd25a', out: OUT('freeze') });
+  for (let i = 0; i < 6; i++) { const a = i * 1.05 + u, x = cx + Math.cos(a) * R * 0.7, y = cy + Math.sin(a) * R * 0.7; ctx.fillStyle = `rgba(255,255,255,${0.9 * b})`; ctx.beginPath(); ctx.moveTo(x, y - 24); ctx.quadraticCurveTo(x, y, x + 24, y); ctx.quadraticCurveTo(x, y, x, y + 24); ctx.quadraticCurveTo(x, y, x - 24, y); ctx.quadraticCurveTo(x, y, x, y - 24); ctx.fill(); }
+  pulseDim(ctx, u, 0, 0.22);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['Half the sunlight.', 'The planet freezes.'], 230, 0.15, { size: 88, out: OUT('freeze') });
-  if (u > 1.4) say(ctx, u, ['global average (est.)'], 1640, 1.4, { size: 40, weight: 800, x: W / 2, align: 'center', out: OUT('freeze'), color: 'rgba(255,255,255,0.8)' });
-}
-
-// ================================================================ 9. Snowball Earth (it has happened before)
-function vSnowball(ctx, u) {
-  bgSky(ctx, ['#8aa8c8', '#c8d8e8', '#eef4fa']);
-  ctx.fillStyle = '#e8f0f8'; ctx.fillRect(0, 1100, W, H);
-  ctx.strokeStyle = 'rgba(140,170,200,0.6)'; ctx.lineWidth = 4; const r = rng(3); for (let i = 0; i < 14; i++) { let x = r() * W, y = 1150 + r() * 700; ctx.beginPath(); ctx.moveTo(x, y); for (let s = 0; s < 5; s++) { x += (r() - 0.3) * 120; y += (r() - 0.5) * 40; ctx.lineTo(x, y); } ctx.stroke(); }
-  [[200, 1500, 0.9], [780, 1300, 0.6]].forEach(([x, y, s]) => { ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = '#5a6a7a'; ctx.beginPath(); ctx.moveTo(-200, 0); ctx.lineTo(200, 0); ctx.lineTo(160, -40); ctx.lineTo(-160, -40); ctx.fill(); ctx.fillRect(-40, -110, 80, 70); ctx.fillStyle = '#e8f0f8'; ctx.fillRect(-210, -6, 420, 20); ctx.restore(); });
-  sunDisk(ctx, 860, 400, 60, u, SAFE(u) * 0.7);
-  snowfall(ctx, u, 160);
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 600, 0.55);
-  say(ctx, u, ['The oceans start', 'to freeze over'], 230, 0.15, { size: 88, out: 2.5 });
-  say(ctx, u, ['“Snowball Earth” has happened', 'before: 700 million years ago'], 230, 2.6, { size: 64, out: OUT('snowball') });
-}
-
-// ================================================================ 10. the toll
-function vToll(ctx, u) {
-  bgSky(ctx, ['#2a3450', '#3a4460', '#4a5470']);
-  snowfall(ctx, u, 120, 5, 0.7);
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['Crops fail in the cold.'], 700, 0.15, { size: 76, x: W / 2, align: 'center', out: OUT('toll') });
-  bigNum(ctx, u, 'Billions at risk', 940, 0.8, { size: 108, color: '#ffffff', out: OUT('toll') });
-  say(ctx, u, ['of famine (est.)'], 1070, 1.1, { size: 60, weight: 800, x: W / 2, align: 'center', out: OUT('toll') });
-}
-
-// ================================================================ 11. the universe already has strobe lights: pulsars
-function vPulsar(ctx, u) {
-  space(ctx, u);
-  const cx = W / 2, cy = 1150, a = u * 1.1;   // shown rotating slowly (the real one spins 716×/s)
-  for (const s of [1, -1]) { ctx.save(); ctx.translate(cx, cy); ctx.rotate(a + (s < 0 ? Math.PI : 0)); const g = ctx.createLinearGradient(0, 0, 900, 0); g.addColorStop(0, 'rgba(160,210,255,0.85)'); g.addColorStop(1, 'rgba(160,210,255,0)');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(900, -90); ctx.lineTo(900, 90); ctx.fill(); ctx.restore(); }
-  glow(ctx, cx, cy, 160, '180,220,255', 0.9); ctx.fillStyle = '#eaf4ff'; ctx.beginPath(); ctx.arc(cx, cy, 34, 0, 6.283); ctx.fill();
-  ctx.strokeStyle = 'rgba(160,210,255,0.35)'; ctx.lineWidth = 3; for (let k = 1; k < 4; k++) { ctx.beginPath(); ctx.ellipse(cx, cy, 120 * k, 40 * k, a * 0.3, 0, 6.283); ctx.stroke(); }
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['The universe already', 'has strobe lights:', 'pulsars'], 230, 0.15, { size: 84, out: OUT('pulsar'), mark: { line: 2, from: 0, to: 7, color: '#2a9df4' } });
-  say(ctx, u, ['The fastest flashes', '716 times a second'], 1600, 1.8, { size: 66, weight: 900, out: OUT('pulsar') });
+  say(ctx, u, ['Earth becomes a giant', 'frozen disco ball'], 230, 0.15, { size: 84, out: 2.9 });
+  say(ctx, u, ['Last time Earth froze over,', 'complex animal life', 'evolved soon after'], 230, 3.0, { size: 70, out: OUT('disco'), mark: { line: 1, from: 0, to: 19, color: '#2a9df4' } });
 }
 
 function vEnd(ctx, u) {

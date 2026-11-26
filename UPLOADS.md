@@ -385,22 +385,23 @@ In reality, one man said no: Vasily Arkhipov. The world didn't learn his name fo
 
 **File:** `videos/strobe-sun.mp4`
 
-**Title:** What If the Sun Became a Strobe Light? ☀️⚡ #shorts
+**Title:** What If the Sun Became a Strobe Light? ☀️🪩 #shorts
 
 **Description:**
 
 ```
-Physics says no: light takes tens of thousands of years to escape the Sun's core. But say the surface flickers 10 times a second.
-Sunlight takes 8 minutes to reach us. That's all the warning you get.
-Daylight flickers. ~1.5 million people with photosensitive epilepsy are at risk of seizures; billions more get pounding headaches.
-Rain looks frozen in midair. Car wheels seem to spin backwards.
-Surprise: plants can use flashing light just fine (a 1932 experiment). But they only get half the sunlight.
-Half the sunlight: the planet freezes, from +15°C toward −30°C (est.). The oceans start to freeze over. "Snowball Earth" has happened before.
-Crops fail in the cold: billions at risk of famine (est.).
+Impossible (light takes millennia to escape the Sun's core), but say it happens anyway. You get 8 minutes of warning.
+For about an hour, Earth is the world's biggest rave. Then the fun stops.
+Drivers can't judge speed or distance: pileups everywhere. ~1.5 million people with photosensitive epilepsy risk seizures.
+Birds, bees and bats lose track of day and night. Rain hangs frozen in midair; wheels spin backwards.
+Ocean plankton make about half our oxygen. With half the light, they starve, and so does everything that eats them.
+Summer never comes: snow on the 4th of July. Over centuries, oceans lock into ice sheets and seas drop.
+Billions head for the equator. Crops fail. Rainforests and reefs freeze: a mass extinction.
+Earth becomes a giant frozen disco ball.
 
-The universe already has strobe lights: pulsars. The fastest flashes 716 times a second.
+Last time Earth froze over, complex animal life evolved soon after.
 
-(No real strobe effects in this video. The flicker is slowed down for viewer safety.)
+(No real strobe effects in this video: the flicker is slowed down for viewer safety.)
 
 #whatif #sun #space #science #shorts
 ```

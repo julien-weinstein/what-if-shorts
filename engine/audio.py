@@ -283,6 +283,14 @@ def sfx(name):
         b = 0.0
         while b < sec - 0.3: thump(b, 1.0); thump(b + 0.22, 0.7); b += 0.75
         return norm(lp(out, 0.05), 0.8)
+    if base == "kick":     # four-on-the-floor techno kick at 96 bpm (deep sine thump, soft attack, no click)
+        tt = t(sec); out = np.zeros(len(tt)); step = 60 / 96; n = int(SR * 0.45); k = np.arange(n) / SR
+        f = 45 + 95 * np.exp(-k * 28); ph = 2 * np.pi * np.cumsum(f) / SR
+        one = np.sin(ph) * np.exp(-k * 7.5) * np.minimum(1, k / 0.002)
+        b = 0.0
+        while b < sec - 0.05:
+            s0 = int(b * SR); out[s0:s0 + n] += one[: len(out[s0:s0 + n])]; b += step
+        return norm(lp(out, 0.08), 0.95)
     if base == "air":      # soft cinematic whoosh (noise only)
         n = noise(1.2); e = np.sin(np.linspace(0, np.pi, len(n))) ** 3
         return norm(lp(n, 0.04) * e, 0.3)
