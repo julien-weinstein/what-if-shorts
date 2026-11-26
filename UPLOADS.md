@@ -505,15 +505,17 @@ Shot towers really did make lead shot by dropping molten lead from a height.
 
 ```
 Imagine a fault the whole West Coast long: 3,500 km from Baja to Canada, snapping at once.
-~15 gigatons of energy in 22 minutes (est.). Minutes of shaking, not seconds.
-Freeway bridges fall. High-rises give way. Across the LA basin, buildings fall by the thousands (est.).
-~15 minutes later: a wall of water up to ~30 m hits the beaches (est.).
+~15 gigatons of energy in 22 minutes. Minutes of shaking, not seconds.
+High-rises give way. Across the LA basin, buildings fall by the thousands.
+The seafloor heaves up along the whole coast: a tsunami 3,500 km wide is born.
+From 100 km up: the wave hits Catalina first, then pours into LA, kilometers inland. Up to ~30 m tall at the beaches.
+In San Francisco the surge roars under the Golden Gate and floods the bay.
 The ports of LA & Long Beach, ~1/3 of US imports, are wrecked.
 Gas lines burst: thousands of fires, and no water to fight them.
-The aqueducts snap. Millions without water for months (est.).
+The aqueducts snap. Millions without water for months.
 The tsunami crosses the Pacific: Hawaii in ~6 h, Japan ~12 h, Australia ~17 h.
-California is the world's ~4th-biggest economy. Global recession (est.).
-~60 million people live along the rupture. Total toll: up to ~1 million (rough est.).
+California is the world's ~4th-biggest economy. Global recession.
+~60 million people live along the rupture. Total toll: up to ~1 million.
 
 Hypothetical: the San Andreas slides sideways and tops out near M8. No known fault here can make an M10.
 

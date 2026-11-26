@@ -12,7 +12,9 @@ Read this first. It records what the channel owner has asked for across many rou
 - Scene functions get `Math.max(0, localTime)`. Guard anything that can go negative (radii, modulo) to avoid render crashes.
 
 ## Content rules
-- **Accuracy first.** Real physics and biology, numbers worked out in the script header, sources noted. Hedge estimates on screen with "(est.)". Never invent facts.
+- **Accuracy first.** Real physics and biology, numbers worked out in the script header, sources noted. Never invent facts. Don't tag predictions with "(est.)" on screen (the owner says it's implied); use "~" for rough numbers, and keep one short "hypothetical" note if the premise needs it.
+- **Present tense, minimal history.** The owner doesn't want history lessons in disaster shorts ("I don't care about the past"). Use past events only in the script header to justify numbers, not as on-screen beats.
+- **Show the main phenomenon from above too.** For something like a tsunami, impact or eruption, include bird's-eye or orbital views of the whole event (e.g. a wavefront crossing the ocean), not only ground-level shots.
 - **Human toll and destruction at scale.** Don't shy from death (death tolls as estimates), but use no gore. Balance small-scale human and species consequences with planet-scale ones.
 - **Arc:** hook → escalation → strong final image. **No forced plot twists**, and no "it already happened" tags unless asked.
 - **Pacing:** about 4–5 s per scene so captions can be read. Total length is about 50–65 s.

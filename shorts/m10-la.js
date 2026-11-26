@@ -17,20 +17,20 @@
 
 const SCENES = [
   ['hook', 3.5, [[0, 'swell:2.6'], [1.2, 'boom'], [1.25, 'rumble:2.2']]],
-  ['rupture', 5.0, [[0.2, 'rumble:4.6'], [0.3, 'roar:4.4']]],
-  ['wave', 3.5, [[0.2, 'rumble:3.2'], [0.6, 'boom'], [1.6, 'boom']]],
-  ['overpass', 4.5, [[0.2, 'rumble:4.2'], [1.2, 'impact'], [1.25, 'boom'], [2.9, 'impact'], [2.95, 'boom']]],
-  ['downtown', 4.5, [[0.2, 'rumble:4.2'], [1.0, 'boom'], [1.05, 'impact'], [2.2, 'boom'], [2.3, 'roar:2.0']]],
-  ['basin', 4.5, [[0.2, 'roar:4.2'], [0.8, 'boom'], [2.0, 'boom']]],
-  ['crack', 3.5, [[0.3, 'impact'], [0.35, 'boom'], [1.5, 'impact'], [1.55, 'boom']]],
-  ['tsunami', 5.0, [[0.2, 'drawback:1.6'], [1.4, 'roar:3.4'], [2.4, 'boom'], [2.45, 'impact']]],
+  ['rupture', 4.5, [[0.2, 'rumble:4.2'], [0.3, 'roar:4.0']]],
+  ['downtown', 4.0, [[0.2, 'rumble:3.8'], [1.0, 'boom'], [1.05, 'impact'], [2.2, 'boom'], [2.3, 'roar:1.6']]],
+  ['basin', 4.0, [[0.2, 'roar:3.8'], [0.8, 'boom'], [2.0, 'boom']]],
+  ['launch', 5.0, [[0.2, 'boom'], [0.3, 'rumble:4.6'], [2.5, 'swell:2.4']]],
+  ['bird', 6.0, [[0.2, 'roar:5.6'], [1.4, 'boom'], [3.0, 'boom'], [3.1, 'impact']]],
+  ['tsunami', 4.5, [[0.2, 'drawback:1.2'], [1.0, 'roar:3.4'], [2.2, 'boom'], [2.25, 'impact']]],
+  ['gate', 4.5, [[0.3, 'drawback:1.0'], [1.0, 'roar:3.4'], [3.0, 'boom'], [3.05, 'impact']]],
   ['port', 3.5, [[0.2, 'roar:3.2'], [1.2, 'boom']]],
   ['fires', 3.5, [[0.2, 'roar:3.2']]],
-  ['aqueduct', 4.0, [[0.4, 'impact'], [0.45, 'boom'], [0.6, 'roar:3.2']]],
-  ['pacific', 4.5, [[0.2, 'swell:4.2'], [0.3, 'rumble:4.0']]],
-  ['economy', 3.5, [[0.3, 'impact'], [0.4, 'drawback:2.4']]],
-  ['toll', 5.5, [[0.2, 'heart:5.2']]],
-  ['dark', 5.0, [[0.2, 'swell:4.6']]],
+  ['aqueduct', 3.5, [[0.4, 'impact'], [0.45, 'boom'], [0.6, 'roar:2.8']]],
+  ['pacific', 5.0, [[0.2, 'swell:4.6'], [0.3, 'rumble:4.4']]],
+  ['economy', 3.0, [[0.3, 'impact'], [0.4, 'drawback:2.2']]],
+  ['toll', 5.0, [[0.2, 'heart:4.7']]],
+  ['dark', 4.5, [[0.2, 'swell:4.2']]],
   ['end', 3.0, [[0.2, 'swell:2.5']]],
 ];
 const START = {}; let _acc = 0; const _sfx = [];
@@ -46,8 +46,8 @@ const SHORT = {
   music: { bpm: 84, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHookLA, rupture: vRupture, wave: vWave, overpass: vOverpass, downtown: vDowntown, basin: vBasin, crack: vCrack, tsunami: vTsunamiLA,
-              port: vPort2, fires: vFires, aqueduct: vAqueduct, pacific: vPacific, economy: vEconomy, toll: vTollLA, dark: vDark, end: vEnd };
+const FNS = { hook: vHookLA, rupture: vRupture, downtown: vDowntown, basin: vBasin, launch: vLaunch, bird: vBird, tsunami: vTsunamiLA, gate: vGate,
+              port: vPort2, fires: vFires, aqueduct: vAqueduct, pacific: vPacific2, economy: vEconomy, toll: vTollLA, dark: vDark, end: vEnd };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 const RUP = [[-110.5, 23.5], [-112.5, 26.5], [-115.5, 29.5], [-117.6, 32.3], [-118.9, 33.6], [-120.8, 34.25], [-121.9, 36.2], [-123.2, 37.7], [-124.4, 40.3], [-124.9, 43], [-124.8, 46], [-125.6, 48.5], [-128, 50.5]];
 const LA = [-119, 33.7];
@@ -98,7 +98,7 @@ function vRupture(ctx, u) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 620, 0.65);
   say(ctx, u, ['Imagine a fault the whole', 'West Coast long: 3,500 km', 'snapping at once'], 220, 0.15, { size: 70, out: 2.5 });
-  say(ctx, u, ['~15 gigatons of energy', 'in 22 minutes (est.)'], 220, 2.6, { size: 76, out: OUT('rupture') });
+  say(ctx, u, ['~15 gigatons of energy', 'in 22 minutes'], 220, 2.6, { size: 76, out: OUT('rupture') });
   ctx.font = `700 28px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.75)'; ctx.textAlign = 'center'; ctx.fillText('Hypothetical: no known fault here can make an M10', 540, 1870);
 }
 
@@ -118,7 +118,7 @@ function vDowntown(ctx, u) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.6);
   say(ctx, u, ['Minutes of shaking,', 'not seconds'], 230, 0.15, { size: 92, out: 2.0 });
-  say(ctx, u, ['High-rises give way', '(est.)'], 230, 2.1, { size: 92, out: OUT('downtown') });
+  say(ctx, u, ['High-rises', 'give way'], 230, 2.1, { size: 100, out: OUT('downtown') });
 }
 
 // ================================================================ 6. aerial: the LA basin collapses in a sweeping wave
@@ -133,7 +133,7 @@ function vBasin(ctx, u) {
     const r = rng(90 + row); for (let i = 0; i < 4; i++) { const x = r() * W, at = 0.5 + (1 - x / W) * 2.2 + (1 - q) * 0.6; dustBlast(ctx, x, base, u - at, row * 10 + i, { n: 10, spread: 300 * s, up: 260 * s, col: '#d0c0b0', life: 5 }); } }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 620, 0.6);
-  say(ctx, u, ['Across the LA basin,', 'buildings fall by', 'the thousands (est.)'], 230, 0.15, { size: 80, out: OUT('basin') });
+  say(ctx, u, ['Across the LA basin,', 'buildings fall by', 'the thousands'], 230, 0.15, { size: 80, out: OUT('basin') });
 }
 
 // ================================================================ 8. Santa Monica: the wall of water
@@ -158,7 +158,7 @@ function vTsunamiLA(ctx, u) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.6);
   say(ctx, u, ['~15 minutes later:', 'the beaches'], 230, 0.15, { size: 92, out: 1.9 });
-  say(ctx, u, ['A wall of water', 'up to ~30 m (est.)'], 230, 2.0, { size: 92, out: OUT('tsunami') });
+  say(ctx, u, ['A wall of water', 'up to ~30 m tall'], 230, 2.0, { size: 92, out: OUT('tsunami') });
 }
 
 // ================================================================ 11. the aqueduct rips: LA's water pours into the desert
@@ -178,8 +178,8 @@ function vAqueduct(ctx, u) {
     dustBlast(ctx, 300, fault, dt, 3, { n: 12, spread: 500, up: 200, col: '#d8b890' }); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.6);
-  say(ctx, u, ['The aqueducts that bring', 'LA its water snap (est.)'], 230, 0.15, { size: 74, out: 2.0 });
-  say(ctx, u, ['Millions without water', 'for months (est.)'], 230, 2.1, { size: 80, out: OUT('aqueduct') });
+  say(ctx, u, ['The aqueducts that bring', 'LA its water snap'], 230, 0.15, { size: 74, out: 2.0 });
+  say(ctx, u, ['Millions without water', 'for months'], 230, 2.1, { size: 80, out: OUT('aqueduct') });
 }
 
 // ================================================================ 12. planetary: the tsunami fans across the whole Pacific
@@ -210,7 +210,7 @@ function vEconomy(ctx, u) {
   const _ic = 0, icons = [['⚓', 'ports'], ['🔌', 'chips & tech'], ['🌾', 'farms'], ['🎬', 'film & media']];
   icons.forEach(([ic, lab], i) => { const a = R2((u - 0.6 - i * 0.25) / 0.4); ctx.globalAlpha = a; ctx.font = `64px ${FONT}`; ctx.textAlign = 'center'; ctx.fillText(ic, 180 + i * 240, 1660); ctx.font = `800 28px ${FONT}`; ctx.fillStyle = '#ffffff'; ctx.fillText(lab, 180 + i * 240, 1710); ctx.globalAlpha = 1; });
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['California is the world’s', '~4th-biggest economy.', 'Global recession (est.)'], 230, 0.15, { size: 72, out: OUT('economy') });
+  say(ctx, u, ['California is the world’s', '~4th-biggest economy.', 'Global recession'], 230, 0.15, { size: 72, out: OUT('economy') });
 }
 
 // ================================================================ 14. the toll: immediate + aftermath
@@ -225,7 +225,6 @@ function vTollLA(ctx, u) {
   bigNum(ctx, u, 'power or hospitals):', 970, 1.9, { size: 54, color: '#ffffff', out: OUT('toll') });
   bigNum(ctx, u, 'hundreds of thousands more', 1060, 2.1, { size: 62, color: '#ffd25a', out: OUT('toll') });
   bigNum(ctx, u, 'Total: up to ~1 million', 1260, 3.2, { size: 84, color: '#ffffff', out: OUT('toll') });
-  bigNum(ctx, u, '(rough est.)', 1350, 3.4, { size: 50, color: '#c8d0ff', out: OUT('toll') });
 }
 
 // ================================================================ 15. final: night from orbit, the West Coast goes dark
@@ -242,6 +241,141 @@ function vDark(ctx, u) {
   ctx.restore();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   say(ctx, u, ['From space, the', 'West Coast goes dark'], 230, 0.15, { size: 88, out: OUT('dark') });
+}
+
+
+// ================================================================ tsunami toolkit
+let _OC = null;
+function ocx() { if (!_OC) { _OC = document.createElement('canvas'); _OC.width = W; _OC.height = H; } const g = _OC.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.filter = 'none'; g.clearRect(0, 0, W, H); return g; }
+function gProj(v, cx, cy, R) { return ([lo, la]) => { let [x, y, z] = v(lo, la); if (z < 0) { const m = Math.hypot(x, y) || 1; x /= m; y /= m; } return [cx + x * R, cy + y * R]; }; }
+function discsGlobe(g, P, srcs, d) { g.beginPath(); for (const s of srcs) { for (let b = 0; b <= 6.3; b += 0.06) { const p = P(dest(s[0], s[1], b, d)); b ? g.lineTo(...p) : g.moveTo(...p); } g.closePath(); } }
+function landGlobe(g, P, v) { g.beginPath(); for (const poly of LAND) { let hid = 0; for (const [lo, la] of poly) if (v(lo, la)[2] < 0) hid++; if (hid > poly.length * 0.3 || poly.some(([lo, la]) => la < -60)) continue;
+  poly.forEach((p, i) => i ? g.lineTo(...P(p)) : g.moveTo(...P(p))); g.closePath(); } }
+// whole-ocean tsunami from orbit: passed water tinted, a bright front band, land masked out
+function tsunamiGlobe(ctx, v, cx, cy, R, srcs, dRad, band = 0.035) {
+  if (dRad <= 0) return; const P = gProj(v, cx, cy, R);
+  let g = ocx(); g.fillStyle = '#bfe8ff'; discsGlobe(g, P, srcs, dRad); g.fill('nonzero');
+  g.globalCompositeOperation = 'destination-out'; landGlobe(g, P, v); g.fill('nonzero'); g.beginPath(); g.rect(0, 0, W, H); g.arc(cx, cy, R, 2 * Math.PI, 0, true); g.fill();
+  ctx.save(); ctx.globalAlpha = 0.22; ctx.drawImage(_OC, 0, 0); ctx.restore();
+  g = ocx(); g.fillStyle = '#ffffff'; discsGlobe(g, P, srcs, dRad); g.fill('nonzero');
+  g.globalCompositeOperation = 'destination-out'; discsGlobe(g, P, srcs, Math.max(0, dRad - band)); g.fill('nonzero'); landGlobe(g, P, v); g.fill('nonzero'); g.beginPath(); g.rect(0, 0, W, H); g.arc(cx, cy, R, 2 * Math.PI, 0, true); g.fill();
+  ctx.save(); ctx.filter = 'blur(14px)'; ctx.globalAlpha = 0.9; ctx.drawImage(_OC, 0, 0); ctx.filter = 'none'; ctx.globalAlpha = 1; ctx.drawImage(_OC, 0, 0); ctx.restore();
+}
+
+// ---------------------------------------------------------------- hand-traced SoCal coast (lon, lat)
+const SOCAL = [[-121.0, 34.6], [-120.47, 34.45], [-120.0, 34.46], [-119.7, 34.4], [-119.3, 34.27], [-119.06, 34.09], [-118.8, 34.02], [-118.68, 34.03], [-118.5, 34.01], [-118.47, 33.98], [-118.45, 33.96],
+  [-118.42, 33.91], [-118.39, 33.84], [-118.41, 33.77], [-118.35, 33.72], [-118.29, 33.705], [-118.24, 33.73], [-118.19, 33.76], [-118.1, 33.74], [-118.0, 33.66], [-117.9, 33.6], [-117.78, 33.54],
+  [-117.7, 33.46], [-117.61, 33.42], [-117.38, 33.19], [-117.35, 33.15], [-117.27, 32.96], [-117.27, 32.85], [-117.24, 32.68], [-117.12, 32.53], [-116.95, 32.2], [-116.62, 31.85], [-116.6, 31.0]];
+const SOCAL_LAND = [...SOCAL, [-110, 31.0], [-110, 40], [-121.0, 40]];
+const ISLANDS = [[[-118.6, 33.48], [-118.48, 33.44], [-118.32, 33.34], [-118.3, 33.3], [-118.45, 33.36], [-118.6, 33.45]],
+  [[-118.6, 33.03], [-118.47, 32.95], [-118.35, 32.82], [-118.38, 32.82], [-118.55, 32.98]],
+  [[-119.92, 34.07], [-119.55, 34.05], [-119.52, 33.99], [-119.88, 33.97]], [[-120.24, 34.02], [-119.98, 34.02], [-119.95, 33.92], [-120.2, 33.9]]];
+const LA_URBAN = [[-118.9, 34.18], [-118.55, 34.3], [-118.0, 34.2], [-117.55, 34.12], [-117.35, 33.95], [-117.7, 33.62], [-117.95, 33.67], [-118.2, 33.77], [-118.4, 33.8], [-118.48, 34.0], [-118.72, 34.04], [-118.95, 34.12]];
+const LOWS = [[-118.22, 33.78, 9], [-118.45, 33.98, 5], [-118.05, 33.7, 8], [-119.18, 34.18, 9], [-117.2, 32.72, 5], [-117.92, 33.62, 5]];
+
+// ================================================================ BIRD'S-EYE: from ~100 km up, the wave races in and floods LA
+function vBird(ctx, u) {
+  const z = easeInOut(prog(u, 0, 5.8)), s = lerp(360, 760, z), C0 = [lerp(-118.6, -118.3, z), lerp(33.45, 33.82, z)], kpx = s / 111;
+  const P = ([lo, la]) => [540 + (lo - C0[0]) * 0.829 * s, 1150 - (la - C0[1]) * s];
+  // ocean
+  const og = ctx.createLinearGradient(0, 0, 0, H); og.addColorStop(0, '#1a5a9a'); og.addColorStop(1, '#0e3a72'); ctx.fillStyle = og; ctx.fillRect(0, 0, W, H);
+  const r = rng(150); for (let i = 0; i < 90; i++) { ctx.fillStyle = `rgba(80,150,210,${0.12 + r() * 0.12})`; ctx.beginPath(); ctx.ellipse(r() * W, r() * H, 60 + r() * 160, 10 + r() * 20, -0.5, 0, 6.283); ctx.fill(); }
+  // tsunami (passed water + front band), masked by land
+  const d = lerp(0, 95, easeOut(prog(u, 0.2, 3.6))) + Math.max(0, u - 3.6) * 6, pts = rupPts().filter(([lo, la]) => la > 31 && la < 35.5), dpx = d * kpx;
+  if (dpx > 0) { const mask = g => { g.beginPath(); SOCAL_LAND.forEach((p, i) => i ? g.lineTo(...P(p)) : g.moveTo(...P(p))); g.closePath(); for (const isl of ISLANDS) { isl.forEach((p, i) => i ? g.lineTo(...P(p)) : g.moveTo(...P(p))); g.closePath(); } g.fill('nonzero'); };
+    const discs = (g, rad) => { g.beginPath(); for (const p of pts) { const [x, y] = P(p); g.moveTo(x + rad, y); g.arc(x, y, rad, 0, 6.283); } g.fill('nonzero'); };
+    let g = ocx(); g.fillStyle = '#9ad8ff'; discs(g, dpx); g.globalCompositeOperation = 'destination-out'; mask(g);
+    ctx.save(); ctx.globalAlpha = 0.3; ctx.drawImage(_OC, 0, 0); ctx.restore();
+    g = ocx(); g.fillStyle = '#ffffff'; discs(g, dpx); g.globalCompositeOperation = 'destination-out'; discs(g, Math.max(0, dpx - 7 * kpx)); mask(g);
+    ctx.save(); ctx.filter = 'blur(12px)'; ctx.drawImage(_OC, 0, 0); ctx.filter = 'none'; ctx.drawImage(_OC, 0, 0); ctx.restore(); }
+  // rupture
+  ctx.strokeStyle = 'rgba(255,210,90,0.9)'; ctx.lineWidth = 8; ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p))); ctx.stroke();
+  // land
+  ctx.fillStyle = '#c8b48a'; ctx.beginPath(); SOCAL_LAND.forEach((p, i) => i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p))); ctx.closePath(); ctx.fill();
+  for (const isl of ISLANDS) { ctx.beginPath(); isl.forEach((p, i) => i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p))); ctx.closePath(); ctx.fill(); }
+  ctx.save(); ctx.beginPath(); SOCAL_LAND.forEach((p, i) => i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p))); ctx.closePath(); ctx.clip();
+  const rr = rng(151); for (let i = 0; i < 40; i++) { const [x, y] = P([-119.5 + rr() * 3.5, 34.25 + rr() * 0.8]); ctx.fillStyle = 'rgba(110,120,80,0.35)'; ctx.beginPath(); ctx.ellipse(x, y, 80 * kpx / 3, 20 * kpx / 3, -0.3, 0, 6.283); ctx.fill(); }
+  ctx.fillStyle = '#a8a4b4'; ctx.beginPath(); LA_URBAN.forEach((p, i) => i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p))); ctx.closePath(); ctx.fill();
+  { const [x, y] = P([-117.1, 32.75]); ctx.beginPath(); ctx.arc(x, y, 18 * kpx, 0, 6.283); ctx.fill(); }
+  ctx.strokeStyle = 'rgba(120,116,130,0.6)'; ctx.lineWidth = 1.5; const st = Math.max(6, 3 * kpx); for (let x = 0; x < W; x += st) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); } for (let y = 0; y < H; y += st) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+  // inundation: coastal band + low-lying basins flood inland
+  const inn = easeOut(prog(u, 2.9, 5.8));
+  if (inn > 0) { ctx.strokeStyle = 'rgba(70,170,220,0.92)'; ctx.lineWidth = inn * 6 * kpx * 2; ctx.lineJoin = 'round'; ctx.beginPath(); SOCAL.forEach((p, i) => i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p))); ctx.stroke();
+    ctx.fillStyle = 'rgba(70,170,220,0.9)'; for (const [lo, la, km] of LOWS) { const [x, y] = P([lo, la]); ctx.beginPath(); ctx.arc(x, y, inn * km * kpx, 0, 6.283); ctx.fill(); }
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 4; ctx.setLineDash([10, 8]); ctx.beginPath(); SOCAL.forEach((p, i) => i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p))); ctx.stroke(); ctx.setLineDash([]); }
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 3; ctx.beginPath(); SOCAL.forEach((p, i) => i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p))); ctx.stroke();
+  // clouds + haze (high altitude)
+  const cr = rng(152); for (let i = 0; i < 10; i++) { const x = ((cr() * W * 1.4 + u * 18) % (W * 1.4)) - 200, y = cr() * H; for (let k = 0; k < 5; k++) puff(ctx, x + k * 40, y + Math.sin(k) * 20, 40 + cr() * 40, '#ffffff', 0.18); }
+  for (const [n, lo, la] of [['Los Angeles', -118.25, 34.05], ['Santa Monica', -118.49, 34.02], ['Long Beach', -118.19, 33.79], ['Catalina', -118.45, 33.38], ['Oxnard', -119.18, 34.2], ['San Diego', -117.15, 32.74]]) {
+    const [x, y] = P([lo, la]); if (x < 40 || x > W - 40 || y < 640 || y > 1760) continue; ctx.font = `800 30px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(20,30,60,0.6)'; ctx.fillText(n, x + 2, y + 2); ctx.fillStyle = '#ffffff'; ctx.fillText(n, x, y); }
+  ctx.fillStyle = 'rgba(200,225,255,0.18)'; ctx.fillRect(0, 0, W, H);
+  ctx.font = `900 72px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffd25a'; ctx.fillText(`+${Math.round(lerp(0, 20, prog(u, 0.2, 5.6)))} min`, 540, 1800);
+  ctx.font = `700 28px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText('view from ~100 km up', 540, 1860);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 600, 0.6);
+  say(ctx, u, ['From 100 km up: the wave', 'hits Catalina first...'], 230, 0.15, { size: 76, out: 2.8 });
+  say(ctx, u, ['then pours into LA,', 'kilometers inland'], 230, 2.9, { size: 80, out: OUT('bird') });
+}
+
+// ================================================================ ORBIT: the wave peels off the entire coast
+function vLaunch(ctx, u) {
+  space(ctx, u);
+  const R = lerp(1500, 1100, easeInOut(prog(u, 0, 5))), cx = 640, cy = 1150, lon0 = -124, lat0 = 38, v = gView(lon0, lat0);
+  globe(ctx, cx, cy, R, { lon0, lat0, t: u, ink: false, clouds: 0.2, lights: false });
+  const srcs = rupPts().filter((_, i) => i % 5 === 0), hrs = lerp(0, 2.2, easeOut(prog(u, 0.2, 4.8)));
+  tsunamiGlobe(ctx, v, cx, cy, R, srcs, hrs * 713 / 6371, 0.02);
+  const P = gProj(v, cx, cy, R); ctx.strokeStyle = '#ffd25a'; ctx.lineWidth = 8; ctx.beginPath(); rupPts().forEach((p, i) => i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p))); ctx.stroke();
+  ctx.font = `900 72px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.fillText(`+${hrs.toFixed(1)} h`, 540, 1810);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 600, 0.6);
+  say(ctx, u, ['The seafloor heaves up', 'along the whole coast...'], 230, 0.15, { size: 78, out: 2.4 });
+  say(ctx, u, ['and a tsunami 3,500 km', 'wide is born'], 230, 2.5, { size: 80, out: OUT('launch') });
+}
+
+// ================================================================ PACIFIC from orbit: one unbroken wavefront crosses the ocean
+function vPacific2(ctx, u) {
+  space(ctx, u);
+  const R = 560, cx = W / 2, cy = 1180, lon0 = lerp(-135, -165, easeInOut(prog(u, 0, 5))), v = gView(lon0, 8);
+  globe(ctx, cx, cy, R, { lon0, lat0: 8, t: u, ink: false, lights: false, clouds: 0.2 });
+  const hrs = lerp(1.5, 17, easeInOut(prog(u, 0.2, 4.6))), srcs = rupPts().filter((_, i) => i % 5 === 0);
+  tsunamiGlobe(ctx, v, cx, cy, R, srcs, hrs * 713 / 6371, 0.05);
+  const P = ([lo, la]) => { const [x, y, z] = v(lo, la); return [cx + x * R, cy + y * R, z]; };
+  for (const [n, lo, la, h] of [['Hawaii', -157.9, 21.3, 5.7], ['Peru', -77.1, -12, 9.5], ['Japan', 139.7, 35.7, 12.3], ['N. Zealand', 174.8, -36.8, 14.6], ['Philippines', 121, 14.6, 16.4], ['Australia', 151.2, -33.9, 16.8]]) {
+    const [x, y, z] = P([lo, la]); if (z < 0.05) continue; const hit = hrs >= h; ctx.fillStyle = hit ? '#ffd25a' : '#ffffff'; ctx.beginPath(); ctx.arc(x, y, hit ? 12 : 8, 0, 6.283); ctx.fill();
+    ctx.font = `800 ${hit ? 32 : 26}px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = hit ? '#ffd25a' : 'rgba(255,255,255,0.85)'; ctx.fillText(hit ? `${n} ${h} h` : n, x, y - 22); }
+  ctx.font = `900 90px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.fillText(`+${hrs.toFixed(1)} h`, 540, 1820);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, u, ['Then the wave crosses', 'the entire Pacific'], 230, 0.15, { size: 84, out: OUT('pacific') });
+}
+
+// ================================================================ GOLDEN GATE: the surge comes under the bridge, straight at us
+function vGate(ctx, u) {
+  const hz = 1120, yb = lerp(hz + 20, H + 500, easeIn2(prog(u, 0.8, 4.4))), hh = lerp(20, 760, easeIn2(prog(u, 0.8, 4.4))), [sx, sy] = shakeOffset(u, 3.0, 1.4, 22);
+  bgSky(ctx, ['#4a8ad8', '#a8d0f0', '#ffe0c0']); ctx.translate(sx, sy);
+  ctx.fillStyle = '#2a7ab0'; ctx.fillRect(0, hz, W, H);
+  // headlands
+  ctx.fillStyle = '#6a9a5a'; ctx.beginPath(); ctx.moveTo(-50, hz + 20); ctx.quadraticCurveTo(80, 820, 260, hz + 40); ctx.lineTo(-50, hz + 60); ctx.fill();
+  ctx.fillStyle = '#8aa070'; ctx.beginPath(); ctx.moveTo(W + 50, hz + 30); ctx.quadraticCurveTo(980, 900, 820, hz + 50); ctx.lineTo(W + 50, hz + 70); ctx.fill();
+  for (let i = 0; i < 7; i++) { ctx.fillStyle = ['#f0ece4', '#e0e4ec', '#f4e8d8'][i % 3]; ctx.fillRect(880 + i * 30, hz - 60 - (i % 3) * 30, 26, 80 + (i % 3) * 30); }
+  // bridge
+  const tw = [[330, 470], [760, 470]], deck = 1000, top = 560, col = '#e8642a';
+  ctx.strokeStyle = col; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(-40, deck - 10); ctx.quadraticCurveTo(160, deck - 60, tw[0][0], top); ctx.quadraticCurveTo(545, deck + 40, tw[1][0], top); ctx.quadraticCurveTo(930, deck - 60, W + 40, deck - 10); ctx.stroke();
+  ctx.lineWidth = 2; for (let x = 0; x < W; x += 22) { const y = x < 330 ? lerp(deck - 10, top, Math.pow(x / 330, 2)) : x < 760 ? top + (deck + 40 - top) * 4 * ((x - 330) / 430) * (1 - (x - 330) / 430) * 0.5 + (1 - 4 * ((x - 330) / 430) * (1 - (x - 330) / 430)) * 0 : lerp(top, deck - 10, Math.pow((x - 760) / 320, 0.5));
+    ctx.beginPath(); ctx.moveTo(x, Math.min(y, deck)); ctx.lineTo(x, deck); ctx.stroke(); }
+  for (const [x] of tw) { ctx.fillStyle = col; ctx.fillRect(x - 22, top - 20, 16, hz - top + 40); ctx.fillRect(x + 6, top - 20, 16, hz - top + 40); for (const y of [top + 30, top + 160, top + 300]) ctx.fillRect(x - 22, y, 44, 16); }
+  ctx.fillStyle = col; ctx.fillRect(-40, deck, W + 80, 22); ctx.fillStyle = '#b84a20'; ctx.fillRect(-40, deck + 22, W + 80, 10);
+  for (let i = 0; i < 9; i++) { const x = ((i * 130 + u * 60 * (i % 2 ? 1 : -1)) % (W + 100) + W + 100) % (W + 100) - 50; ctx.fillStyle = CARCOL[i % 8]; ctx.fillRect(x, deck - 14, 34, 14); }
+  // the frontal wave: elevated water behind its crest, face below, foam on top
+  if (u > 0.8) { ctx.fillStyle = '#3a9ad0'; ctx.fillRect(0, hz, W, yb - hh - hz + 40); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff'; for (let i = 0; i < 30; i++) { const r = rng(i); ctx.fillRect(r() * W, hz + r() * Math.max(0, yb - hh - hz), 60 + r() * 120, 4); } ctx.globalAlpha = 1;
+    const g = ctx.createLinearGradient(0, yb - hh, 0, yb); g.addColorStop(0, '#7ad0ec'); g.addColorStop(0.3, '#1f80b4'); g.addColorStop(1, '#0c4a7a'); ctx.fillStyle = g;
+    ctx.beginPath(); ctx.moveTo(-20, yb); for (let x = -20; x <= W + 20; x += 20) ctx.lineTo(x, yb - hh + Math.sin(x * 0.012 + u * 2) * hh * 0.06); ctx.lineTo(W + 20, yb); ctx.fill();
+    const r = rng(160); for (let i = 0; i < 70; i++) { const x = r() * W; puff(ctx, x, yb - hh + Math.sin(x * 0.012 + u * 2) * hh * 0.06 - r() * hh * 0.1, hh * (0.04 + r() * 0.06) + 8, '#ffffff', 0.92); }
+    for (let i = 0; i < 40; i++) { const x = r() * W, y = yb - hh - ((u * 300 * (0.5 + r())) % (hh * 0.6 + 40)); puff(ctx, x, y, 4 + r() * hh * 0.02, '#ffffff', 0.6); } }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 560, 0.6);
+  say(ctx, u, ['San Francisco: the surge', 'roars under the', 'Golden Gate...'], 230, 0.15, { size: 78, out: 2.4 });
+  say(ctx, u, ['and floods the', 'whole bay shore'], 230, 2.5, { size: 84, out: OUT('gate') });
 }
 
 // ================================================================ action kit
@@ -314,7 +448,7 @@ function vOverpass(ctx, u) {
   flash(ctx, u, landAt, 0.3);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 560, 0.55);
-  say(ctx, u, ['Every freeway', 'bridge is tested.', 'Many fall (est.)'], 230, 0.15, { size: 84, out: OUT('overpass') });
+  say(ctx, u, ['Every freeway', 'bridge is tested.', 'Many fall'], 230, 0.15, { size: 84, out: OUT('overpass') });
 }
 
 function vCrack(ctx, u) {
@@ -407,7 +541,7 @@ function vFires(ctx, u) {
   ctx.restore();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.6);
-  say(ctx, u, ['Gas lines burst.', 'Thousands of fires (est.)'], 230, 0.15, { size: 76, out: 1.9 });
+  say(ctx, u, ['Gas lines burst.', 'Thousands of fires'], 230, 0.15, { size: 76, out: 1.9 });
   say(ctx, u, ['and no water', 'to fight them'], 230, 2.0, { size: 80, out: OUT('fires') });
 }
 
