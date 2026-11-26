@@ -385,21 +385,22 @@ In reality, one man said no: Vasily Arkhipov. The world didn't learn his name fo
 
 **File:** `videos/strobe-sun.mp4`
 
-**Title:** What If the Sun Became a Strobe Light? ☀️🪩 #shorts
+**Title:** What If the Sun Became a Strobe Light? ☀️🔊 #shorts
 
 **Description:**
 
 ```
-Impossible (light takes millennia to escape the Sun's core), but say it happens anyway. You get 8 minutes of warning.
-For about an hour, Earth is the world's biggest rave. Then the fun stops.
-Drivers can't judge speed or distance: pileups everywhere. ~1.5 million people with photosensitive epilepsy risk seizures.
-Birds, bees and bats lose track of day and night. Rain hangs frozen in midair; wheels spin backwards.
-Ocean plankton make about half our oxygen. With half the light, they starve, and so does everything that eats them.
-Summer never comes: snow on the 4th of July. Over centuries, oceans lock into ice sheets and seas drop.
-Billions head for the equator. Crops fail. Rainforests and reefs freeze: a mass extinction.
-Earth becomes a giant frozen disco ball.
+8 minutes after it starts, the light arrives. For about an hour, Earth is the world's biggest rave.
+Then: pileups on every highway. Pilots get "flicker vertigo", a real aviation hazard, and planes fall out of the sky.
+Bees steer by the Sun. Now it keeps vanishing: hives get lost, crops go unpollinated.
+From space, the whole planet blinks.
+Plankton make half our oxygen. With half the light, they start to die.
+The planet goes cold: +15°C → −30°C global average (est.).
+Winter never ends. Pipes burst, grids fail, millions freeze in their homes. Birds drop from the sky; herds starve.
+Oceans lock into ice sheets and seas drop. Billions head for the equator. Billions could die (est.).
+The last humans huddle around volcanoes.
 
-Last time Earth froze over, complex animal life evolved soon after.
+Earth has survived freezing solid before. Humans never have.
 
 (No real strobe effects in this video: the flicker is slowed down for viewer safety.)
 
