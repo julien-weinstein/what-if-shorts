@@ -497,6 +497,31 @@ Shot towers really did make lead shot by dropping molten lead from a height.
 
 ---
 
+## 18. What if a magnitude 10 earthquake hit the middle of the Pacific? (`videos/m10-pacific.mp4`)
+
+**Title:** What if a MAGNITUDE 10 earthquake hit the Pacific? 🌊 #shorts
+
+**Description:**
+
+```
+The biggest quake ever recorded was M9.5 (Chile, 1960). Each magnitude step is ~32x the energy.
+An M10 would release ~5.6x more than Chile: ~15 gigatons of TNT (est.).
+No known fault in the mid-Pacific could do this, so imagine one: a 4,000 km crack that unzips for ~25 minutes.
+The seafloor jolts up ~10 m (est.), lifting the ocean above it.
+At sea it's a long, low swell ships barely notice, moving at ~700 km/h.
+Kiribati is hit in ~2.7 h, Hawaii ~3 h, Japan and LA ~9 h, Chile ~16 h.
+Midway, 2011: a far smaller tsunami killed ~110,000 albatross chicks.
+Coastal waves of 10–30 m (est.) top even 15 m seawalls. Ports are wrecked; global trade stalls.
+The whole planet rings like a bell for weeks.
+Hundreds of millions live on Pacific coasts. Deaths could reach hundreds of thousands (est.).
+
+#whatif #earthquake #tsunami #science #shorts
+```
+
+**Pinned comment:** How many hours of warning would YOUR coast get? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
