@@ -1,35 +1,35 @@
-// What if every bullet, bomb and missile on Earth exploded at once?
+// What if every bullet, bomb and missile on Earth exploded at once?   (v2: more variety; nukes act two)
 //
-// SAFETY: consequences only; nothing about how munitions work beyond widely known, non-technical facts.
+// SAFETY: consequences only. Nuclear weapons are described at the public, non-technical level ("needs a perfectly timed
+// trigger"); base locations shown are widely published regions, drawn approximately.
 //
-// FACTS (checked; all hedged on screen where estimates):
-//  - The world makes on the order of ~12 billion rounds of small-arms ammunition a year (Small Arms Survey-type estimates);
-//    there are roughly 1 billion firearms worldwide (Small Arms Survey 2018: ~1.01 billion).
-//  - Ammunition depot explosions are real and devastating: Lagos 2002 (~1,100 dead), Brazzaville 2012 (~300 dead);
-//    the 2024 Toropets (Russia) arsenal blast registered on seismographs like a small earthquake.
-//  - HMS Hood (1941): a magazine explosion sank her in about 3 minutes; 1,415 of 1,418 crew died.
-//  - A cartridge that cooks off outside a gun is far less dangerous than one fired from a gun: without a barrel the case
-//    ruptures and the bullet barely moves (fire-service and SAAMI tests). Chambered rounds in loaded guns would fire.
-//  - Nuclear weapons are designed so a non-symmetric detonation of their explosive does not produce a nuclear yield; it
-//    scatters plutonium instead (Palomares, Spain 1966; Thule, Greenland 1968).
-//  - Unexploded ordnance: Laos has an estimated ~80 million unexploded cluster bomblets; France and Belgium still dig up
-//    tons of WWI shells every year ("iron harvest").
-//  - Toll (est.): tens of thousands at least, possibly far more (deliberately hedged).
-//  - After the blast nobody has ammunition; ammunition factories store explosives too. Rebuilding large-scale munition
-//    production has taken years (e.g. post-2022 artillery ramp-ups).
+// FACTS (checked; hedged on screen where estimates):
+//  - ~12 billion small-arms rounds made a year (est.); ~1 billion firearms worldwide, ~857 million in civilian hands
+//    (Small Arms Survey 2018). 12e9 rounds × ~3 cm ≈ 360,000 km (Moon: ~384,000 km away) -> "almost to the Moon".
+//  - Loose cartridges that cook off outside a gun barely move (fire-service/SAAMI tests); loaded guns would fire.
+//  - Depot blasts: Lagos 2002 (~1,100 dead); 2024 Toropets arsenal blast registered on seismographs.
+//  - HMS Hood (1941): magazine explosion, sank in ~3 minutes.
+//  - Nuclear weapons are "one-point safe": a non-symmetric detonation of the explosive gives no nuclear yield and instead
+//    scatters plutonium (Palomares 1966, Thule 1968).
+//  - ~12,000 nuclear warheads worldwide (FAS 2025). Most sit at remote missile fields, submarine and bomber bases, or at
+//    sea; some bases are near cities (e.g. Kitsap-Bangor ~30 km from Seattle; Faslane ~40 km from Glasgow).
+//  - Ground bursts at missile fields would spread heavy fallout downwind (studies of attacks on U.S. ICBM fields
+//    estimated millions to tens of millions of U.S. deaths). Toll (est.) hedged as "tens of millions".
+//  - Afterwards: no ammunition anywhere; rearming takes years.
 
 const SCENES = [
-  ['hook', 3.5, [[0, 'swell:2.6']]],
-  ['lots', 4.5, [[0.2, 'rumble:4.2']]],
-  ['depots', 5.0, [[0.3, 'impact'], [0.35, 'boom'], [1.0, 'boom'], [1.7, 'boom'], [2.4, 'boom'], [0.4, 'rumble:4.4']]],
-  ['city', 4.5, [[0.6, 'impact'], [0.65, 'boom'], [0.8, 'roar:3']]],
-  ['ships', 5.0, [[0.5, 'impact'], [0.55, 'boom'], [2.0, 'boom']]],
-  ['popcorn', 5.0, [[0.6, 'impact'], [3.0, 'impact']]],
-  ['nukes', 5.0, [[0.6, 'boom'], [0.7, 'rumble:4']]],
-  ['fields', 4.5, [[0.4, 'boom'], [1.0, 'boom'], [1.6, 'boom']]],
-  ['toll', 4.5, [[0.2, 'heart:4.2']]],
-  ['stop', 5.0, [[0.2, 'swell:4.6']]],
-  ['sling', 5.0, [[0.2, 'swell:4.6']]],
+  ['hook', 3.5, [[0, 'swell:2.6'], [1.6, 'impact']]],
+  ['grid', 5.0, [[1.2, 'impact'], [1.25, 'boom'], [1.3, 'rumble:3.4']]],
+  ['moonline', 4.5, [[0.2, 'swell:4.2']]],
+  ['house', 5.0, [[1.2, 'impact']]],
+  ['seismo', 4.5, [[0.4, 'boom'], [0.45, 'rumble:3.8'], [1.2, 'boom']]],
+  ['fleet', 4.5, [[0.8, 'impact'], [0.85, 'boom'], [1.4, 'boom']]],
+  ['radar', 4.0, [[0.2, 'heart:3.6']]],
+  ['why', 5.0, [[1.4, 'boom']]],
+  ['nukes', 5.5, [[0.2, 'swell:1.4'], [1.6, 'impact'], [1.65, 'boom'], [1.7, 'rumble:3.6']]],
+  ['fallout', 5.0, [[0.2, 'rumble:4.6']]],
+  ['disarm', 4.5, [[0.2, 'swell:4.2']]],
+  ['sling', 4.5, [[0.2, 'swell:4.2']]],
   ['end', 3.0, [[0.2, 'swell:2.5']]],
 ];
 const START = {}; let _acc = 0; const _sfx = [];
@@ -45,8 +45,8 @@ const SHORT = {
   music: { bpm: 84, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHook, lots: vLots, depots: vDepots, city: vCity2, ships: vShips, popcorn: vPopcorn, nukes: vNukes, fields: vFields,
-              toll: vToll, stop: vStop, sling: vSling, end: vEnd };
+const FNS = { hook: vOrbit, grid: vGrid, moonline: vMoonLine, house: vHouse, seismo: vSeismo, fleet: vFleet, radar: vRadar, why: vWhy,
+              nukes: vNukes2, fallout: vFallout, disarm: vDisarm, sling: vSling, end: vEnd };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 function render(ctx, t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -55,7 +55,7 @@ function render(ctx, t) {
   if (t < START.end) { ctx.font = `800 26px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.textAlign = 'left'; ctx.fillText('WHAT IF, THOUGH?', 70, 1850); }
   post(ctx, { bloom: 0.26, contrast: 1.08, saturate: 1.15, vignette: 0.34 });
 }
-function fireball(ctx2, x, y, dt, s, seed) {   // a rising, cooling explosion
+function fireball(ctx2, x, y, dt, s, seed) {
   if (dt <= 0) return; const r = rng(seed), k = 1 - Math.exp(-dt * 2.5), fade = R2(1 - dt / 3.5);
   for (let i = 0; i < 16; i++) { const a = r() * 6.283, d = r() * 90 * s * k, rr = (60 + r() * 70) * s * (0.4 + k);
     puff(ctx2, x + Math.cos(a) * d, y - k * 160 * s + Math.sin(a) * d * 0.6 - dt * 40 * s, rr, mixHex('#fff0a0', '#3a2a28', R2(dt / 1.6 + r() * 0.3)), fade); }
@@ -63,169 +63,212 @@ function fireball(ctx2, x, y, dt, s, seed) {   // a rising, cooling explosion
 }
 function cartridge(ctx, x, y, s, rot = 0, burst = 0) { ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
   ctx.fillStyle = '#d8a040'; roundRect(ctx, -12, -10, 24, 60, 4); ctx.fill(); ctx.fillStyle = '#e8c070'; ctx.fillRect(-12, -10, 6, 60);
-  if (burst > 0) { ctx.strokeStyle = '#3a2a18'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-4, 50); ctx.lineTo(2, 20); ctx.lineTo(-3, 0); ctx.stroke(); }
   ctx.translate(0, -burst * 26); ctx.fillStyle = '#c87a4a'; ctx.beginPath(); ctx.moveTo(-11, -10); ctx.quadraticCurveTo(-11, -42, 0, -50); ctx.quadraticCurveTo(11, -42, 11, -10); ctx.fill(); ctx.restore(); }
+function flashPts(ctx, cx, cy, R, v, pts, u, at, col = '255,220,150') {
+  for (const [lon, lat, s] of pts) { const [x, y, z] = v(lon, lat); if (z < 0.05) continue; const sx = cx + x * R, sy = cy + y * R, dt = u - at;
+    if (dt < 0) continue; const k = Math.exp(-dt * 1.2); glow(ctx, sx, sy, (12 + 40 * s) * (1 + 0.4 * dt), col, 0.95 * k + 0.2); ctx.fillStyle = `rgba(255,250,230,${0.9 * k + 0.1})`; ctx.beginPath(); ctx.arc(sx, sy, 3 + 4 * s, 0, 6.283); ctx.fill();
+    if (dt < 1.2) { ctx.strokeStyle = `rgba(255,255,255,${0.7 * (1 - dt / 1.2)})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(sx, sy, dt * 120 * s + 6, 0, 6.283); ctx.stroke(); } }
+}
 
-// ================================================================ 1. hook
-function vHook(ctx, u) {
-  bgSky(ctx, ['#1b1430', '#3a2050', '#6a3060']);
-  drift(ctx, u, 0, 3.5, 1.0, 1.08, W / 2, 1150);
-  const r = rng(2); for (let i = 0; i < 26; i++) { const a = r() * 6.283, d = 300 + r() * 700, x = W / 2 + Math.cos(a + u * 0.2) * d * 0.6, y = 1150 + Math.sin(a + u * 0.2) * d;
-    cartridge(ctx, x, y, 1.4 + r(), a + u * (r() - 0.5), 0); }
-  ctx.save(); ctx.translate(W / 2, 1150); ctx.rotate(u * 0.6); cartridge(ctx, 0, 0, 7, 0, 0); ctx.restore();
-  if (u > 2.6) { fireball(ctx, W / 2, 1300, (u - 2.6) * 1.5, 2.4, 3); flash(ctx, u, 2.6, 0.3); }
+// ================================================================ 1. hook: Earth from orbit lights up
+const SITES = (() => { const r = rng(5), P = []; for (let i = 0; i < 260; i++) { let lon, lat; do { lon = -170 + r() * 340; lat = -45 + r() * 110; } while (!onLand(lon, lat)); P.push([lon, lat, 0.2 + r() * 0.5]); } return P; })();
+function onLand(lon, lat) { const LM = landMap(); const x = Math.floor((lon + 180) / 360 * LM.w), y = Math.floor((90 - lat) / 180 * LM.h); return LM.m[y * LM.w + x] > 0.5; }
+function vOrbit(ctx, u) {
+  space(ctx, u);
+  drift(ctx, u, 0, 3.5, 1.0, 1.06, W / 2, 1200);
+  const lon0 = 10 + u * 6, v = gView(lon0, 25), R = 470, cx = W / 2, cy = 1200;
+  globe(ctx, cx, cy, R, { lon0, lat0: 25, t: u, ink: false, sun: [0.2, -0.2, -0.95] });
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip(); flashPts(ctx, cx, cy, R, v, SITES, u, 1.6); ctx.restore();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (u < 3.4) { ctx.save(); ctx.globalAlpha = 1 - easeInOut(prog(u, 3.0, 3.4));
-    shadowed(ctx, () => blip(ctx, u, 890, 1700, u > 1.4 ? 'shock' : 'happy', 0.8, 0.3), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
+    shadowed(ctx, () => blip(ctx, u, 890, 1720, u > 1.6 ? 'shock' : 'happy', 0.8, 0.3), 30, 14, 'rgba(0,0,0,0.35)'); ctx.restore(); }
   say(ctx, u, ['What if every bullet,', 'bomb and missile', 'exploded at once?'], 300, 0.15, { size: 84, out: OUT('hook'), mark: { line: 2, from: 0, to: 8, color: '#e63946' } });
 }
 
-// ================================================================ 2. there's a LOT of it
-function vLots(ctx, u) {
-  bgSky(ctx, ['#2a2a34', '#3a3a46', '#4a4a58']);
-  const vx = W / 2, vy = 820, z0 = u * 0.8;
-  ctx.fillStyle = '#5a5a66'; ctx.beginPath(); ctx.moveTo(vx - 40, vy); ctx.lineTo(vx + 40, vy); ctx.lineTo(W + 500, H); ctx.lineTo(-500, H); ctx.fill();
-  for (const side of [-1, 1]) for (let k = 14; k >= 0; k--) { const z = 1 + k * 0.6 - (z0 % 0.6), s = 1 / z, x = vx + side * 330 * s, base = vy + 900 * s;
-    for (let st = 0; st < 5; st++) { const w = 260 * s, h = 110 * s, y = base - st * h; ctx.fillStyle = ['#4a5a3a', '#5a6a42', '#3a4a30'][(k + st) % 3]; ctx.fillRect(x - w / 2, y - h, w, h - 4 * s);
-      ctx.fillStyle = 'rgba(255,220,120,0.7)'; ctx.fillRect(x - w * 0.3, y - h * 0.6, w * 0.6, h * 0.18); } }
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 600, 0.6);
-  say(ctx, u, ['The world makes ~12 billion', 'bullets a year (est.)'], 230, 0.15, { size: 72, out: 2.4 });
-  say(ctx, u, ['Plus millions of shells,', 'bombs and missiles'], 230, 2.5, { size: 80, out: OUT('lots') });
-}
-
-// ================================================================ 3. thousands of depots, all at once
-function vDepots(ctx, u) {
-  const [sx, sy] = shakeOffset(u, 0.3, 4.5, 26);
-  bgSky(ctx, ['#2a3a6a', '#7a8aaa', '#c8b8a0']); ctx.translate(sx, sy);
-  ctx.fillStyle = '#8a9a6a'; ctx.fillRect(0, 1000, W, H);
-  const pos = []; for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) { const z = 1 + r * 0.7, s = 1 / z, x = W / 2 + (c - 1.5) * 420 * s, y = 1000 + 800 * s; pos.push([x, y, s, r * 4 + c]); }
-  pos.sort((a, b) => a[1] - b[1]);
-  for (const [x, y, s, i] of pos) { const at = 0.3 + ((i * 7) % 16) / 16 * 2.4; if (u < at) { ctx.fillStyle = '#6a7a5a'; ctx.beginPath(); ctx.ellipse(x, y, 160 * s, 100 * s, 0, Math.PI, 0); ctx.fill(); ctx.fillStyle = '#3a3a3a'; ctx.fillRect(x - 30 * s, y - 60 * s, 60 * s, 60 * s); } }
-  for (const [x, y, s, i] of pos) { const at = 0.3 + ((i * 7) % 16) / 16 * 2.4; if (u >= at) { fireball(ctx, x, y, u - at, s * 1.8, i); debrisAtCam(ctx, x, y - 40 * s, (u - at) * 0.7, i + 50, 14, '#2a2420'); } }
-  for (const [x, y, s, i] of pos) { const at = 0.3 + ((i * 7) % 16) / 16 * 2.4, dt = u - at; if (dt > 0 && dt < 1.2) { ctx.strokeStyle = `rgba(255,255,255,${0.6 * (1 - dt / 1.2)})`; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(x, y, dt * 600 * s, dt * 200 * s, 0, 0, 6.283); ctx.stroke(); } }
-  flash(ctx, u, 0.3, 0.3);
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 600, 0.6);
-  say(ctx, u, ['Thousands of ammo depots', 'go up in the same second'], 230, 0.15, { size: 72, out: OUT('depots') });
-  if (u > 2.2) { scrimB(ctx, 1600, 0.65); say(ctx, u, ['In 2024, one depot blast', 'registered as an earthquake'], 1720, 2.2, { size: 50, weight: 900, out: OUT('depots') }); }
-}
-
-// ================================================================ 4. the shockwave hits a nearby city
-function vCity2(ctx, u) {
-  const hit = 0.6, dt = Math.max(0, u - hit), [sx, sy] = shakeOffset(u, hit, 3, 30);
-  bgSky(ctx, ['#4a5a8a', '#c88a6a', '#ffd0a0']); ctx.translate(sx, sy);
-  fireball(ctx, 880, 1050, u * 0.8 + 0.4, 3, 9);
-  cityLayer(ctx, u, { base: 1300, seed: 12, hMin: 260, hMax: 800, wMin: 90, wMax: 180, gap: 14, col: '#3a3a5a', win: 'rgba(200,230,255,0.75)', winP: 0.6, ws: 10 });
-  if (dt > 0) { const r = rng(4); ctx.save(); ctx.globalCompositeOperation = 'lighter';
-    for (let i = 0; i < 220; i++) { const x0 = r() * W, y0 = 600 + r() * 680, vx = -(300 + r() * 600), vy = -100 + r() * 200, s = (6 + r() * 12) * (1 + dt * 1.5), x = x0 + vx * dt, y = y0 + vy * dt + 600 * dt * dt;
-      if (dt * 900 < W - x0) continue; ctx.save(); ctx.translate(x, y); ctx.rotate(dt * 8 + i); ctx.fillStyle = 'rgba(210,240,255,0.8)'; ctx.beginPath(); ctx.moveTo(0, -s); ctx.lineTo(s * 0.6, s * 0.4); ctx.lineTo(-s * 0.5, s * 0.6); ctx.fill(); ctx.restore(); }
+// ================================================================ 2. everywhere, the same instant: a 3×3 grid
+const TILES9 = [['ARMY DEPOT', '#6a7a5a'], ['WARSHIP', '#2a6a9a'], ['FIGHTER JET', '#7ab0e0'], ['TANK', '#9a8a60'], ['POLICE CAR', '#3a3a5a'], ['GUN SHOP', '#c89a6a'],
+  ['MINEFIELD', '#7a9a4a'], ['ROCKET LAUNCHER', '#a8a080'], ['ARMORY', '#5a5a66']];
+function vGrid(ctx, u) {
+  bgSky(ctx, ['#14141e', '#1a1a28', '#202030']);
+  const boom = 1.2, sz = 320, gap = 20, x0 = (W - 3 * sz - 2 * gap) / 2, y0 = 560;
+  TILES9.forEach(([label, col], i) => { const c = i % 3, r = Math.floor(i / 3), x = x0 + c * (sz + gap), y = y0 + r * (sz + gap), dt = u - boom;
+    ctx.save(); ctx.beginPath(); roundRect(ctx, x, y, sz, sz, 24); ctx.clip(); ctx.fillStyle = col; ctx.fillRect(x, y, sz, sz);
+    const cx = x + sz / 2, cy = y + sz * 0.62; ctx.fillStyle = 'rgba(20,20,30,0.85)';
+    if (i === 0) { ctx.beginPath(); ctx.ellipse(cx, cy + 40, 110, 70, 0, Math.PI, 0); ctx.fill(); }
+    else if (i === 1) { ctx.beginPath(); ctx.moveTo(cx - 130, cy); ctx.lineTo(cx + 130, cy); ctx.lineTo(cx + 100, cy + 30); ctx.lineTo(cx - 100, cy + 30); ctx.fill(); ctx.fillRect(cx - 30, cy - 50, 60, 50); }
+    else if (i === 2) { ctx.beginPath(); ctx.moveTo(cx + 110, cy - 40); ctx.lineTo(cx - 90, cy - 70); ctx.lineTo(cx - 90, cy - 10); ctx.fill(); ctx.fillRect(cx - 40, cy - 10, 60, 10); }
+    else if (i === 3) { roundRect(ctx, cx - 110, cy, 220, 50, 20); ctx.fill(); ctx.fillRect(cx - 50, cy - 40, 100, 40); ctx.fillRect(cx + 40, cy - 30, 100, 12); }
+    else if (i === 4) { roundRect(ctx, cx - 110, cy, 220, 60, 18); ctx.fill(); ctx.fillStyle = Math.sin(u * 14) > 0 ? '#e63946' : '#3a86ff'; ctx.fillRect(cx - 20, cy - 14, 40, 14); }
+    else if (i === 5) { ctx.fillRect(cx - 120, cy - 80, 240, 140); ctx.fillStyle = '#ffd25a'; ctx.fillRect(cx - 100, cy - 110, 200, 34); }
+    else if (i === 6) { for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.arc(cx - 100 + (k % 3) * 100, cy - 20 + Math.floor(k / 3) * 60, 16, 0, 6.283); ctx.fill(); } }
+    else if (i === 7) { ctx.fillRect(cx - 110, cy, 220, 40); ctx.save(); ctx.translate(cx - 60, cy); ctx.rotate(-0.5); ctx.fillRect(0, -40, 160, 40); ctx.restore(); }
+    else { ctx.fillRect(cx - 110, cy - 70, 220, 130); ctx.fillStyle = col; ctx.fillRect(cx - 30, cy - 10, 60, 70); }
+    if (dt > 0) { fireball(ctx, cx, cy, dt * 1.3, 0.9, i + 1); }
     ctx.restore();
-    const front = W - dt * 900; ctx.fillStyle = 'rgba(220,190,160,0.35)'; ctx.fillRect(front, 0, W - front + 200, H); }
-  ctx.fillStyle = '#2a2a3a'; ctx.fillRect(-40, 1300, W + 80, H);
-  massCrowd(ctx, u, { n: 500, yFar: 1320, yNear: 2150, sFar: 20, sNear: 200, seed: 13, col: '#14141e', flow: dt > 0 ? -220 : 0, panic: dt > 0 ? 1 : 0, arms: dt > 0 ? 0.4 : 0 });
+    ctx.font = `900 26px ${FONT}`; ctx.textAlign = 'left'; ctx.fillStyle = '#ffffff'; ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 8; ctx.fillText(label, x + 18, y + 40); ctx.shadowBlur = 0; });
+  if (u > boom && u < boom + 0.12) { ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(0, 0, W, H); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 560, 0.6);
-  say(ctx, u, ['Many depots sit', 'right next to cities'], 230, 0.15, { size: 84, out: OUT('city') });
-  if (u > 2.0) { scrimB(ctx, 1600, 0.65); say(ctx, u, ['Lagos, 2002: one armory blast', 'killed over 1,000 people'], 1720, 2.0, { size: 50, weight: 900, out: OUT('city') }); }
+  say(ctx, u, ['Everywhere.', 'The same instant.'], 230, 0.15, { size: 96, out: OUT('grid') });
 }
 
-// ================================================================ 5. every warship's magazine
-function warship(ctx, x, y, s, split, t) {
-  for (const [side, dir] of [[0, -1], [1, 1]]) { ctx.save(); ctx.translate(x + dir * split * 80 * s, y + split * 160 * s); ctx.rotate(dir * split * 0.5); ctx.scale(s, s);
-    ctx.beginPath(); ctx.rect(side ? 0 : -500, -400, 500, 600); ctx.clip();
-    ctx.fillStyle = '#7a8494'; ctx.beginPath(); ctx.moveTo(-460, -60); ctx.lineTo(480, -60); ctx.lineTo(420, 40); ctx.lineTo(-420, 40); ctx.fill();
-    ctx.fillStyle = '#6a7484'; ctx.fillRect(-160, -150, 260, 90); ctx.fillRect(-60, -220, 90, 70); ctx.fillRect(-30, -300, 12, 80);
-    ctx.fillStyle = '#5a6474'; ctx.fillRect(220, -100, 110, 40); ctx.fillRect(330, -90, 90, 10); ctx.fillRect(-330, -100, 110, 40); ctx.fillRect(-420, -90, 90, 10); ctx.restore(); }
-}
-function vShips(ctx, u) {
-  const hit = 0.5, dt = Math.max(0, u - hit), [sx, sy] = shakeOffset(u, hit, 3, 22);
-  bgSky(ctx, ['#2a4a7a', '#6a9ac0', '#c8dcec']); ctx.translate(sx, sy);
-  for (let i = 0; i < 6; i++) { const x = 90 + i * 180, at = 0.8 + i * 0.3; if (u > at) fireball(ctx, x, 1000, (u - at) * 1.2, 0.35, i + 20); }
-  ctx.fillStyle = '#2a6a9a'; ctx.fillRect(0, 1000, W, H);
-  const split = easeInOut(R2((dt - 0.3) / 3.6)) * 0.8, sink = easeIn2(R2((dt - 0.8) / 3.6)) * 220;
-  warship(ctx, W / 2, 1300 + sink, 1.0, split, u);
-  if (dt > 0) { fireball(ctx, W / 2, 1180 + sink * 0.5, dt * 1.3, 1.1, 7); debrisAtCam(ctx, W / 2, 1200, dt * 0.7, 3, 40, '#3a3a44'); }
-  ctx.fillStyle = 'rgba(42,106,154,0.6)'; ctx.fillRect(0, 1340, W, H);
-  for (let i = 0; i < 8; i++) { ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(i * 150 + (u * 40) % 150, 1360 + i * 60); ctx.lineTo(i * 150 + 80 + (u * 40) % 150, 1360 + i * 60); ctx.stroke(); }
-  flash(ctx, u, hit, 0.3);
+// ================================================================ 3. scale: bullets end to end almost reach the Moon
+function vMoonLine(ctx, u) {
+  space(ctx, u);
+  const ex = 230, ey = 1600, mx = 860, my = 600, k = easeInOut(prog(u, 0.4, 3.4));
+  globe(ctx, ex, ey, 200, { lon0: 20 + u * 6, lat0: 20, t: u, ink: false }); moonFx(ctx, mx, my, 70, {});
+  const n = 46; for (let i = 0; i < n * k * 0.94; i++) { const f = i / n, x = lerp(ex + 150, mx - 50, f), y = lerp(ey - 150, my + 50, f); cartridge(ctx, x, y, 0.7, Math.atan2(my - ey, mx - ex) + Math.PI / 2, 0); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 600, 0.6);
-  say(ctx, u, ['Every warship’s magazine', 'detonates'], 230, 0.15, { size: 80, out: OUT('ships') });
-  if (u > 2.0) { scrimB(ctx, 1600, 0.65); say(ctx, u, ['HMS Hood, 1941: one magazine', 'blast sank her in 3 minutes'], 1720, 2.0, { size: 50, weight: 900, out: OUT('ships') }); }
+  say(ctx, u, ['A year’s worth of bullets,', 'lined up end to end…'], 230, 0.15, { size: 72, out: 2.2 });
+  say(ctx, u, ['…almost reaches', 'the Moon'], 230, 2.3, { size: 92, out: OUT('moonline'), mark: { line: 1, from: 0, to: 8, color: '#e63946' } });
 }
 
-// ================================================================ 6. surprise: a loose bullet barely flies
-function vPopcorn(ctx, u) {
-  bgSky(ctx, ['#f0e6d0', '#e6d8bc', '#d8c8a8']);
-  ctx.fillStyle = '#8a6a4a'; ctx.fillRect(0, 1350, W, H); ctx.fillStyle = '#6a4a30'; ctx.fillRect(0, 1350, W, 20);
-  ctx.fillStyle = '#4a6a3a'; ctx.fillRect(200, 1080, 680, 270); ctx.fillStyle = '#3a5a2a'; ctx.fillRect(200, 1080, 680, 40);
-  ctx.font = `900 50px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#e8e0c0'; ctx.fillText('AMMO', 540, 1260);
-  const r = rng(6);
-  for (let i = 0; i < 40; i++) { const at = 0.6 + r() * 2.0, dt = u - at, x0 = 240 + r() * 600, y0 = 1090; if (dt < 0) { continue; }
-    const h = 120 + r() * 160, x = x0 + (r() - 0.5) * 200 * Math.min(dt, 0.8), y = y0 - (h * Math.sin(Math.min(dt, 0.9) / 0.9 * Math.PI)) + (dt > 0.9 ? Math.min(260, (dt - 0.9) * 600) : 0);
-    cartridge(ctx, x, Math.min(y, 1330), 1.2, dt * 10 + i, 1); if (dt < 0.15) glow(ctx, x0, y0, 60, '255,200,120', 0.8); }
+// ================================================================ 4. a dollhouse view of an ordinary home
+function vHouse(ctx, u) {
+  const pop = 1.2, dt = Math.max(0, u - pop);
+  bgSky(ctx, ['#7ab8e8', '#b8dcf0', '#e8f4ff']);
+  const x0 = 110, y0 = 700, w = 860, h = 960, fl = h / 2;
+  ctx.fillStyle = '#c86a4a'; ctx.beginPath(); ctx.moveTo(x0 - 40, y0); ctx.lineTo(x0 + w / 2, y0 - 260); ctx.lineTo(x0 + w + 40, y0); ctx.fill();
+  ctx.fillStyle = '#f4ecd8'; ctx.fillRect(x0, y0, w, h); ctx.strokeStyle = '#8a6a4a'; ctx.lineWidth = 14; ctx.strokeRect(x0, y0, w, h);
+  ctx.beginPath(); ctx.moveTo(x0, y0 + fl); ctx.lineTo(x0 + w, y0 + fl); ctx.moveTo(x0 + w / 2, y0); ctx.lineTo(x0 + w / 2, y0 + h); ctx.stroke();
+  ctx.fillStyle = '#e8dcc0'; ctx.fillRect(x0 + 7, y0 + 7, w / 2 - 14, fl - 14);
+  // rooms: bedroom closet w/ safe (TL), living room (TR), kitchen (BL), garage shelf (BR)
+  const jump = dt > 0 && dt < 0.5 ? Math.sin(dt / 0.5 * Math.PI) * 50 : 0;
+  ctx.fillStyle = '#5a5a66'; roundRect(ctx, x0 + 260, y0 + 200, 150, 260, 12); ctx.fill(); ctx.fillStyle = '#9aa0b0'; ctx.beginPath(); ctx.arc(x0 + 380, y0 + 330, 14, 0, 6.283); ctx.fill();
+  ctx.fillStyle = '#3a6ab0'; roundRect(ctx, x0 + 40, y0 + 380, 200, 80, 20); ctx.fill();
+  ctx.fillStyle = '#2a2a34'; ctx.fillRect(x0 + w / 2 + 240, y0 + 200, 160, 110); ctx.fillStyle = '#7ab0e0'; ctx.fillRect(x0 + w / 2 + 250, y0 + 210, 140, 90);
+  ctx.fillStyle = '#c86a6a'; roundRect(ctx, x0 + w / 2 + 40, y0 + 360, 220, 100, 24); ctx.fill();
+  person2(ctx, x0 + w / 2 + 150, y0 + fl - 20 - jump, 260, { seed: 1, t: u });
+  ctx.fillStyle = '#d8d0c0'; ctx.fillRect(x0 + 30, y0 + fl + 260, 380, 200); person2(ctx, x0 + 300, y0 + h - 20 - jump * 0.8, 280, { seed: 3, t: u });
+  ctx.fillStyle = '#8a6a4a'; for (let s = 0; s < 3; s++) ctx.fillRect(x0 + w / 2 + 60, y0 + fl + 120 + s * 110, 340, 14);
+  ctx.fillStyle = '#4a5a3a'; for (let s = 0; s < 3; s++) for (let b = 0; b < 3; b++) ctx.fillRect(x0 + w / 2 + 80 + b * 110, y0 + fl + 60 + s * 110, 90, 60);
+  if (dt > 0) { for (const [px, py] of [[x0 + 335, y0 + 330], [x0 + w / 2 + 230, y0 + fl + 160]]) { glow(ctx, px, py, 120, '255,200,120', 0.8 * Math.exp(-dt * 2));
+      const r = rng(Math.floor(px)); for (let i = 0; i < 14; i++) { const a = -Math.PI * r(), d = (60 + r() * 120) * Math.min(dt, 0.6) / 0.6; cartridge(ctx, px + Math.cos(a) * d, py + Math.sin(a) * d + 200 * Math.max(0, dt - 0.4) ** 2, 0.8, dt * 8 + i, 1); } }
+    ctx.font = `900 64px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#e63946'; if (dt < 1.5) { ctx.fillText('POP!', x0 + 335, y0 + 160); ctx.fillText('POP POP!', x0 + w / 2 + 230, y0 + fl + 40); } }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.55);
-  say(ctx, u, ['Surprise: a loose bullet', 'barely flies. It just pops.'], 230, 0.15, { size: 70, out: 2.8 });
-  say(ctx, u, ['But every loaded gun', 'fires once'], 230, 2.9, { size: 84, out: OUT('popcorn'), mark: { line: 0, from: 4, to: 20, color: '#e63946' } });
+  say(ctx, u, ['Most of the world’s guns', 'are in people’s homes'], 230, 0.15, { size: 72, out: 2.4 });
+  say(ctx, u, ['Loose ammo just pops.', 'But any loaded gun fires.'], 230, 2.5, { size: 72, out: OUT('house') });
 }
 
-// ================================================================ 7. nukes don't go nuclear: they scatter plutonium
-function vNukes(ctx, u) {
-  const hit = 0.6, dt = Math.max(0, u - hit);
-  bgSky(ctx, ['#2a3a5a', '#6a7aa0', '#b8c0d0']);
-  ctx.fillStyle = '#9aa07a'; ctx.fillRect(0, 1250, W, H); ctx.fillStyle = '#6a6a6a'; ctx.fillRect(0, 1450, W, 120);
-  for (const x of [220, 540, 860]) { ctx.fillStyle = '#c8ccd4'; ctx.beginPath(); ctx.moveTo(x - 120, 1460); ctx.lineTo(x + 140, 1460); ctx.lineTo(x + 100, 1430); ctx.lineTo(x - 90, 1430); ctx.fill(); ctx.fillRect(x - 10, 1400, 50, 30); }
-  if (dt > 0) { const r = rng(3); for (let i = 0; i < 26; i++) { const x = 540 + (r() - 0.5) * 900 * R2(dt / 2), y = 1300 - r() * 600 * R2(dt / 2.2) - dt * 20; puff(ctx, x, y, (60 + r() * 80) * (0.5 + R2(dt / 2)), mixHex('#c8c0b8', '#8a8a8a', r()), 0.7); }
-    for (let i = 0; i < 80; i++) { const a = r() * 6.283, d = r() * 700 * R2(dt / 3), x = 540 + Math.cos(a) * d, y = 1100 + Math.sin(a) * d * 0.5 + dt * 30; ctx.fillStyle = 'rgba(160,255,120,0.85)'; ctx.beginPath(); ctx.arc(x, y, 4 + r() * 4, 0, 6.283); ctx.fill(); }
-    if (u > 2.2) { const k = easeBack(R2((u - 2.2) / 0.4)); ctx.save(); ctx.translate(840, 880); ctx.scale(k, k); ctx.fillStyle = '#ffd25a'; ctx.beginPath(); ctx.moveTo(0, -110); ctx.lineTo(110, 80); ctx.lineTo(-110, 80); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#1b1b2e'; ctx.beginPath(); ctx.arc(0, 20, 14, 0, 6.283); ctx.fill(); for (let q = 0; q < 3; q++) { const a = -Math.PI / 2 + q * 2.094; ctx.beginPath(); ctx.moveTo(0, 20); ctx.arc(0, 20, 52, a - 0.5, a + 0.5); ctx.fill(); } ctx.restore(); } }
+// ================================================================ 5. depots, read on a seismograph
+function vSeismo(ctx, u) {
+  const boom = 0.4, [sx, sy] = shakeOffset(u, boom, 3.6, 18);
+  bgSky(ctx, ['#2a3a6a', '#7a8aaa', '#c8b8a0']);
+  ctx.save(); ctx.translate(sx, sy); ctx.fillStyle = '#8a9a6a'; ctx.fillRect(0, 900, W, 400);
+  for (let i = 0; i < 7; i++) { const x = 90 + i * 150, at = boom + (i % 3) * 0.25; ctx.fillStyle = '#6a7a5a'; ctx.beginPath(); ctx.ellipse(x, 1200, 60, 40, 0, Math.PI, 0); ctx.fill(); fireball(ctx, x, 1180, u - at, 0.8, i); }
+  ctx.restore();
+  // seismograph strip
+  ctx.fillStyle = '#f8f4ea'; ctx.fillRect(0, 1340, W, 380); ctx.strokeStyle = 'rgba(120,140,180,0.3)'; ctx.lineWidth = 2; for (let k = 0; k < 8; k++) { ctx.beginPath(); ctx.moveTo(0, 1360 + k * 45); ctx.lineTo(W, 1360 + k * 45); ctx.stroke(); }
+  ctx.strokeStyle = '#1b1b2e'; ctx.lineWidth = 4; ctx.beginPath();
+  for (let x = 0; x <= W - 120; x += 3) { const tt = u - (W - 120 - x) / 400, amp = tt > boom ? 160 * Math.exp(-(tt - boom) * 1.4) * (1 + (tt > boom + 0.8 ? 0.8 * Math.exp(-(tt - boom - 0.8) * 2) : 0)) : 4, y = 1530 + Math.sin(tt * 90 + x) * amp;
+    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke();
+  ctx.fillStyle = '#e63946'; ctx.beginPath(); ctx.arc(W - 120, 1530 + Math.sin(u * 90) * (u > boom ? 160 * Math.exp(-(u - boom) * 1.4) : 4), 12, 0, 6.283); ctx.fill();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 620, 0.6);
-  say(ctx, u, ['Nukes don’t go nuclear.', 'They spray plutonium', 'over their bases instead.'], 230, 0.15, { size: 70, out: OUT('nukes') });
-  if (u > 2.4) { scrimB(ctx, 1600, 0.65); say(ctx, u, ['It really happened: Spain, 1966'], 1760, 2.4, { size: 48, weight: 900, x: W / 2, align: 'center', out: OUT('nukes') }); }
+  scrim(ctx, 600, 0.6);
+  say(ctx, u, ['Thousands of ammo depots', 'blow at once'], 230, 0.15, { size: 76, out: 2.3 });
+  say(ctx, u, ['Big ones register', 'as earthquakes'], 230, 2.4, { size: 88, out: OUT('seismo') });
 }
 
-// ================================================================ 8. old battlefields erupt
-function vFields(ctx, u) {
-  bgSky(ctx, ['#6aa0d8', '#a8d0ec', '#e8f4ff']);
-  for (let k = 0; k < 7; k++) { const y = 1000 + k * 140; ctx.fillStyle = k % 2 ? '#7ab04a' : '#8ac05a'; ctx.beginPath(); ctx.moveTo(0, y); ctx.quadraticCurveTo(W / 2, y - 40 + k * 6, W, y); ctx.lineTo(W, y + 160); ctx.lineTo(0, y + 160); ctx.fill(); }
-  const r = rng(11); for (let i = 0; i < 46; i++) { const x = r() * W, y = 1020 + r() * 900, at = 0.3 + r() * 3.6, dt = u - at, s = 0.4 + (y - 1000) / 900;
-    if (dt < 0) continue; for (let k = 0; k < 6; k++) puff(ctx, x + (r() - 0.5) * 40 * s, y - dt * 260 * s * (0.6 + k * 0.15), (20 + k * 8) * s * (0.5 + dt), '#6a5040', R2(1 - dt / 1.6) * 0.9);
-    if (dt < 0.2) glow(ctx, x, y, 90 * s, '255,200,120', 0.8); }
+// ================================================================ 6. a fleet from directly above
+function vFleet(ctx, u) {
+  const boom = 0.8;
+  bgSky(ctx, ['#1a5a8a', '#2a6a9a', '#1a4a7a']);
+  for (let i = 0; i < 40; i++) { const r = rng(i); ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 3; const x = r() * W, y = (r() * H + u * 30) % H; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 40, y); ctx.stroke(); }
+  const ships = [[W / 2, 1100, 1.4, 0], [260, 760, 0.8, 1], [820, 760, 0.8, 2], [230, 1500, 0.8, 3], [860, 1480, 0.8, 4]];
+  for (const [x, y, s, i] of ships) { const dt = u - boom - i * 0.12, split = easeOut(R2(dt / 2.5)) * 40 * s;
+    if (dt > 0) { ctx.fillStyle = 'rgba(20,20,20,0.35)'; ctx.beginPath(); ctx.ellipse(x, y, 140 * s * (1 + dt * 0.5), 70 * s * (1 + dt * 0.5), 0.3, 0, 6.283); ctx.fill(); }
+    for (const dir of [-1, 1]) { ctx.save(); ctx.translate(x + dir * split * 0.3, y + dir * split); ctx.rotate(dir * split * 0.004); ctx.beginPath(); ctx.rect(-80 * s, dir < 0 ? -400 * s : 0, 160 * s, 400 * s); ctx.clip();
+      ctx.fillStyle = '#8a94a4'; ctx.beginPath(); ctx.moveTo(0, -300 * s); ctx.lineTo(50 * s, -200 * s); ctx.lineTo(50 * s, 260 * s); ctx.lineTo(-50 * s, 260 * s); ctx.lineTo(-50 * s, -200 * s); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#6a7484'; ctx.fillRect(-26 * s, -60 * s, 52 * s, 120 * s); ctx.restore(); }
+    if (dt > 0) fireball(ctx, x, y, dt * 1.2, s * 0.8, i + 3); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  scrim(ctx, 620, 0.55);
-  say(ctx, u, ['Old war zones erupt.', 'Laos alone holds ~80 million', 'unexploded bomblets'], 230, 0.15, { size: 68, out: OUT('fields') });
+  scrim(ctx, 560, 0.55);
+  say(ctx, u, ['Every warship’s magazine', 'goes off'], 230, 0.15, { size: 80, out: OUT('fleet') });
+  if (u > 2.2) { scrimB(ctx, 1640, 0.6); say(ctx, u, ['HMS Hood, 1941: sank in 3 minutes'], 1780, 2.2, { size: 46, weight: 900, x: W / 2, align: 'center', out: OUT('fleet') }); }
 }
 
-// ================================================================ 9. the toll
-function vToll(ctx, u) {
-  bgSky(ctx, ['#14080e', '#2a0e16', '#3a121c']);
-  const r = rng(2); for (let i = 0; i < 16; i++) glow(ctx, r() * W, 1300 + r() * 600, 120, '255,120,40', 0.25 + 0.15 * Math.sin(u * 3 + i));
+// ================================================================ 7. radar: armed jets vanish
+function vRadar(ctx, u) {
+  bgSky(ctx, ['#020804', '#041008', '#06140a']);
+  const cx = W / 2, cy = 1150, R = 440, sw = u * 2.2;
+  ctx.strokeStyle = 'rgba(90,255,120,0.35)'; ctx.lineWidth = 3; for (let k = 1; k <= 4; k++) { ctx.beginPath(); ctx.arc(cx, cy, R * k / 4, 0, 6.283); ctx.stroke(); }
+  ctx.beginPath(); ctx.moveTo(cx - R, cy); ctx.lineTo(cx + R, cy); ctx.moveTo(cx, cy - R); ctx.lineTo(cx, cy + R); ctx.stroke();
+  const g = ctx.createConicGradient ? ctx.createConicGradient(sw - 0.6, cx, cy) : null;
+  if (g) { g.addColorStop(0, 'rgba(90,255,120,0)'); g.addColorStop(0.09, 'rgba(90,255,120,0.4)'); g.addColorStop(0.1, 'rgba(90,255,120,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.fill(); }
+  const r = rng(4); for (let i = 0; i < 16; i++) { const a = r() * 6.283, d = (0.2 + r() * 0.75) * R, x = cx + Math.cos(a) * d + u * 10, y = cy + Math.sin(a) * d;
+    const gone = u > 1.0 + ((a - (1.0 * 2.2 % 6.283) + 12.566) % 6.283) / 2.2; if (gone) { if (u < 1.0 + ((a - 2.2 + 12.566) % 6.283) / 2.2 + 0.3) glow(ctx, x, y, 40, '255,200,120', 0.8); continue; }
+    ctx.fillStyle = '#7dffb0'; ctx.beginPath(); ctx.arc(x, y, 10, 0, 6.283); ctx.fill(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  say(ctx, u, ['Killed in the first', 'minute (est.):'], 600, 0.15, { size: 76, x: W / 2, align: 'center', out: OUT('toll') });
-  bigNum(ctx, u, 'tens of thousands', 920, 0.8, { size: 100, color: '#ff6b5b', out: OUT('toll') });
-  say(ctx, u, ['probably far more'], 1060, 1.8, { size: 60, weight: 800, x: W / 2, align: 'center', out: OUT('toll') });
+  say(ctx, u, ['Every jet carrying', 'missiles: gone'], 230, 0.15, { size: 88, out: OUT('radar') });
 }
 
-// ================================================================ 10. every war on Earth stops
-function vStop(ctx, u) {
+// ================================================================ 8. why the nukes don't go nuclear
+function vWhy(ctx, u) {
+  const boom = 1.4, dt = Math.max(0, u - boom);
+  bgSky(ctx, ['#1a2240', '#2a3460', '#3a4680']);
+  ctx.save(); ctx.translate(W / 2, 1150);
+  if (dt < 0.2) { ctx.fillStyle = '#c8ccd8'; ctx.beginPath(); ctx.moveTo(0, -300); ctx.quadraticCurveTo(140, -120, 120, 260); ctx.lineTo(-120, 260); ctx.quadraticCurveTo(-140, -120, 0, -300); ctx.fill();
+    ctx.fillStyle = '#ffd25a'; roundRect(ctx, -60, -20, 120, 100, 16); ctx.fill(); ctx.strokeStyle = '#ffd25a'; ctx.lineWidth = 16; ctx.beginPath(); ctx.arc(0, -20, 40, Math.PI, 0); ctx.stroke(); }
+  ctx.restore();
+  if (dt > 0) { const r = rng(3); for (let i = 0; i < 24; i++) { const x = W / 2 + (r() - 0.5) * 700 * R2(dt / 2), y = 1150 - r() * 400 * R2(dt / 2); puff(ctx, x, y, (50 + r() * 70) * (0.5 + R2(dt / 2)), '#a8a4a0', 0.75); }
+    for (let i = 0; i < 60; i++) { const a = r() * 6.283, d = r() * 520 * R2(dt / 2.5); ctx.fillStyle = 'rgba(160,255,120,0.85)'; ctx.beginPath(); ctx.arc(W / 2 + Math.cos(a) * d, 1100 + Math.sin(a) * d * 0.6, 4 + r() * 4, 0, 6.283); ctx.fill(); } }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, u, ['But the nukes don’t go', 'nuclear. They need a', 'perfectly timed trigger'], 230, 0.15, { size: 70, out: 2.6 });
+  say(ctx, u, ['They just spray plutonium', '(it happened in Spain, 1966)'], 230, 2.7, { size: 64, out: OUT('why') });
+}
+
+// ================================================================ 9. ...but what if they DID go off?
+const BASES = [[-111, 47.5, 1], [-101.4, 48.4, 1], [-104.8, 41.1, 1], [-122.7, 47.7, 0.8], [-81.5, 30.8, 0.8], [-115.0, 36.2, 0.5], [-93.5, 38.7, 0.5],
+  [35.8, 54.0, 1], [45.6, 51.9, 1], [59.5, 50.8, 1], [89.8, 55.3, 1], [33.3, 69.25, 0.8], [158.4, 52.9, 0.8], [39.5, 56.2, 0.6], [84.0, 56.5, 0.6],
+  [-4.82, 56.07, 0.6], [-4.5, 48.3, 0.6], [7.06, 50.17, 0.4], [12.6, 46.03, 0.4], [35.4, 37.0, 0.4], [5.5, 51.6, 0.4],
+  [96.5, 40.1, 0.8], [105.7, 39.7, 0.8], [93.0, 42.5, 0.6], [125.7, 39.0, 0.4], [72.9, 19.1, 0.3], [73.0, 33.6, 0.3], [35.0, 31.2, 0.3],
+  [-40, 50, 0.5], [-30, 30, 0.5], [160, 40, 0.5], [-150, 45, 0.5], [60, 75, 0.5], [-10, 65, 0.5]];
+function vNukes2(ctx, u) {
+  space(ctx, u);
+  const lon0 = lerp(-90, 60, easeInOut(prog(u, 0, 5.5))), lat0 = 45, v = gView(lon0, lat0), R = 520, cx = W / 2, cy = 1150;
+  globe(ctx, cx, cy, R, { lon0, lat0, t: u, ink: false, sun: [0.2, -0.2, -0.95] });
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip(); flashPts(ctx, cx, cy, R, v, BASES, u, 1.6, '255,240,200'); ctx.restore();
+  if (u > 1.6 && u < 1.8) { ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.fillRect(0, 0, W, H); }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, u, ['…but what if they', 'DID go off?'], 230, 0.15, { size: 92, out: 1.6, mark: { line: 1, from: 0, to: 3, color: '#e63946' } });
+  say(ctx, u, ['~12,000 warheads at once.', 'Most at remote bases and subs'], 230, 1.8, { size: 66, out: OUT('nukes') });
+}
+
+// ================================================================ 10. fallout drifts downwind
+function vFallout(ctx, u) {
+  space(ctx, u);
+  const R = 1500, cx = W / 2, cy = 1250, lon0 = -97, lat0 = 42, v = gView(lon0, lat0), k = easeOut(prog(u, 0.2, 4.6));
+  globe(ctx, cx, cy, R, { lon0, lat0, t: u, ink: false, sun: [0, -0.3, 1], clouds: 0.15 });
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.clip();
+  for (const [lon, lat] of [[-111, 47.5], [-101.4, 48.4], [-104.8, 41.1]]) { const [x, y] = v(lon, lat), X = cx + x * R, Y = cy + y * R;
+    ctx.save(); ctx.translate(X, Y); ctx.rotate(0.25); const len = 900 * k; const g = ctx.createLinearGradient(0, 0, len, 0); g.addColorStop(0, 'rgba(190,90,200,0.65)'); g.addColorStop(1, 'rgba(190,90,200,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(len / 2, 0, len / 2 + 20, 70 + 60 * k, 0, 0, 6.283); ctx.fill(); ctx.restore(); glow(ctx, X, Y, 50, '255,220,160', 0.8); }
+  for (const [name, lon, lat] of [['Chicago', -87.63, 41.88], ['Minneapolis', -93.27, 44.98], ['Denver', -104.99, 39.74], ['Des Moines', -93.6, 41.6]]) { const [x, y] = v(lon, lat), X = cx + x * R, Y = cy + y * R;
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(X, Y, 9, 0, 6.283); ctx.fill(); ctx.font = `800 32px ${FONT}`; ctx.textAlign = 'center'; ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 8; ctx.fillText(name, X, Y - 18); ctx.shadowBlur = 0; }
+  ctx.restore();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 600, 0.6);
+  say(ctx, u, ['Missile fields become', 'fallout factories'], 230, 0.15, { size: 84, out: 2.6 });
+  bigNum(ctx, u, 'Tens of millions (est.)', 1640, 2.6, { size: 72, color: '#ffffff', out: OUT('fallout') });
+  if (u > 2.8) say(ctx, u, ['in the U.S., Russia and beyond'], 1760, 2.8, { size: 44, weight: 800, x: W / 2, align: 'center', out: OUT('fallout') });
+}
+
+// ================================================================ 11. the world, disarmed
+function vDisarm(ctx, u) {
   bgSky(ctx, ['#8a9aaa', '#b8c0c8', '#d8d4cc']);
-  ctx.fillStyle = '#7a6a50'; ctx.fillRect(0, 1200, W, H);
-  ctx.fillStyle = '#5a4a38'; ctx.fillRect(0, 1260, W, 60); ctx.fillRect(0, 1640, W, 60);
+  ctx.fillStyle = '#7a6a50'; ctx.fillRect(0, 1200, W, H); ctx.fillStyle = '#5a4a38'; ctx.fillRect(0, 1260, W, 60); ctx.fillRect(0, 1640, W, 60);
   const soldier = (x, y, s, dir, seed) => { person2(ctx, x, y, s, { seed: 7, t: u, dir, grey: 0.6 }); ctx.fillStyle = '#4a5a3a'; ctx.beginPath(); ctx.ellipse(x, y - s * 0.96, s * 0.2, s * 0.09, 0, Math.PI, 0); ctx.fill();
     ctx.save(); ctx.translate(x + dir * s * 0.2, y - s * 0.5); ctx.rotate(dir * (0.4 + Math.sin(u * 2 + seed) * 0.1)); ctx.fillStyle = '#2a2a2a'; ctx.fillRect(0, -6, dir * s * 0.55, 12); ctx.restore(); };
   for (let i = 0; i < 4; i++) soldier(140 + i * 140, 1270, 220, 1, i);
   for (let i = 0; i < 4; i++) soldier(W - 140 - i * 140, 1660, 260, -1, i + 9);
-  if (u > 1.2) { for (const [x, y] of [[420, 960], [700, 1350]]) { ctx.save(); ctx.globalAlpha = R2((u - 1.2) / 0.3); ctx.font = `900 120px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 16; ctx.fillText('?', x, y); ctx.restore(); } }
+  if (u > 1.0) for (const [x, y] of [[420, 960], [700, 1350]]) { ctx.save(); ctx.globalAlpha = R2((u - 1.0) / 0.3); ctx.font = `900 120px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 16; ctx.fillText('?', x, y); ctx.restore(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.55);
-  say(ctx, u, ['Then: silence. Every war', 'on Earth stops mid-battle'], 230, 0.15, { size: 70, out: 2.6 });
-  say(ctx, u, ['Nobody has', 'a single bullet'], 230, 2.7, { size: 92, out: OUT('stop') });
+  say(ctx, u, ['Then: silence. Every', 'war stops mid-battle.'], 230, 0.15, { size: 80, out: 2.3 });
+  say(ctx, u, ['Nobody on Earth has', 'a single bullet'], 230, 2.4, { size: 84, out: OUT('disarm') });
 }
 
-// ================================================================ 11. the new deadliest weapon
+// ================================================================ 12. the new deadliest weapon
 function vSling(ctx, u) {
   bgSky(ctx, ['#ffb07a', '#ffd6a0', '#fff0d0']);
   ctx.fillStyle = '#c8a070'; ctx.fillRect(0, 1450, W, H);
@@ -236,8 +279,8 @@ function vSling(ctx, u) {
   ctx.fillStyle = '#9a9aa0'; ctx.beginPath(); ctx.arc(hx - 120 * pull - 30, hy - 20, 16, 0, 6.283); ctx.fill();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.55);
-  say(ctx, u, ['Ammo factories blew up too.', 'Rearming takes years.'], 230, 0.15, { size: 70, out: 2.4 });
-  say(ctx, u, ['Until then, the world’s', 'deadliest weapon is…', 'a slingshot'], 230, 2.5, { size: 76, out: OUT('sling'), mark: { line: 2, from: 0, to: 11, color: '#e63946' } });
+  say(ctx, u, ['Rearming takes years.', 'Until then, the world’s', 'deadliest weapon is…'], 230, 0.15, { size: 72, out: 2.4 });
+  say(ctx, u, ['…a slingshot'], 230, 2.5, { size: 110, out: OUT('sling'), color: '#ffd25a' });
 }
 
 function vEnd(ctx, u) {

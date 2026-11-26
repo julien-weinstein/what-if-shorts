@@ -328,25 +328,25 @@ The real Moon? Its dust smells like spent gunpowder. (Apollo astronauts said so.
 
 **File:** `videos/all-ammo.mp4`
 
-**Title:** What If Every Bullet and Bomb on Earth Exploded at Once? 💥🌍 #shorts
+**Title:** What If Every Bullet, Bomb and Nuke Went Off at Once? 💥🌍 #shorts
 
 **Description:**
 
 ```
-The world makes ~12 billion bullets a year (est.), plus millions of shells, bombs and missiles.
-Thousands of ammo depots go up in the same second. (In 2024, one depot blast registered as an earthquake.)
-Many sit right next to cities. Lagos, 2002: one armory blast killed over 1,000 people.
-Every warship's magazine detonates. HMS Hood, 1941: one magazine blast sank her in 3 minutes.
-Surprise: a loose bullet barely flies, it just pops. But every loaded gun fires once.
-Nukes don't go nuclear: they spray plutonium over their bases instead. (It really happened: Spain, 1966.)
-Old war zones erupt. Laos alone holds ~80 million unexploded bomblets.
-Killed in the first minute (est.): tens of thousands, probably far more.
+Everywhere. The same instant.
+A year's worth of bullets, lined up end to end, almost reaches the Moon.
+Most of the world's guns are in people's homes. Loose ammo just pops, but any loaded gun fires.
+Thousands of ammo depots blow at once. Big ones register as earthquakes.
+Every warship's magazine goes off. Every jet carrying missiles: gone.
 
-Then: silence. Every war on Earth stops mid-battle. Nobody has a single bullet.
-Ammo factories blew up too, and rearming takes years.
-Until then, the world's deadliest weapon is... a slingshot.
+But the nukes don't go nuclear: they need a perfectly timed trigger. They just spray plutonium (it happened in Spain, 1966).
+...but what if they DID go off? ~12,000 warheads at once, mostly at remote bases and subs.
+Missile fields become fallout factories. Tens of millions dead (est.).
 
-#whatif #science #history #military #shorts
+Then: silence. Every war stops mid-battle. Nobody on Earth has a single bullet.
+Rearming takes years. Until then, the world's deadliest weapon is... a slingshot.
+
+#whatif #science #nuclear #military #shorts
 ```
 
 **Pinned comment:** Would the world rearm, or would this be the start of world peace? 👇
