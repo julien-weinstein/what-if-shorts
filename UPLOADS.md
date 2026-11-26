@@ -497,28 +497,30 @@ Shot towers really did make lead shot by dropping molten lead from a height.
 
 ---
 
-## 18. What if a magnitude 10 earthquake hit the middle of the Pacific? (`videos/m10-pacific.mp4`)
+## 18. What if a magnitude 10 earthquake hit Japan? (`videos/m10-japan.mp4`)
 
-**Title:** What if a MAGNITUDE 10 earthquake hit the Pacific? 🌊 #shorts
+**Title:** What if a MAGNITUDE 10 earthquake hit Japan? 🌊 #shorts
 
 **Description:**
 
 ```
-The biggest quake ever recorded was M9.5 (Chile, 1960). Each magnitude step is ~32x the energy.
-An M10 would release ~5.6x more than Chile: ~15 gigatons of TNT (est.).
-No known fault in the mid-Pacific could do this, so imagine one: a 4,000 km crack that unzips for ~25 minutes.
-The seafloor jolts up ~10 m (est.), lifting the ocean above it.
-At sea it's a long, low swell ships barely notice, moving at ~700 km/h.
-Kiribati is hit in ~2.7 h, Hawaii ~3 h, Japan and LA ~9 h, Chile ~16 h.
-Midway, 2011: a far smaller tsunami killed ~110,000 albatross chicks.
-Coastal waves of 10–30 m (est.) top even 15 m seawalls. Ports are wrecked; global trade stalls.
-The whole planet rings like a bell for weeks.
-Hundreds of millions live on Pacific coasts. Deaths could reach hundreds of thousands (est.).
+No M10 has ever been recorded. The biggest was M9.5 (Chile, 1960). Each magnitude step is ~32x the energy.
+But a Tohoku University seismologist showed one is possible: 3,000 km of the Japan + Kuril-Kamchatka trenches slipping ~60 m at once. Maybe once in 10,000 years.
+It would unzip for ~18 minutes and release ~15 gigatons of TNT (est.).
+Tokyo, ~250 km away: towers sway for minutes. Tokyo Bay's landfill turns to quicksand.
+1923: fires after a quake killed most of Tokyo's ~105,000 dead.
+20–30 minutes later the sea pulls back... then the wave. 2011's peaked at ~40 m.
+2011: a ~14 m wave caused three meltdowns at Fukushima.
+Midway, 2011: the tsunami killed ~110,000 albatross chicks (est.).
+Hours later: Hawaii, then California ports.
+Japan's worst case for a Nankai M9: 298,000 dead. An M10: hundreds of thousands (est.).
 
-#whatif #earthquake #tsunami #science #shorts
+Scenario: T. Matsuzawa, Tohoku University (2012). Toll anchor: Japan Cabinet Office (2025).
+
+#whatif #earthquake #tsunami #japan #science #shorts
 ```
 
-**Pinned comment:** How many hours of warning would YOUR coast get? 👇
+**Pinned comment:** Would you know where high ground is from your house? 👇
 
 ---
 
