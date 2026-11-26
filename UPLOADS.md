@@ -441,6 +441,36 @@ It wouldn't be a party. It would end most life on Earth.
 
 ---
 
+## 16. What if all the money in the world turned into pennies?
+
+**File:** `videos/pennies.mp4`
+
+**Title:** What If All the World's Money Turned Into Pennies? 🪙🌍 #shorts
+
+**Description:**
+
+```
+Cash, savings, stocks, homes: ~$450 trillion (est.). That's 45,000,000,000,000,000 pennies.
+112 billion tonnes: about as heavy as Mount Everest.
+Pile it on Manhattan: 540 meters deep.
+Homes are wealth too. A $400,000 house: 100 tonnes of pennies.
+A median U.S. household: ~5 tonnes of pennies in the living room. Floors give way.
+A bank holding $1 trillion becomes a penny mountain taller than the Empire State Building.
+$100 of groceries: 25 kg of coins. A full truckload is worth just $100,000.
+Every bank balance, gone from every computer. Trade freezes.
+~500x all the zinc we've ever found. Metal prices crash.
+Rain eats through the copper skin; zinc leaches out and poisons rivers.
+Earth's day gets ~3 microseconds longer (est.).
+
+The U.S. stopped making pennies in 2025. Each cost ~3.7¢ to make. Minting all of these would cost ~4x the world's wealth.
+
+#whatif #money #science #pennies #shorts
+```
+
+**Pinned comment:** How many tonnes of pennies would your net worth be? (Hint: $1,000 = 250 kg) 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
