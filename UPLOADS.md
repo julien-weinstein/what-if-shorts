@@ -629,6 +629,55 @@ Anyone not near a pole: ~8 billion, within the first hour.
 
 ---
 
+## 23. What if La Palma collapsed into the Atlantic? (`videos/la-palma.mp4`)
+
+**Title:** What if half an ISLAND fell into the Atlantic? 🌋🌊 #shorts
+
+**Description:**
+
+```
+La Palma, Canary Islands: a volcanic ridge with a crack down its spine.
+Worst case: its whole west flank lets go. ~500 km³ of rock slides into the sea at ~100 m/s: ~6 gigatons of energy.
+Underwater, it shoves up a dome of water hundreds of meters high.
+Tenerife, 10 minutes later: waves hundreds of meters tall.
+Then it crosses the whole Atlantic at ~800 km/h: Morocco in 1 h, Lisbon 1.7 h, the UK 3.3 h, New York ~8 h, Miami ~9 h.
+The US East Coast gets ~8 hours of warning, and tens of millions try to flee at once.
+Worst case: walls of water up to ~25 m roll over Miami Beach, across the bay and into downtown. New York's harbor floods.
+Florida beaches host ~90% of US loggerhead nests. Whole nesting beaches are scoured away.
+Worst-case toll: hundreds of thousands+.
+
+This is the worst-case model; many scientists expect smaller, piecemeal slides and much smaller far-away waves.
+
+#whatif #tsunami #volcano #science #shorts
+```
+
+**Pinned comment:** Would 8 hours be enough for you to get out? 👇
+
+---
+
+## 24. What if every volcano on Earth erupted at once? (`videos/all-volcanoes.mp4`)
+
+**Title:** What if EVERY volcano on Earth erupted at once? 🌋🌍 #shorts
+
+**Description:**
+
+```
+~1,350 active volcanoes. Normally ~50 erupt on a given day. Now: all of them.
+Naples: ~3 million people live under Vesuvius. Its flanks unleash pyroclastic flows: ~700 km/h, hundreds of degrees hot. Nothing outruns them.
+Mexico City: ~22 million under falling ash. ~10 cm of wet ash can collapse a roof.
+Mount Rainier melts its glaciers: mudflows race toward Tacoma.
+From space, hundreds of ash plumes merge. Every airport on Earth shuts down.
+Island volcanoes blow themselves apart and launch tsunamis. Plumes 30+ km high crackle with lightning.
+Sulfur haze dims the Sun: Earth cools up to ~10 °C for years. Snow in summer. Harvests fail worldwide.
+~800 million people live within 100 km of a volcano. First days: millions. The famine after: billions at risk.
+
+#whatif #volcano #disaster #science #shorts
+```
+
+**Pinned comment:** Which volcano is closest to you? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
