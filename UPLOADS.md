@@ -552,6 +552,32 @@ This is why you thaw the turkey first.
 
 ---
 
+## 20. What if gravity suddenly doubled? (`videos/gravity-2x.mp4`)
+
+**Title:** What if gravity suddenly DOUBLED? 🌍⬇️ #shorts
+
+**Description:**
+
+```
+T+1 s: you weigh double, like carrying a second you.
+T+10 s: your heart pumps against double weight. The frail faint first.
+T+30 s: buildings and bridges have ~2x safety margins. Gravity just used them up.
+T+1 min: ~10,000 airliners suddenly need double the lift. They dive for speed and thicker air.
+T+10 min: satellites are too slow to stay up. The ISS and ~10,000 satellites burn up as shooting stars.
+T+15 min: the air weighs double; the sky sinks and gets squeezed, heating to ~78 °C on average.
+T+20 min: rock gets crushed too. Earth shrinks ~290 km and gravity climbs to ~2.2x.
+T+30 min: the crust is squeezed ~4.6% shorter (rock breaks at ~0.1%). It shatters everywhere.
+T+1 h: the squeeze releases the energy of ~30 million dinosaur-killer impacts.
+T+5 days: the Moon swings 3x closer every ~10 days. Tides ~13x higher.
+Even +10% gravity would crack the planet. There's no gentle version.
+
+#whatif #gravity #physics #space #science #shorts
+```
+
+**Pinned comment:** What's the first thing you'd notice: your weight, or the sky getting hot? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
