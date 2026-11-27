@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
 
 const [, , scenePath, outBase, ...rest] = process.argv;
 const stillsArg = rest.indexOf('--stills') >= 0 ? rest[rest.indexOf('--stills') + 1] : null;
-const ENGINE = ['vendor/three.iife.js', 'lib.js', 'style2.js', 'style3.js', 'style4.js', 'data/land.js', 'fx.js', 'city3d.js'];
+const ENGINE = ['vendor/three.iife.js', 'lib.js', 'style2.js', 'style3.js', 'style4.js', 'data/land.js', 'data/elev.js', 'fx.js', 'city3d.js'];
 
 async function openPage(browser, lib, scene) {
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });

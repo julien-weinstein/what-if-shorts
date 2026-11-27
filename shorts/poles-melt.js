@@ -12,6 +12,8 @@
 //    (~900 million live below 10 m alone).
 //  - Polar bears (~26,000) lose their sea ice; emperor penguins (~600,000) lose the ice they breed on.
 //  - Mass moves from the poles toward the equator: moment of inertia up ~1e-5 -> day ~0.85 s longer.
+//  - v2: flooded land is drawn from real elevation data (engine/data/elev.js, AWS Terrain Tiles, 0.25°): every cell at or below
+//    ~70 m that is connected to the open ocean (flood-filled from the sea, so isolated inland basins stay dry).
 //  - Toll (rough): over a billion people lose their homes within days; deaths in the millions (hedged).
 
 const SCENES = [
@@ -23,7 +25,7 @@ const SCENES = [
   ['greenland', 4.0, [[0.2, 'roar:3.8']]],
   ['liberty', 5.0, [[0.2, 'rumble:4.6'], [0.4, 'swell:4.4']]],
   ['london', 5.0, [[0.2, 'drawback:4.6']]],
-  ['gone', 4.5, [[0.3, 'impact'], [1.2, 'impact'], [2.1, 'impact']]],
+  ['floodmap', 7.0, [[0.2, 'rumble:6.6'], [0.4, 'swell:6.4']]],
   ['animals', 4.0, [[0.2, 'swell:3.8']]],
   ['toll', 4.5, [[0.2, 'heart:4.2']]],
   ['day', 4.0, [[0.2, 'swell:3.8']]],
@@ -43,7 +45,7 @@ const SHORT = {
   music: { bpm: 80, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHookM, ice: vIceM, melt: vMeltM, flood: vFloodM, capetown: vCapeM, greenland: vGreenM, liberty: vLibertyM, london: vLondonM, gone: vGoneM,
+const FNS = { hook: vHookM, ice: vIceM, melt: vMeltM, flood: vFloodM, capetown: vCapeM, greenland: vGreenM, liberty: vLibertyM, london: vLondonM, floodmap: vFloodMapM,
               animals: vAnimalsM, toll: vTollM, day: vDayM, final: vFinalM, end: vEndM };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 function render(ctx, t) {
@@ -160,6 +162,38 @@ function vLondonM(ctx, u) {
   say(ctx, u, ['London: only the top of', 'Big Ben’s tower stays dry'], 230, 0.15, { size: 76, out: OUT('london') });
 }
 
+// ---------------------------------------------------------------- real flooding from elevation data
+let _FLOOD = null;
+function floodable() { if (_FLOOD) return _FLOOD; const a = ELEV.arr(), w = ELEV.w, h = ELEV.h, f = new Uint8Array(w * h), q = new Int32Array(w * h); let qh = 0, qt = 0;
+  for (let i = 0; i < w * h; i++) if (a[i] === 0) { f[i] = 2; q[qt++] = i; }
+  while (qh < qt) { const i = q[qh++], x = i % w, y = (i / w) | 0; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const yy = y + dy; if (yy < 0 || yy >= h) continue; const j = yy * w + (x + dx + w) % w;
+      if (!f[j] && a[j] >= 1 && a[j] <= 8) { f[j] = 1; q[qt++] = j; } } }
+  _FLOOD = f; return f; }
+let _FMK = null;
+function floodGlobe(ctx, cx, cy, R, lon0, lat0, level, alpha = 1) {   // paint flooded land (connected, below `level` m) on the globe
+  const S = 3, N = Math.ceil(2 * R / S); if (!_FMK || _FMK.width !== N) { _FMK = document.createElement('canvas'); _FMK.width = _FMK.height = N; }
+  const g = _FMK.getContext('2d'), img = g.createImageData(N, N), d = img.data, f = floodable(), a = ELEV.arr(), w = ELEV.w, h = ELEV.h;
+  const l0 = lon0 * Math.PI / 180, p0 = lat0 * Math.PI / 180, sp0 = Math.sin(p0), cp0 = Math.cos(p0);
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const x = (i + 0.5) / N * 2 - 1, y = (j + 0.5) / N * 2 - 1, rr = x * x + y * y, k = (j * N + i) * 4; d[k + 3] = 0; if (rr > 1) continue;
+    const z = Math.sqrt(1 - rr), wy = -y * cp0 + z * sp0, wz = y * sp0 + z * cp0, lat = Math.asin(Math.max(-1, Math.min(1, wy))) * 57.2958; let lon = (Math.atan2(x, wz) + l0) * 57.2958;
+    lon = ((lon + 180) % 360 + 360) % 360 - 180; const c = Math.max(0, Math.min(h - 1, Math.floor((90 - lat) / 180 * h))) * w + Math.floor((lon + 180) / 360 * w) % w;
+    if (f[c] === 1 && (a[c] - 1) * 10 <= level) { const sh = 0.75 + 0.25 * z; d[k] = 70 * sh; d[k + 1] = 215 * sh; d[k + 2] = 240 * sh; d[k + 3] = 245; } }
+  g.putImageData(img, 0, 0); ctx.save(); ctx.globalAlpha = alpha; ctx.drawImage(_FMK, cx - R, cy - R, 2 * R, 2 * R); ctx.restore(); }
+
+// ================================================================ v2: the globe turns as real low-lying land floods
+function vFloodMapM(ctx, u) {
+  space(ctx, u);
+  const R = 760, cx = 540, cy = 1200, lon0 = lerp(-85, 115, easeInOut(prog(u, 0, 7))), lat0 = 28, v = gView(lon0, lat0), level = 70 * easeOut(prog(u, 0.2, 2.6));
+  globe(ctx, cx, cy, R, { lon0, lat0, t: u, ink: false, clouds: 0.15, lights: false });
+  floodGlobe(ctx, cx, cy, R, lon0, lat0, level, 1);
+  for (const [n, lo, la] of [['Florida', -81.5, 28], ['Amazon', -60, -3], ['Netherlands', 5.3, 52.4], ['Venice', 12.3, 45.4], ['Bangladesh', 90, 23.7], ['Shanghai', 121.5, 31.2], ['Bangkok', 100.5, 13.8]]) {
+    const [x, y, z] = v(lo, la); if (z < 0.25 || level < 40) continue; const px = cx + x * R, py = cy + y * R; ctx.font = `900 36px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(10,20,50,0.6)'; ctx.fillText(n, px + 2, py + 2); ctx.fillStyle = '#ffffff'; ctx.fillText(n, px, py); }
+  ctx.font = `900 72px ${FONT}`; ctx.textAlign = 'center'; ctx.fillStyle = '#8ad8ff'; ctx.fillText(`+${Math.round(level)} m`, 540, 1790); ctx.font = `800 30px ${FONT}`; ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText('cyan = land that becomes sea', 540, 1840);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  say(ctx, u, ['Watch the coastlines', 'move inland'], 230, 0.15, { size: 88, out: 3.4 });
+  say(ctx, u, ['Florida, Bangladesh,', 'the Netherlands: gone.', 'The Amazon: an inland sea'], 230, 3.5, { size: 70, out: OUT('floodmap') });
+}
+
 // ================================================================ 9. the list of places gone
 function vGoneM(ctx, u) {
   bgSky(ctx, ['#0e3a6a', '#145a8a', '#1a6a9a']);
@@ -204,7 +238,7 @@ function vDayM(ctx, u) {
 function vFinalM(ctx, u) {
   space(ctx, u);
   globe(ctx, 540, 1200, 640, { lon0: 20 + u * 3, lat0: -35, t: u, ink: false, clouds: 0.25, ice: false });
-  iceCap(ctx, 540, 1200, 640, -35, 1, true, 20 + u * 3);
+  iceCap(ctx, 540, 1200, 640, -35, 1, true, 20 + u * 3); floodGlobe(ctx, 540, 1200, 640, 20 + u * 3, -35, 70, 1);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   say(ctx, u, ['A planet with', 'no ice at all'], 230, 0.15, { size: 100, out: OUT('final') });
 }

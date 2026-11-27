@@ -884,7 +884,7 @@ Hours later, mega-surges hit the southern coasts.
 Greenland's fresh water floods the Atlantic, and its warm current could stall.
 Within days, the seas rise ~70 m: up to Lady Liberty's chest.
 London: only the top of Big Ben's tower stays dry.
-Gone: Florida, the Netherlands, Bangladesh, Venice, Shanghai, most of NYC.
+Watch the coastlines move inland (real elevation data): Florida, Bangladesh and the Netherlands are gone, and the Amazon becomes an inland sea.
 Polar bears and emperor penguins lose the ice they live on.
 Homes underwater: 1 billion+ people. Deaths: millions.
 All that water spreads toward the equator. Days get ~1 second longer.

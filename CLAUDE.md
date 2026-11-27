@@ -14,6 +14,7 @@ Read this first. It records what the channel owner has asked for across many rou
 ## Content rules
 - **Accuracy first.** Real physics and biology, numbers worked out in the script header, sources noted. Never invent facts. Don't tag predictions with "(est.)" on screen (the owner says it's implied); use "~" for rough numbers, and keep one short "hypothetical" note if the premise needs it.
 - **Present tense, minimal history.** The owner doesn't want history lessons in disaster shorts ("I don't care about the past"). Use past events only in the script header to justify numbers, not as on-screen beats.
+- **Show, don't list.** When places are affected (flooded, buried, burned), show them on the globe or map rather than listing names. `engine/data/elev.js` (global 0.25° elevation grid, `ELEV.at(lon, lat)`) supports real flooding / sea-level maps; see `floodGlobe()` in `shorts/poles-melt.js`.
 - **Show the main phenomenon from above too.** For something like a tsunami, impact or eruption, include bird's-eye or orbital views of the whole event (e.g. a wavefront crossing the ocean), not only ground-level shots.
 - **Maximum destruction.** The owner rejects premises that are mostly logistics ("not enough destruction"). Favour scenarios with planet-scale physical devastation, whole cities leveled and big death tolls.
 - **Human toll and destruction at scale.** Don't shy from death (death tolls as estimates), but use no gore. Balance small-scale human and species consequences with planet-scale ones.
