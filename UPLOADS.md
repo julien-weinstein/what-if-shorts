@@ -819,6 +819,31 @@ Sources: 9/11 Commission Report; Brown University Costs of War project.
 
 ---
 
+## 30. What if Earth suddenly spun twice as fast? (`videos/spin-2x.mp4`)
+
+**Title:** What if Earth suddenly spun TWICE as fast? 🌍🌀 #shorts
+
+**Description:**
+
+```
+The equator already spins at 1,670 km/h. Now: 3,345 km/h, and a 12-hour day.
+The ground lurches east. Everything else doesn't: people, cars, buildings flung west at ~1,300 km/h.
+A supersonic wind tears west across every continent, and friction heats the sky by ~70 °C.
+The oceans lag behind and slosh west into every east-facing coast. New York: the Atlantic hits at ~1,270 km/h, a wall of water kilometers tall.
+Over weeks, the spin flings the oceans to the equator: one ring of ocean, up to ~8 km deep.
+Mumbai ends up under ~4 km of ocean. Singapore: ~8 km. Mexico City: ~2 km.
+Beyond ~30° latitude the seas drain away. The Mediterranean becomes a desert of dying sea life.
+Day and night every 6 hours. Plants and animals lose their rhythm.
+The Coriolis force doubles: storms spin tighter and harder.
+Anyone not near a pole: ~8 billion, in the first minutes.
+
+#whatif #earth #physics #space #science #shorts
+```
+
+**Pinned comment:** Would you rather have the 12-hour day, or Earth stopping completely? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
