@@ -897,6 +897,32 @@ A planet with no ice at all.
 
 ---
 
+## 33. What if we tried to blow up Mount Everest? (`videos/blow-up-everest.mp4`)
+
+**Title:** What would it take to BLOW UP Mount Everest? 🏔️💥 #shorts
+
+**Description:**
+
+```
+Above the Tibetan plateau, Everest is ~100 km³ of rock: ~270 billion tonnes.
+Just cracking it: ~50 million tonnes of explosives. And you get a slightly shorter pile of rubble.
+To blast it away entirely: ~2,500 megatons. That's ~170,000 Hiroshimas, ~5x every nuclear test ever.
+The roof of the world erupts into the sky.
+The shock sends avalanches down every slope for hundreds of km.
+Kathmandu, 160 km away, shakes like a great earthquake.
+Glacial lakes burst their ice dams, and floods tear down the valleys.
+From space: a plume of radioactive dust. The winds carry it over Nepal, India and China.
+Asia's great rivers start here, and ~2 billion people drink downstream.
+Where Everest stood: a smoking crater. K2 is now the tallest mountain on Earth.
+Quakes, floods, fallout: millions, just to remove one mountain.
+
+#whatif #everest #science #mountains #shorts
+```
+
+**Pinned comment:** K2 would finally get its moment. Which mountain should we NOT blow up next? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
