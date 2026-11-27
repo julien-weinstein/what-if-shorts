@@ -10,6 +10,9 @@
 //  - Road deaths today ~1.2 million/yr (WHO); crashes with injuries ~20-50 million/yr. If injury crashes become fireballs:
 //    deaths in the tens of millions per year.
 //  - Vehicle fires already spark roadside wildfires (hot exhaust/catalytic converters, sparks).
+//  - v2 (lawlessness): series rule "lose the cops and your wanted level resets" = no consequences. Murders today ~400-460k/yr
+//    worldwide (UNODC Global Study on Homicide 2023, 2021 data ~458k). With no consequences and rampages as everyday events:
+//    "millions" (rough). Violence is shown through chaos, fleeing crowds and aftermath, never on-screen killing.
 
 const SCENES = [
   ['hook', 3.5, [[0, 'swell:2.4'], [1.4, 'boom'], [1.45, 'impact']]],
@@ -17,12 +20,13 @@ const SCENES = [
   ['orbit', 5.0, [[0.2, 'rumble:4.6'], [0.8, 'boom'], [2.2, 'boom']]],
   ['wanted', 4.5, [[0.2, 'roar:4.2'], [2.0, 'impact']]],
   ['tanks', 5.0, [[0.2, 'rumble:4.6'], [1.6, 'boom'], [3.0, 'boom']]],
+  ['escape', 4.0, [[0.2, 'roar:3.0'], [2.2, 'drawback:1.6']]],
+  ['rampage', 5.0, [[0.2, 'heart:4.6'], [0.6, 'boom'], [2.2, 'boom'], [3.6, 'impact']]],
   ['gas', 4.5, [[0.8, 'impact'], [1.0, 'boom'], [1.05, 'roar:3.2']]],
   ['drivers', 4.5, [[0.4, 'roar:3.8'], [1.8, 'impact'], [2.8, 'boom']]],
   ['burn', 5.0, [[0.2, 'roar:4.6'], [1.4, 'boom'], [3.0, 'boom']]],
-  ['wildfire', 4.5, [[0.2, 'roar:4.2'], [1.2, 'boom']]],
   ['hospital', 4.0, [[0.2, 'heart:3.8']]],
-  ['toll', 4.5, [[0.2, 'heart:4.2']]],
+  ['toll', 5.0, [[0.2, 'heart:4.6']]],
   ['final', 5.0, [[0.2, 'swell:4.6']]],
   ['end', 3.0, [[0.2, 'swell:2.5']]],
 ];
@@ -39,7 +43,7 @@ const SHORT = {
   music: { bpm: 96, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHookR, cars: vCarsR, orbit: vOrbitR, wanted: vWantedR, tanks: vTanksR, gas: vGasR, drivers: vDriversR, burn: vBurnR, wildfire: vWildfireR,
+const FNS = { hook: vHookR, cars: vCarsR, orbit: vOrbitR, wanted: vWantedR, tanks: vTanksR, escape: vEscapeR, rampage: vRampageR, gas: vGasR, drivers: vDriversR, burn: vBurnR,
               hospital: vHospitalR, toll: vTollR, final: vFinalR, end: vEndR };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
 const NEON = ['#ff5ab8', '#3ae0e8', '#ffb84a', '#9a6aff'];
@@ -128,6 +132,37 @@ function vTanksR(ctx, u) {
   say(ctx, u, ['Five stars: tanks and', 'helicopters, for', 'running a red light'], 230, 0.15, { size: 80, out: OUT('tanks') });
 }
 
+// ================================================================ v2: lose the cops and it's all forgiven
+function vEscapeR(ctx, u) {
+  bgSky(ctx, ['#2a1a5a', '#5a3a8a', '#c87ab0']); neonCity(ctx, u, 1200, 21, 0.8); ctx.fillStyle = '#3a3a5a'; ctx.fillRect(0, 1200, W, H);
+  ctx.fillStyle = '#2a2a48'; ctx.fillRect(700, 700, 260, 500); ctx.fillStyle = '#1e1e3a'; ctx.fillRect(760, 900, 140, 300);
+  const k = easeInOut(prog(u, 0.2, 2.0)); ctx.save(); ctx.globalAlpha = 1 - easeIn2(prog(u, 1.4, 2.0)); carSide(ctx, lerp(-100, 830, k), 1180, 1.1, '#ffbe0b'); ctx.restore();
+  for (let i = 0; i < 3; i++) copCar(ctx, lerp(-500 - i * 220, 500 - i * 260, easeOut(prog(u, 0.2, 2.6))), 1460, 1.2, u);
+  const st = Math.max(0, 5 - Math.floor(prog(u, 1.8, 3.4) * 6)); stars5(ctx, 540, 1700, st, 1.2);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 600, 0.6);
+  say(ctx, u, ['Rule 3: lose the cops', 'and all is forgiven'], 230, 0.15, { size: 84, out: 2.0 });
+  say(ctx, u, ['No arrests. No prisons.', 'No consequences'], 230, 2.1, { size: 80, out: OUT('escape') });
+}
+
+// ================================================================ v2: rampages become everyday events (chaos, never on-screen killing)
+function vRampageR(ctx, u) {
+  const [sx, sy] = shakeOffset(u, 0.6, 4, 10); bgSky(ctx, ['#1e1a4a', '#3a1a5a', '#7a3a6a']); ctx.translate(sx, sy);
+  const vy = 900; neonCity(ctx, u, vy + 80, 22, 0.6);
+  ctx.fillStyle = '#3a3a5a'; ctx.beginPath(); ctx.moveTo(0, 300); ctx.lineTo(360, vy); ctx.lineTo(360, H); ctx.lineTo(0, H); ctx.fill(); ctx.beginPath(); ctx.moveTo(W, 300); ctx.lineTo(720, vy); ctx.lineTo(720, H); ctx.lineTo(W, H); ctx.fill();
+  const r = rng(23); for (let i = 0; i < 6; i++) { const y = 420 + i * 200, sd = i % 2 ? 1 : -1, x = sd < 0 ? 40 : W - 260; ctx.fillStyle = NEON[i % 4]; ctx.fillRect(x, y, 220, 14); ctx.fillStyle = 'rgba(200,220,255,0.35)'; ctx.fillRect(x + 10, y + 24, 200, 110);
+    ctx.strokeStyle = 'rgba(240,248,255,0.9)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x + 110, y + 80); for (let k = 0; k < 6; k++) { const a = k * 1.05; ctx.moveTo(x + 110, y + 80); ctx.lineTo(x + 110 + Math.cos(a) * 70, y + 80 + Math.sin(a) * 40); } ctx.stroke(); }
+  ctx.fillStyle = '#4a4a6a'; ctx.fillRect(360, vy + 80, 360, H);
+  for (const [x, y, t0] of [[420, vy + 200, 0.6], [660, vy + 320, 2.2]]) { if (u < t0) carSide(ctx, x, y, 0.7, '#3ae0e8'); kaboom(ctx, x, y - 20, u - t0, 0.6, Math.floor(x)); if (u > t0 + 0.8) { glow(ctx, x, y - 30, 90, '255,150,60', 0.7); for (let j = 0; j < 5; j++) puff(ctx, x + j * 20 + u * 20, y - 80 - j * 70, 30 + j * 14, '#5a4a6a', 0.55); } }
+  for (let i = 0; i < 4; i++) { const a = 0.35 + 0.25 * Math.sin(u * 2 * Math.PI * 0.8 + i); glow(ctx, 380 + i * 110, vy + 60, 90, i % 2 ? '90,140,255' : '255,110,190', a); }
+  massCrowd(ctx, u, { n: 120, yFar: vy + 120, yNear: 1950, sFar: 30, sNear: 220, x0: 340, x1: 740, seed: 24, col: '#2a2a5a', flow: 0, panic: 1, arms: 0.8 });
+  for (let i = 0; i < 30; i++) { ctx.fillStyle = 'rgba(220,235,255,0.7)'; ctx.fillRect(360 + r() * 360, vy + 100 + r() * 800, 6, 6); }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  scrim(ctx, 600, 0.65);
+  say(ctx, u, ['Looting, carjackings,', 'random rampages:', 'every single day'], 230, 0.15, { size: 80, out: 2.6 });
+  say(ctx, u, ['Nobody is safe', 'outside'], 230, 2.7, { size: 92, out: OUT('rampage') });
+}
+
 // ================================================================ 6. rule 3: a gas station goes up
 function vGasR(ctx, u) {
   const [sx, sy] = shakeOffset(u, 1.0, 3, 34); bgSky(ctx, ['#2a1a5a', '#6a3a9a', '#ff9ab8']); ctx.translate(sx, sy);
@@ -137,7 +172,7 @@ function vGasR(ctx, u) {
   kaboom(ctx, 540, 1200, u - 1.0, 2.6, 11); if (u > 1.0) { const d = u - 1.0; ctx.save(); ctx.translate(540 + d * 200, 900 - d * 600 + 500 * d * d); ctx.rotate(d * 3); ctx.fillStyle = '#f4f0f8'; ctx.fillRect(-300, -24, 600, 48); ctx.restore(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.6);
-  say(ctx, u, ['Rule 3: one spark and', 'gas stations blow'], 230, 0.15, { size: 84, out: 2.2 });
+  say(ctx, u, ['Rule 4: one spark and', 'gas stations blow'], 230, 0.15, { size: 84, out: 2.2 });
   say(ctx, u, ['~145,000 of them', 'in the US alone'], 230, 2.3, { size: 86, out: OUT('gas') });
 }
 
@@ -151,7 +186,7 @@ function vDriversR(ctx, u) {
   for (let i = 0; i < 6; i++) { const x = ((i * 220 + u * 600) % (W + 300)) - 150, y = 1420 + (i % 3) * 60; carSide(ctx, x, y, 0.9, CARCOL[(i + 3) % 8], Math.sin(u * 4 + i) * 0.15); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 600, 0.6);
-  say(ctx, u, ['Rule 4: everyone drives', 'like a GTA player'], 230, 0.15, { size: 82, out: OUT('drivers') });
+  say(ctx, u, ['Rule 5: everyone drives', 'like a GTA player'], 230, 0.15, { size: 82, out: OUT('drivers') });
 }
 
 // ================================================================ 8. night aerial: the city burns
@@ -198,10 +233,11 @@ function vTollR(ctx, u) {
   bgSky(ctx, ['#1e1a4a', '#2a1a5a', '#3a2a6a']);
   const r = rng(17); for (let i = 0; i < 30; i++) { const x = r() * W, y = 1400 + r() * 500; glow(ctx, x, y, 50, '255,170,80', 0.3 + 0.15 * Math.sin(u * 1.4 + i)); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  bigNum(ctx, u, 'Road deaths today:', 620, 0.2, { size: 60, color: '#ffffff', out: OUT('toll') });
-  bigNum(ctx, u, '~1.2 million a year', 720, 0.4, { size: 76, color: '#ffffff', out: OUT('toll') });
-  bigNum(ctx, u, 'On GTA rules:', 900, 1.4, { size: 60, color: '#ffffff', out: OUT('toll') });
-  bigNum(ctx, u, 'tens of millions', 1020, 1.7, { size: 104, color: '#ffd25a', out: OUT('toll') });
+  bigNum(ctx, u, 'Today, per year:', 560, 0.2, { size: 58, color: '#ffffff', out: OUT('toll') });
+  bigNum(ctx, u, '~1.2M road deaths', 650, 0.4, { size: 66, color: '#ffffff', out: OUT('toll') });
+  bigNum(ctx, u, '~450,000 murders', 730, 0.6, { size: 66, color: '#ffffff', out: OUT('toll') });
+  bigNum(ctx, u, 'On GTA rules:', 900, 1.6, { size: 60, color: '#ffffff', out: OUT('toll') });
+  bigNum(ctx, u, 'tens of millions', 1020, 1.9, { size: 104, color: '#ffd25a', out: OUT('toll') });
 }
 
 // ================================================================ 12. final: Earth at night, every city flickering with fire
