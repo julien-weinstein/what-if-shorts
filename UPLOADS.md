@@ -604,6 +604,31 @@ For weeks, the sky goes quiet.
 
 ---
 
+## 22. What if Earth suddenly stopped spinning? (v2 remake: `videos/earth-stops-spinning.mp4`)
+
+(#1 was posted with the old v1 render; this is the max-destruction remake. Post it as a new Short.)
+
+**Title:** Earth STOPS spinning. Everything on it doesn't. 🌍💥 #shorts
+
+**Description:**
+
+```
+Right now you're moving east at up to 1,670 km/h: faster than sound at the equator.
+The ground stops. Everything else doesn't: people, cars, buildings flung east at ~1,300 km/h.
+The air keeps going too: a supersonic wind scours every continent, and as it slows, friction heats the whole sky by ~70 °C.
+The oceans keep moving east and slam into every west-facing coast: walls of water kilometers tall.
+The safest spot on Earth: the South Pole, where your speed is ~0. ~150 people there right now ride it out.
+A single day now lasts a whole year.
+Without the spin, the oceans drain to the poles, leaving one giant dry belt of land.
+Anyone not near a pole: ~8 billion, within the first hour.
+
+#whatif #earth #physics #space #science #shorts
+```
+
+**Pinned comment:** How fast are YOU moving right now? (Equator 1,670 km/h; London ~1,040; the South Pole ~0) 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
