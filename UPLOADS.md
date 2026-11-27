@@ -526,6 +526,32 @@ Hypothetical: the San Andreas slides sideways and tops out near M8. No known fau
 
 ---
 
+## 19. What if the Pacific was deep-fryer oil and we dropped in an Everest-sized frozen turkey? (`videos/turkey-fryer.mp4`)
+
+**Title:** We dropped an EVEREST-sized frozen turkey into a Pacific of fryer oil 🦃🔥 #shorts
+
+**Description:**
+
+```
+The Pacific: 700 million km³ of oil at ~180 °C. The turkey: 8.8 km tall, ~550 billion tonnes, frozen solid.
+Dropped from 10 km, it hits at ~1,600 km/h: ~13 gigatons of impact energy and a crown of hot oil kilometers high.
+It sinks (hot oil is lighter than turkey) and ~4 km still sticks out.
+Its ice flashes to steam, 1,700x bigger: the world's biggest fryer boil-over, with a plume into the stratosphere.
+Waves of hot oil race out at ~700 km/h. Hawaii in 3 hours, then every Pacific coast.
+Hot oil + one spark: the coasts catch fire, and nothing can put out a burning ocean.
+Burning a layer just ~2.7 m deep off the Pacific would use up all the oxygen in the air.
+Day one: tens of millions. If the fire keeps spreading: everyone.
+And the turkey? Cooked to the middle in ~5 million years.
+
+This is why you thaw the turkey first.
+
+#whatif #thanksgiving #turkey #science #shorts
+```
+
+**Pinned comment:** Real talk: thaw it, dry it, and fry it outside away from the house 🦃👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
