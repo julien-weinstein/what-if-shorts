@@ -923,6 +923,31 @@ Quakes, floods, fallout: millions, just to remove one mountain.
 
 ---
 
+## 34. What if one bomb held all the calories humanity eats in a day? (`videos/calorie-bomb.mp4`)
+
+**Title:** A bomb made of ONE DAY of humanity's calories 🍔💥 #shorts
+
+**Description:**
+
+```
+8.2 billion people x ~2,300 kcal each = ~19 megatons of TNT, every single day.
+That's ~1,300 Hiroshimas, bigger than any bomb the US ever tested.
+Detonated above a city like New York: a fireball ~7 km wide, hotter than the Sun's surface.
+The heat alone causes severe burns ~35 km away.
+Then the blast wave: most buildings flattened out to ~19 km.
+A mushroom cloud ~40 km tall, deep into the stratosphere. Fires merge across the whole metro area.
+Over a city like New York: millions dead.
+And humanity eats that much energy every single day: ~7,000 megatons a year.
+
+Effects scaled from Glasstone & Dolan, "The Effects of Nuclear Weapons".
+
+#whatif #science #energy #food #shorts
+```
+
+**Pinned comment:** An 800-calorie lunch holds as much energy as ~0.8 kg of TNT. 🍕💥👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
