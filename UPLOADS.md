@@ -757,6 +757,32 @@ Fan-made what-if. Not affiliated with Rockstar Games or Take-Two.
 
 ---
 
+## 28. What if real life was GTA VI? (`videos/gta-real-life.mp4`)
+
+**Title:** What if real life ran on GTA rules? 🚗💥 #shorts
+
+**Description:**
+
+```
+Rule 1: a few dents and cars explode. A full tank holds the energy of ~400 kg of TNT.
+The US alone has ~16,000 crashes a day. Now every one is a fireball.
+Rule 2: wanted levels. Speeding = a police chase, and the US writes ~40 million speeding tickets a year.
+Five stars: tanks and helicopters, for running a red light.
+Rule 3: one spark and gas stations blow. ~145,000 of them in the US alone.
+Rule 4: everyone drives like a GTA player.
+Burning cars light the buildings. Fire trucks explode too. Highway fireballs spark wildfires.
+Hospitals overflow. And in real life, nobody respawns.
+Road deaths today: ~1.2 million a year. On GTA rules: tens of millions.
+
+Fan-made what-if using classic series rules. Not affiliated with Rockstar Games or Take-Two.
+
+#whatif #gta6 #gtavi #gaming #shorts
+```
+
+**Pinned comment:** Which GTA rule would wreck real life the fastest? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
