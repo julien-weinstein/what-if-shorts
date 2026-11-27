@@ -578,6 +578,32 @@ Even +10% gravity would crack the planet. There's no gentle version.
 
 ---
 
+## 21. What if all the jet fuel in the world turned into vodka? (`videos/jetfuel-vodka.mp4`)
+
+**Title:** What if all the JET FUEL on Earth turned into VODKA? ✈️🍸 #shorts
+
+**Description:**
+
+```
+Every wing, tanker and pipeline: ~30 billion liters, now vodka. That's ~7 years of the world's vodka.
+60% water won't burn in a jet engine. ~10,000 airliners: every engine flames out.
+~1 million people in the air. Then: silence.
+From 11 km up, an airliner glides ~190 km. Over land, most can reach some runway.
+Over the ocean, hundreds of planes have nowhere to go.
+Every nearby airport: dozens of planes, all landing at once. No engines. No second tries.
+Every air force is grounded, and many armies' tanks run on jet fuel too.
+~1/3 of world trade by value flies. All of it stops.
+Leaking vodka strips rivers of oxygen. Fish suffocate.
+Deaths in the first hour: ~100,000+, mostly over the oceans.
+For weeks, the sky goes quiet.
+
+#whatif #aviation #vodka #science #shorts
+```
+
+**Pinned comment:** And no, you can't drink the airport vodka: it's full of fuel-system additives and residue 🍸🚫
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
