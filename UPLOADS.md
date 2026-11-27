@@ -678,6 +678,31 @@ Sulfur haze dims the Sun: Earth cools up to ~10 °C for years. Snow in summer. H
 
 ---
 
+## 25. What if every cloud turned into concrete? (`videos/concrete-clouds.mp4`)
+
+**Title:** What if every CLOUD turned into CONCRETE? ☁️🧱 #shorts
+
+**Description:**
+
+```
+Every cloud on Earth becomes solid concrete, and ~2/3 of the sky is cloudy right now.
+That's roughly 800 quadrillion tonnes of concrete: ~60% as heavy as all the oceans.
+They drop from 1-12 km. The fall takes ~30 seconds.
+They hit at ~1,000 km/h: ~2,400 tonnes on every square meter.
+From space, two-thirds of Earth gets hammered: ~60 dinosaur-killer impacts of energy.
+Slabs the size of cities slam into the oceans. Mega-tsunamis race into every coast.
+All that concrete pushes the water up: seas rise ~670 m.
+Rainforests sit under the cloudiest skies on Earth. Buried.
+Under the clouds, in a minute: ~5 billion. Tsunamis and famine: nearly everyone else.
+And for a few hours: not a single cloud in the sky.
+
+#whatif #clouds #science #disaster #shorts
+```
+
+**Pinned comment:** Look up: is your sky cloudy right now? 👀👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
