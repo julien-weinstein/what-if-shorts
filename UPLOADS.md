@@ -729,6 +729,34 @@ All that's left of Earth: a black hole the size of a marble.
 
 ---
 
+## 27. What if everyone on Earth played GTA VI at the same time? (`videos/gta6-everyone.mp4`)
+
+**Title:** What if EVERYONE on Earth played GTA 6 at the same time? 🎮⚡ #shorts
+
+**Description:**
+
+```
+Only ~110 million consoles can run it. So: 8 billion consoles appear, and everyone plays.
+~100 GB each: ~820 exabytes. That would jam the internet for ~2 months, so we pre-install it.
+Everyone drops what they're doing: tens of millions of cars with nobody steering.
+~10,000 airliners fly on autopilot... until the fuel runs out.
+Each setup draws ~300 W. Together: +2.5 TW in one second, ~70% more than the world normally uses.
+Grids can't take it. The frequency crashes, breakers blow, power plants trip offline.
+Within seconds: a global blackout. And every game on Earth turns off at once.
+No traffic lights. No water pumps. People stuck in ~20 million elevators.
+Restarting grids from zero takes days: ~$300 billion of work lost per day.
+Car crashes, falling planes, no power: ~1 million+ deaths.
+The most anticipated game in history crashed the whole planet.
+
+Fan-made what-if. Not affiliated with Rockstar Games or Take-Two.
+
+#whatif #gta6 #gtavi #gaming #science #shorts
+```
+
+**Pinned comment:** Be honest: how many hours have you played since launch? 🎮👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
