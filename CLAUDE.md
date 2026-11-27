@@ -18,7 +18,7 @@ Read this first. It records what the channel owner has asked for across many rou
 - **Maximum destruction.** The owner rejects premises that are mostly logistics ("not enough destruction"). Favour scenarios with planet-scale physical devastation, whole cities leveled and big death tolls.
 - **Human toll and destruction at scale.** Don't shy from death (death tolls as estimates), but use no gore. Balance small-scale human and species consequences with planet-scale ones.
 - **Arc:** hook → escalation → strong final image. **No forced plot twists**, and no "it already happened" tags unless asked.
-- **Pacing:** about 4–5 s per scene so captions can be read. Total length is about 50–65 s.
+- **Pacing:** about 4–5 s per scene so captions can be read. Total length is about 50–65 s for disaster shorts. History counterfactuals can run ~70–80 s: compress the real history to ~12–15 s and spend the time on how the world would be different today (owner feedback on the 9/11 video).
 - **Variety:** every scene needs a different perspective or setting (cockpit POV, microscope, thermal view, cross-section, aerial, ground level, maps only sparingly). Avoid repeating the same close-up explosion. The owner loves "Michael Bay" action.
 - **Tone:** cartoony but not childish. Faceless figures (`person2`), bright palettes (avoid black and red), and Blip the mascot only in the opening.
 - **Politics:** stick to facts and hedge them. If the owner asks for a lean, keep every claim documented. Use caricature figures, never likenesses.

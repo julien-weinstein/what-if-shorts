@@ -785,7 +785,7 @@ Fan-made what-if using classic series rules. Not affiliated with Rockstar Games 
 
 ---
 
-## 29. What if 9/11 had been stopped? (`videos/911-thwarted.mp4`)
+## 29. What if 9/11 had been stopped? (v2, ~71 s: `videos/911-thwarted.mp4`)
 
 **Title:** What if 9/11 had been STOPPED? 🗽 #shorts
 
@@ -793,17 +793,20 @@ Fan-made what-if using classic series rules. Not affiliated with Rockstar Games 
 
 ```
 ✓ REAL HISTORY
-Summer 2001: the clues are already on government desks. Moussaoui is arrested Aug 16, two future hijackers are known to be inside the US, and the Phoenix memo flags flight schools. Nobody connects them.
-September 11, 2001: 2,977 people are killed.
-2001-2021: 900,000+ killed by direct violence in post-9/11 war zones, and $8+ trillion spent.
+Summer 2001: the clues are on government desks (Moussaoui arrested Aug 16, two future hijackers known to be in the US, the Phoenix memo on flight schools). Nobody connects them.
+September 11, 2001: 2,977 people are killed. Then 20 years of war: 900,000+ killed, $8+ trillion spent.
 
 ⚠ WHAT IF
 History could have split right here: what if the FBI had connected the dots in August 2001?
 The plotters are stopped before they board. It's an ordinary Tuesday, and 2,977 people go home that night.
-Airport security stays simple. Probably no TSA.
+Probably no Patriot Act as written, no Homeland Security department, and far less of the mass surveillance that followed.
 Probably no invasion of Afghanistan in 2001; an Iraq war is far less likely, many historians argue.
+ISIS grew out of the chaos of post-2003 Iraq. Without that war: maybe no ISIS at all.
+Syria's war and Europe's 2015 refugee wave could look very different without ISIS.
+$8+ trillion: spent on something else, or never borrowed at all.
+Airports: probably no TSA. Shoes on, water bottles allowed, and families still walk you right to the gate.
 But al-Qaeda is still out there, still plotting.
-2026: the Twin Towers still stand, ~53 years old.
+2026: the Twin Towers still stand, ~53 years old. No memorial pools. No One World Trade.
 One connected clue. Maybe a different century.
 
 The 9/11 Commission did not conclude the attacks could have been prevented; this is a hypothetical.

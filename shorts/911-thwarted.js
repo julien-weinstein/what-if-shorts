@@ -11,19 +11,26 @@
 //  - Brown University Costs of War: more than 900,000 people killed by direct war violence in post-9/11 war zones; at least
 //    4.5-4.7 million total including indirect deaths; US spent or obligated more than $8 trillion (through 2021).
 //  - TSA was created by law in Nov 2001. The original WTC towers opened in the early 1970s (~53 years old in 2026).
+//  - v2 (longer "world today" section, ~77 s). Extra facts: USA PATRIOT Act signed Oct 26, 2001; Department of Homeland Security
+//    created by the Homeland Security Act (Nov 2002); TSA created Nov 2001; liquids limits began Aug 2006 after the transatlantic
+//    liquid-bomb plot; ISIS grew out of al-Qaeda in Iraq, which surged in the chaos after the 2003 invasion; Syria's war began
+//    in 2011 and ISIS's rise fed Europe's 2015 refugee wave. All "what if" consequences hedged.
 //  - Counterfactual claims are hedged ("probably", "many historians argue"): al-Qaeda still exists and keeps plotting.
 
 const SCENES = [
   ['hook', 3.5, [[0, 'swell:2.6']]],
-  ['clues', 4.5, [[0.2, 'heart:4.2']]],
-  ['memorial', 5.0, [[0.2, 'swell:4.6']]],
-  ['wars', 5.0, [[0.2, 'rumble:4.6'], [1.6, 'boom']]],
-  ['fork', 5.0, [[0.4, 'impact'], [2.6, 'swell:2.2']]],
-  ['arrest', 4.5, [[0.2, 'heart:4.2'], [2.2, 'impact']]],
-  ['tuesday', 5.0, [[0.2, 'swell:4.6']]],
-  ['airport', 4.0, [[0.2, 'air']]],
+  ['clues', 4.0, [[0.2, 'heart:3.8']]],
+  ['memorial', 5.0, [[0.2, 'swell:4.6'], [2.6, 'rumble:2.2']]],
+  ['fork', 4.5, [[0.4, 'impact'], [2.4, 'swell:2.0']]],
+  ['arrest', 4.0, [[0.2, 'heart:3.8'], [2.0, 'impact']]],
+  ['tuesday', 4.5, [[0.2, 'swell:4.2']]],
+  ['laws', 5.0, [[0.2, 'rumble:4.6']]],
   ['nowar', 5.0, [[0.2, 'swell:4.6']]],
-  ['threat', 4.5, [[0.2, 'rumble:4.2']]],
+  ['isis', 5.0, [[0.2, 'rumble:4.6']]],
+  ['syria', 4.5, [[0.2, 'swell:4.2']]],
+  ['money', 4.5, [[0.3, 'impact'], [0.4, 'swell:3.8']]],
+  ['airport', 4.5, [[0.2, 'air']]],
+  ['threat', 4.0, [[0.2, 'rumble:3.8']]],
   ['today', 5.0, [[0.2, 'swell:4.6']]],
   ['final', 5.0, [[0.2, 'swell:4.6']]],
   ['end', 3.0, [[0.2, 'swell:2.5']]],
@@ -41,10 +48,10 @@ const SHORT = {
   music: { bpm: 70, mode: 'cinematic', until: TOTAL - 0.3, duckAt: [] },
 };
 
-const FNS = { hook: vHook9, clues: vClues9, memorial: vMemorial9, wars: vWars9, fork: vFork9, arrest: vArrest9, tuesday: vTuesday9, airport: vAirport9, nowar: vNoWar9,
-              threat: vThreat9, today: vToday9, final: vFinal9, end: vEnd9 };
+const FNS = { hook: vHook9, clues: vClues9, memorial: vMemorial9, fork: vFork9, arrest: vArrest9, tuesday: vTuesday9, laws: vLaws9, nowar: vNoWar9, isis: vIsis9,
+              syria: vSyria9, money: vMoney9, airport: vAirport9, threat: vThreat9, today: vToday9, final: vFinal9, end: vEnd9 };
 const OUT = n => SCENES.find(s => s[0] === n)[1] - 0.3;
-const REAL_SCENES = ['hook', 'clues', 'memorial', 'wars'], WHATIF_SCENES = ['arrest', 'tuesday', 'airport', 'nowar', 'threat', 'today', 'final'];
+const REAL_SCENES = ['hook', 'clues', 'memorial'], WHATIF_SCENES = ['arrest', 'tuesday', 'laws', 'nowar', 'isis', 'syria', 'money', 'airport', 'threat', 'today', 'final'];
 function sceneAt(t) { let cur = null; for (const [n] of SCENES) if (t >= START[n]) cur = n; return cur; }
 function modeBadge(ctx, t) {
   const n = sceneAt(t), real = REAL_SCENES.includes(n), wif = WHATIF_SCENES.includes(n); if (!real && !wif) return;
@@ -91,11 +98,10 @@ function vHook9(ctx, u) {
 function vClues9(ctx, u) {
   bgSky(ctx, ['#4a4a6a', '#5a5a7a', '#6a6a8a']); ctx.fillStyle = '#8a6a4a'; ctx.fillRect(0, 900, W, H);
   folder(ctx, 280, 1120, 1.2, ['MOUSSAOUI', 'arrested Aug 16'], 0); folder(ctx, 760, 1200, 1.2, ['2 SUSPECTS', 'inside the US'], 0); folder(ctx, 480, 1560, 1.2, ['PHOENIX MEMO', 'flight schools'], 0);
-  const k = easeInOut(prog(u, 2.4, 3.6)); ctx.strokeStyle = `rgba(255,255,255,${0.25 * (1 - k)})`; ctx.lineWidth = 4; ctx.setLineDash([14, 14]); ctx.beginPath(); ctx.moveTo(380, 1180); ctx.lineTo(660, 1220); ctx.moveTo(400, 1220); ctx.lineTo(460, 1460); ctx.stroke(); ctx.setLineDash([]);
+  const k = easeInOut(prog(u, 1.6, 3.2)); ctx.strokeStyle = `rgba(255,255,255,${0.25 * (1 - k)})`; ctx.lineWidth = 4; ctx.setLineDash([14, 14]); ctx.beginPath(); ctx.moveTo(380, 1180); ctx.lineTo(660, 1220); ctx.moveTo(400, 1220); ctx.lineTo(460, 1460); ctx.stroke(); ctx.setLineDash([]);
   ctx.setTransform(1, 0, 0, 1, 0, 0); dateTag(ctx, u, 'Summer 2001');
   scrim(ctx, 560, 0.5);
-  say(ctx, u, ['The clues are already', 'on government desks'], 240, 0.15, { size: 80, out: 2.4 });
-  say(ctx, u, ['Nobody connects them'], 240, 2.5, { size: 88, out: OUT('clues') });
+  say(ctx, u, ['Summer 2001: the clues', 'are on government desks.', 'Nobody connects them'], 240, 0.15, { size: 76, out: OUT('clues') });
 }
 
 // ================================================================ 3. REAL: memorial (two beams of light)
@@ -104,8 +110,9 @@ function vMemorial9(ctx, u) {
   const k = easeInOut(prog(u, 0.2, 1.6));
   for (const x of [470, 610]) { const g = ctx.createLinearGradient(0, 0, 0, 1450); g.addColorStop(0, 'rgba(160,200,255,0)'); g.addColorStop(1, `rgba(190,220,255,${0.6 * k})`); ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x - 30, 1450); ctx.lineTo(x - 90, 0); ctx.lineTo(x + 90, 0); ctx.lineTo(x + 30, 1450); ctx.fill(); }
   manhattan(ctx, 1450, 2, false, '#2a3a6a', 1); ctx.fillStyle = '#1a2a4a'; ctx.fillRect(0, 1450, W, H);
-  ctx.setTransform(1, 0, 0, 1, 0, 0); dateTag(ctx, u, 'September 11, 2001');
-  say(ctx, u, ['2,977 people', 'are killed'], 300, 0.4, { size: 100, out: OUT('memorial') });
+  ctx.setTransform(1, 0, 0, 1, 0, 0); dateTag(ctx, u, u < 2.5 ? 'September 11, 2001' : '2001–2021');
+  say(ctx, u, ['2,977 people', 'are killed'], 300, 0.2, { size: 100, out: 2.4 });
+  say(ctx, u, ['Then 20 years of war:', '900,000+ killed,', '$8+ trillion spent'], 300, 2.5, { size: 78, out: OUT('memorial') });
 }
 
 // ================================================================ 4. REAL: two decades of war follow
@@ -153,18 +160,66 @@ function vTuesday9(ctx, u) {
   massCrowd(ctx, u, { n: 160, yFar: 1370, yNear: 1900, sFar: 40, sNear: 160, seed: 9, col: '#3a4a7a', flow: 60 });
   ctx.setTransform(1, 0, 0, 1, 0, 0); dateTag(ctx, u, 'September 11, 2001');
   scrim(ctx, 560, 0.5);
-  say(ctx, u, ['It’s just an', 'ordinary Tuesday'], 240, 0.15, { size: 92, out: 2.4 });
-  say(ctx, u, ['2,977 people', 'go home that night'], 240, 2.5, { size: 88, out: OUT('tuesday') });
+  say(ctx, u, ['It’s just an', 'ordinary Tuesday'], 240, 0.15, { size: 92, out: 2.1 });
+  say(ctx, u, ['2,977 people', 'go home that night'], 240, 2.2, { size: 88, out: OUT('tuesday') });
+}
+
+// ================================================================ v2 WHAT IF: laws and surveillance
+function vLaws9(ctx, u) {
+  bgSky(ctx, ['#4a7ac8', '#9ac0e8', '#f0f4f8']);
+  ctx.fillStyle = '#f0ece4'; ctx.beginPath(); ctx.arc(540, 1000, 220, Math.PI, 0); ctx.fill(); ctx.fillRect(500, 700, 80, 80); ctx.beginPath(); ctx.arc(540, 700, 40, Math.PI, 0); ctx.fill(); ctx.fillRect(200, 1000, 680, 260);
+  ctx.fillStyle = '#d8d4cc'; for (let i = 0; i < 10; i++) ctx.fillRect(230 + i * 64, 1040, 22, 220); ctx.fillStyle = '#c8c4bc'; ctx.fillRect(160, 1260, 760, 40);
+  ctx.fillStyle = '#8aa060'; ctx.fillRect(0, 1300, W, H);
+  const k = easeInOut(prog(u, 1.0, 2.6)); for (const [x, y] of [[120, 640], [940, 700], [160, 1500], [900, 1560]]) { ctx.save(); ctx.globalAlpha = 1 - k; ctx.translate(x, y); ctx.fillStyle = '#4a4a5a'; ctx.fillRect(-50, -18, 80, 36); ctx.fillRect(30, -8, 30, 16); ctx.fillRect(-10, 18, 10, 60); ctx.fillStyle = 'rgba(255,190,60,0.9)'; ctx.beginPath(); ctx.arc(-40, 0, 6, 0, 6.283); ctx.fill(); ctx.restore(); }
+  ctx.setTransform(1, 0, 0, 1, 0, 0); dateTag(ctx, u, '2001–2002');
+  scrim(ctx, 560, 0.5);
+  say(ctx, u, ['Probably no Patriot Act', 'as written, no Homeland', 'Security department'], 240, 0.15, { size: 74, out: 2.5 });
+  say(ctx, u, ['and far less of the mass', 'surveillance that followed'], 240, 2.6, { size: 74, out: OUT('laws') });
+}
+
+// ================================================================ v2 WHAT IF: maybe no ISIS
+function vIsis9(ctx, u) {
+  bgSky(ctx, ['#c8a878', '#e8c898', '#f4e0b8']); ctx.fillStyle = '#c8a878'; ctx.fillRect(0, 1250, W, H);
+  const r = rng(31); for (let i = 0; i < 9; i++) { const x = 40 + i * 120, h = 120 + r() * 200; ctx.fillStyle = mixHex('#e8d8b8', '#d8c8a0', r()); ctx.fillRect(x, 1250 - h, 100, h); ctx.fillStyle = 'rgba(90,80,60,0.35)'; for (let k = 0; k < 4; k++) ctx.fillRect(x + 14 + k * 20, 1250 - h + 20, 10, 16); }
+  ctx.fillStyle = '#e8d0a0'; ctx.beginPath(); ctx.arc(820, 1060, 70, Math.PI, 0); ctx.fill(); ctx.fillRect(810, 960, 20, 40); ctx.fillStyle = '#d8b880'; ctx.fillRect(740, 1060, 160, 190);
+  massCrowd(ctx, u, { n: 90, yFar: 1270, yNear: 1880, sFar: 40, sNear: 150, seed: 32, col: '#5a4a6a', flow: 50 });
+  ctx.setTransform(1, 0, 0, 1, 0, 0); dateTag(ctx, u, '2014');
+  scrim(ctx, 560, 0.5);
+  say(ctx, u, ['ISIS grew out of the chaos', 'of post-2003 Iraq'], 240, 0.15, { size: 76, out: 2.5 });
+  say(ctx, u, ['Without that war:', 'maybe no ISIS at all'], 240, 2.6, { size: 82, out: OUT('isis') });
+}
+
+// ================================================================ v2 WHAT IF: Syria and Europe's refugee wave could look very different
+function vSyria9(ctx, u) {
+  space(ctx, u);
+  const R = 700, cx = 540, cy = 1280, v = gView(28, 40); globe(ctx, cx, cy, R, { lon0: 28, lat0: 40, t: u, ink: false, clouds: 0.2, lights: false });
+  const P = ([lo, la]) => { const [x, y] = v(lo, la); return [cx + x * R, cy + y * R]; };
+  const k = easeInOut(prog(u, 0.2, 2.4)), [ax, ay] = P([38, 35]), [bx, by] = P([12, 50]);
+  ctx.strokeStyle = `rgba(255,210,90,${0.8 * (1 - k)})`; ctx.lineWidth = 10; ctx.setLineDash([24, 16]); ctx.beginPath(); ctx.moveTo(ax, ay); ctx.quadraticCurveTo((ax + bx) / 2 - 40, (ay + by) / 2 + 60, bx, by); ctx.stroke(); ctx.setLineDash([]);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); dateTag(ctx, u, '2015');
+  say(ctx, u, ['Syria’s war and Europe’s', '2015 refugee wave'], 240, 0.15, { size: 78, out: 2.3 });
+  say(ctx, u, ['could look very different', 'without ISIS'], 240, 2.4, { size: 80, out: OUT('syria') });
+}
+
+// ================================================================ v2 WHAT IF: the $8 trillion
+function vMoney9(ctx, u) {
+  bgSky(ctx, ['#1e3a2a', '#2a4a3a', '#3a5a4a']);
+  const r = rng(33), k = easeOut(prog(u, 0.2, 2.0)); for (let i = 0; i < 26; i++) { const c = i % 6, rw = Math.floor(i / 6), x = 190 + c * 140, h = (120 + r() * 260) * k, y = 1600; ctx.fillStyle = '#7ab87a'; ctx.fillRect(x - 50, y - h - rw * 0, 100, h); ctx.fillStyle = '#a8d8a0'; for (let s = 0; s < h; s += 14) ctx.fillRect(x - 50, y - s - 3, 100, 3); }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  bigNum(ctx, u, '$8+ trillion', 640, 0.3, { size: 130, color: '#ffd25a', out: OUT('money') });
+  say(ctx, u, ['spent on something else,', 'or never borrowed at all'], 760, 1.2, { size: 64, x: W / 2, align: 'center', out: OUT('money') });
 }
 
 // ================================================================ 8. WHAT IF: airports stay simple
 function vAirport9(ctx, u) {
   bgSky(ctx, ['#e8eef4', '#f0f4f8', '#f8fafc']); ctx.fillStyle = '#d8dce4'; ctx.fillRect(0, 1200, W, H);
   ctx.fillStyle = '#9ab8d8'; ctx.fillRect(0, 380, W, 600);
+  ctx.fillStyle = '#2a3a6a'; ctx.beginPath(); ctx.roundRect(640, 980, 300, 90, 16); ctx.fill(); ctx.font = `900 44px ${FONT}`; ctx.fillStyle = '#ffd25a'; ctx.textAlign = 'center'; ctx.fillText('GATE 12', 790, 1042);
   for (let i = 0; i < 4; i++) { const x = ((i * 300 + u * 160) % (W + 300)) - 150; person2(ctx, x, 1600, 300, { seed: 20 + i, t: u }); ctx.fillStyle = ['#ffbe0b', '#3a86ff', '#2ec4b6', '#ff7aa8'][i]; ctx.beginPath(); ctx.roundRect(x + 30, 1500, 70, 100, 10); ctx.fill(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   scrim(ctx, 560, 0.5);
-  say(ctx, u, ['Airport security stays', 'simple. Shoes stay on.', 'Probably no TSA'], 240, 0.15, { size: 78, out: OUT('airport') });
+  say(ctx, u, ['Airports: probably no TSA.', 'Shoes on, water bottles', 'allowed'], 240, 0.15, { size: 76, out: 2.3 });
+  say(ctx, u, ['Families still walk you', 'right to the gate'], 240, 2.4, { size: 78, out: OUT('airport') });
 }
 
 // ================================================================ 9. WHAT IF: the wars may never happen
@@ -193,7 +248,8 @@ function vToday9(ctx, u) {
   for (let i = 0; i < 3; i++) { const x = 120 + i * 360; ctx.fillStyle = '#4a5a8a'; ctx.fillRect(x, 1450 - 560 - i * 60, 40, 560 + i * 60); }
   ctx.setTransform(1, 0, 0, 1, 0, 0); dateTag(ctx, u, '2026');
   scrim(ctx, 560, 0.5);
-  say(ctx, u, ['2026: the Twin Towers', 'still stand, ~53 years old'], 240, 0.15, { size: 78, out: OUT('today') });
+  say(ctx, u, ['2026: the Twin Towers', 'still stand, ~53 years old'], 240, 0.15, { size: 78, out: 2.4 });
+  say(ctx, u, ['No memorial pools.', 'No One World Trade'], 240, 2.5, { size: 84, out: OUT('today') });
 }
 
 // ================================================================ 12. final: lit skyline at night; the stakes
