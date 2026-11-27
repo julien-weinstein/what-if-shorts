@@ -703,6 +703,32 @@ And for a few hours: not a single cloud in the sky.
 
 ---
 
+## 26. What if the Moon became a black hole and fell into Earth? (`videos/moon-black-hole.mp4`)
+
+**Title:** What if the Moon became a BLACK HOLE... and fell into Earth? 🌑🕳️ #shorts
+
+**Description:**
+
+```
+Same mass as the Moon, squeezed to ~0.1 mm: smaller than a grain of sand.
+Stop its orbit, and it falls for ~5 days, speeding up the whole way.
+The last hours: tides ~27,000x stronger. The oceans heave up toward it, and its pull bends the crust itself: quakes everywhere.
+At 100 km up it pulls 50 g. The sea itself rises into the sky.
+It punches straight through the crust, swinging back and forth through the planet before settling into the core.
+At the core it feeds, glowing with millions of times the sunlight we get. The oceans boil and the ground splits open.
+In weeks to years, the whole planet falls in.
+Everyone: ~8 billion people, and every species.
+All that's left of Earth: a black hole the size of a marble.
+
+(Fun fact: if the Moon just turned into a black hole and stayed in orbit, the tides wouldn't change at all. The nights would just get darker.)
+
+#whatif #blackhole #moon #space #science #shorts
+```
+
+**Pinned comment:** A black hole with Earth's mass would be ~9 mm wide. What would YOU fit in your pocket? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
