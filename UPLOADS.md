@@ -844,6 +844,33 @@ Anyone not near a pole: ~8 billion, in the first minutes.
 
 ---
 
+## 31. What if Earth orbited the Sun twice as fast? (`videos/orbit-2x.mp4`)
+
+**Title:** What if Earth orbited the Sun TWICE as fast? ☀️🌍💨 #shorts
+
+**Description:**
+
+```
+Earth orbits at ~30 km/s. Double it: 60 km/s. The Sun can only hold us below ~42 km/s.
+Earth breaks free of the Sun. Forever.
+The Moon can't keep up: it stays behind, and tides nearly vanish.
+Every day the Sun looks smaller and dimmer: 43% of today's sunlight by day 40, 25% by day 60.
+Within weeks, crops freeze in the fields. Harvests fail everywhere.
+A winter that never ends. Within months: colder than Antarctica.
+The oceans freeze over, and the ice seals in the water below.
+~6 months: past Jupiter's orbit. ~1 year: past Saturn's. The Sun is just a bright star now.
+Eventually, the air itself freezes and falls as snow.
+Within months: billions. Within a few years: nearly everyone.
+But deep-sea vents run on Earth's own heat. Down there, life clings on.
+A frozen world, drifting toward the stars. Nearest one: ~30,000 years.
+
+#whatif #space #earth #sun #science #shorts
+```
+
+**Pinned comment:** Plot twist for physics nerds: a stable 6-month year would need an orbit closer than Venus. Want that one next? 🔥👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
