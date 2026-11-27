@@ -871,6 +871,32 @@ A frozen world, drifting toward the stars. Nearest one: ~30,000 years.
 
 ---
 
+## 32. What if the poles melted all at once? (`videos/poles-melt.mp4`)
+
+**Title:** What if ALL the ice at the poles melted at once? 🧊🌊 #shorts
+
+**Description:**
+
+```
+~30 million km³ of ice, up to 4.8 km thick. Antarctica turns to water in an instant, and it all pours off the continent at once.
+A flood kilometers tall races off the plateau at ~500 km/h: ~2/3 of a dinosaur-killer's energy.
+Hours later, mega-surges hit the southern coasts.
+Greenland's fresh water floods the Atlantic, and its warm current could stall.
+Within days, the seas rise ~70 m: up to Lady Liberty's chest.
+London: only the top of Big Ben's tower stays dry.
+Gone: Florida, the Netherlands, Bangladesh, Venice, Shanghai, most of NYC.
+Polar bears and emperor penguins lose the ice they live on.
+Homes underwater: 1 billion+ people. Deaths: millions.
+All that water spreads toward the equator. Days get ~1 second longer.
+A planet with no ice at all.
+
+#whatif #climate #antarctica #science #shorts
+```
+
+**Pinned comment:** How high above sea level do YOU live? 👇
+
+---
+
 ## Posting rhythm
 
 - Post one a day at a consistent time. Late afternoon in your main audience's time zone is a good default.
